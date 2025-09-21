@@ -33,7 +33,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/cards', [CardController::class, 'index'])->name('cards');
-    Route::get('/cards/create', [CardController::class, 'create'])->name('create_card');
+    Route::get('/cards/create', [CardController::class, 'show_bins'])->name('show_bins');
+
+    Route::get('/cards/fetch', [CardController::class, 'fetch_bins'])->name('fetch_bins');
+    Route::post('/cards/opencard', [CardController::class, 'open_card'])->name('open_card');
 
     Route::get('/fundings', [FundController::class, 'index'])->name('fundings');
     Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions');

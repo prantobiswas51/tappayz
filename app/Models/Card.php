@@ -8,12 +8,13 @@ class Card extends Model
 {
     protected $fillable = [
         'user_id',
+        'credit_card_id',
         'number',
-        'amount',
         'expiry_date',
-        'type',
-        'cvc',
-        'registered_at',
-        'status',
+        'card_balance',
+        'organization',
+        'cvv',
+        'create_time',
+        'state',
     ];
 }

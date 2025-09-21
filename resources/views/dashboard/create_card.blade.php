@@ -1,5 +1,81 @@
 <x-app-layout>
     <main class="main" style="background: white; color: #333;">
+
+        <!-- Modal -->
+        <div id="binModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+            <div class="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 relative">
+                <button onclick="closeBinModal()"
+                    class="absolute top-2 right-2 text-gray-500 hover:text-gray-800">✖</button>
+
+                <h2 class="text-xl font-bold mb-4 text-gray-800">Create Virtual Card</h2>
+
+                <form id="binForm" method="POST" action="{{ route('open_card') }}">
+                    @csrf
+                    <input type="hidden" name="bin_id" id="modal-bin-id">
+                    <input type="hidden" name="user_id" value="{{ Auth::id() }}">
+
+                    <div class="mb-3 field">
+                        <label class="block text-gray-600">Email <span class="text-red-600">*</span></label>
+                        <span class="text-sm italic">You can use this email to receive the corresponding transaction
+                            verification code.</span>
+                        <input type="email" id="modal-email" name="email" required
+                            style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333;"
+                            class="w-full border rounded p-2 text-gray-800">
+                    </div>
+
+                    <div class="mb-3 field">
+                        <label class="block text-gray-600">BIN</label>
+                        <input type="text" id="modal-bin" name="bin" readonly
+                            style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333;"
+                            class="w-full input border rounded p-2 bg-gray-100 text-gray-800">
+                    </div>
+
+                    <div class="mb-3 field">
+                        <label class="block text-gray-600">Organization</label>
+                        <input type="text" id="modal-organization" name="organization" readonly
+                            style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333;"
+                            class="w-full border rounded p-2 bg-gray-100 text-gray-800">
+                    </div>
+
+                    <input type="hidden" id="modal-area" name="area" readonly>
+
+                    <div class="mb-3 field">
+                        <label class="block text-gray-600">Price / Rate</label>
+                        <input type="text" id="modal-price" name="price" readonly
+                            style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333;"
+                            class="w-full border rounded p-2 bg-gray-100 text-gray-800">
+                    </div>
+
+                    <div class="mb-3 field">
+                        <label class="block text-gray-600">Amount<span class="text-red-600">*</span></label>
+                        <input type="text" name="amount" value="10" required
+                            style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333;"
+                            class="w-full border rounded p-2 bg-gray-100 text-gray-800">
+                    </div>
+
+                    <div class="mb-3 field">
+                        <label class="block text-gray-600">Card Holder Name <span class="text-red-600">*</span> </label>
+                        <input type="text" name="card_holder" required
+                            style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333;"
+                            class="w-full input border rounded p-2 bg-gray-100 text-gray-800">
+                    </div>
+
+                    <div class="mb-3 field">
+                        <label class="block text-gray-600">Remark</label>
+                        <textarea id="modal-notes" name="remark"
+                            style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333;"
+                            class="w-full border rounded p-2 text-gray-800"></textarea>
+                    </div>
+
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                        Create Card
+                    </button>
+                </form>
+
+            </div>
+        </div>
+        {{-- end of modal --}}
+
         <div class="topbar">
             <div class="brand" style="gap:8px;">
                 <div class="brand-badge" style="width:28px;height:28px;"></div>
@@ -120,110 +196,62 @@
             </div>
         </div>
 
-        <div class="grid grid-2">
-            <div class="card"
-                style="background: white; border: 1px solid #e9ecef; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                <div class="card-header">
-                    <div class="card-title" style="color: #333;">Card Information</div>
-                    <div class="card-subtitle" style="color: #6c757d;">Create your virtual card with selected BIN</div>
+        {{-- card area --}}
+        <div class="flex flex-wrap w-full gap-4 p-4 ">
+
+            <!-- Left Side -->
+            <div class="card bg-sky-300 p-2 flex-1 min-w-[280px]"
+                style="border: 1px solid #e9ecef; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div class="card-header mb-3">
+                    <div class="card-title text-lg font-semibold text-[#333]">Card Information</div>
+                    <div class="card-subtitle text-sm text-[#6c757d]">Create your virtual card with selected BIN</div>
                 </div>
-                <form class="form">
-                    <div class="field">
-                        <label class="label" for="label" style="color: #6c757d;">Card label</label>
-                        <input class="input" id="label" placeholder="e.g., Marketing Team"
-                            style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333;" />
-                    </div>
-                    <div class="field">
-                        <label class="label" for="email" style="color: #6c757d;">Email <span
-                                style="color: #dc3545;">*</span></label>
-                        <input class="input" id="email" type="email" placeholder="Enter your email address" required
-                            style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333;" />
-                        <div class="help" style="color: #6c757d;">You can use this email to receive the corresponding
-                            transaction verification code</div>
-                    </div>
-                    <div class="field">
-                        <label class="label" for="amount" style="color: #6c757d;">Card Amount <span
-                                style="color: #dc3545;">*</span></label>
-                        <input class="input" id="amount" type="number" placeholder="10" min="10" step="0.01" required
-                            style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333;" />
-                        <div class="help" style="color: #6c757d;">Minimum amount: $10.00</div>
-                    </div>
-                    <div class="field">
-                        <label class="label" for="bin" style="color: #6c757d;">Card BIN</label>
-                        <select class="input" id="bin"
-                            style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333;">
-                            <option value="">Select a BIN</option>
-                            <option value="49387519" data-price="25.00">49387519 - $25.00</option>
-                            <option value="49387520" data-price="30.00">49387520 - $30.00</option>
-                            <option value="537100" data-price="35.00">537100 - $35.00</option>
-                            <option value="428852" data-price="40.00">428852 - $40.00</option>
-                            <option value="517746" data-price="45.00">517746 - $45.00</option>
-                        </select>
-                    </div>
-                    <div class="field">
-                        <label class="label" for="currency" style="color: #6c757d;">Currency</label>
-                        <select class="input" id="currency"
-                            style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333;">
-                            <option>USD</option>
-                            <option>EUR</option>
-                            <option>GBP</option>
-                        </select>
-                    </div>
-                    <div class="field">
-                        <label class="label" for="notes" style="color: #6c757d;">Notes</label>
-                        <textarea class="input" id="notes" rows="4" placeholder="Optional notes"
-                            style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333;"></textarea>
-                    </div>
-                    <div class="field" id="validation-error" style="display: none;">
-                        <div class="card"
-                            style="background: rgba(255, 107, 107, 0.1); border: 1px solid var(--danger); padding: 12px;">
-                            <div style="color: var(--danger); font-size: 14px;">
-                                <span id="error-message">Please enter a valid amount</span>
-                            </div>
+
+                <div class="cards flex flex-wrap gap-4 justify-center">
+                    @foreach ($bins as $bin)
+                    <div class="border p-3 rounded-lg shadow-md min-w-[220px] flex-1 hover:cursor-pointer hover:bg-gray-200"
+                        onclick="openBinModal('{{ $bin->id }}', '{{ $bin->bin }}', '{{ $bin->organization }}', '{{ $bin->cr }}', '{{ $bin->actualOpenCardPrice }}/{{ $bin->actualRechargeFeeRate }}')">
+                        <div class="flex justify-between items-center py-3">
+                            <h3>{{ $bin->bin }}</h3>
+                            <img class="w-16"
+                                src="{{ $bin->organization == 'VISA' ? asset('images/visa-a.png') : asset('images/mastercard.png') }}"
+                                alt="logo">
                         </div>
+                        <p class="py-2">Price/Rate :
+                            <span>{{ $bin->actualOpenCardPrice + 3 }}$/6.00%</span>
+                        </p>
+                        <p class="flex justify-between items-center">Area : <span>{{ __($bin->cr) }}</span> <button
+                                class="border p-2 bg-green-400 rounded-md">Issue Card</button></p>
                     </div>
-                    <div class="field" id="price-display" style="display: none;">
-                        <div class="card" style="background: #f8f9fa; border: 1px solid #e9ecef; padding: 12px;">
-                            <div style="display: grid; gap: 8px;">
-                                <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <span class="label" style="color: #6c757d;">Card Amount:</span>
-                                    <span id="card-amount" style="font-weight: 600; color: #333;">$0.00</span>
-                                </div>
-                                <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <span class="label" style="color: #6c757d;">Creation Fee:</span>
-                                    <span id="selected-price" style="font-weight: 600; color: #3dd0ff;">$0.00</span>
-                                </div>
-                                <div
-                                    style="border-top: 1px solid #e9ecef; padding-top: 8px; display: flex; justify-content: space-between; align-items: center;">
-                                    <span class="label" style="font-weight: 600; color: #333;">Total:</span>
-                                    <span id="total-amount"
-                                        style="font-weight: 700; color: #2ee6a8; font-size: 16px;">$0.00</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div style="display:flex; gap:10px;">
-                        <a id="create-card" class="btn btn-brand" href="#">Create</a>
-                        <a class="btn btn-ghost" href="cards.html">Cancel</a>
-                    </div>
-                </form>
-            </div>
-            <div class="card"
-                style="background: white; border: 1px solid #e9ecef; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                <div class="card-title" style="margin-bottom:8px; color: #333;">Preview</div>
-                <div class="vcard blue">
-                    <div class="brandmark"></div>
-                    <div class="number" id="preview-number">5244 ••42 ••65 ••88</div>
-                    <div class="meta">
-                        <div id="preview-label">Marketing</div>
-                        <div>12/29</div>
-                    </div>
-                </div>
-                <div class="help" style="margin-top:10px; color: #6c757d;">
-                    <div>BIN: <span id="preview-bin">Not selected</span></div>
-                    <div>Fee: <span id="preview-price">$0.00</span></div>
+                    @endforeach
                 </div>
             </div>
+
+
+
         </div>
+
+
     </main>
+
+    <script>
+        function openBinModal(id, bin, organization, area, price) {
+            document.getElementById('modal-bin-id').value = id;
+            document.getElementById('modal-bin').value = bin;
+            document.getElementById('modal-organization').value = organization;
+            document.getElementById('modal-area').value = area;
+            document.getElementById('modal-price').value = "5$ / 6.00%";
+
+            // Show modal
+            document.getElementById('binModal').classList.remove('hidden');
+            document.getElementById('binModal').classList.add('flex');
+        }
+
+        function closeBinModal() {
+            document.getElementById('binModal').classList.add('hidden');
+            document.getElementById('binModal').classList.remove('flex');
+        }
+    </script>
+
+
 </x-app-layout>

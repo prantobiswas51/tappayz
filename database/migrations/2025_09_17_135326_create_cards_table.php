@@ -14,13 +14,14 @@ return new class extends Migration
         Schema::create('cards', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
+            $table->string('credit_card_id');
             $table->string('number');
-            $table->string('amount');
             $table->string('expiry_date');
-            $table->string('type');
-            $table->string('cvc');
-            $table->string('registered_at')->nullable();
-            $table->enum('status', ['Active', 'Inactive', 'Expired', 'Deleted'])->default('Inactive');
+            $table->string('cvv');
+            $table->string('card_balance');
+            $table->string('organization');
+            $table->string('create_time')->nullable();
+            $table->string('state');
             $table->timestamps();
         });
     }

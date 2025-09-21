@@ -30,14 +30,17 @@
                         <option>GBP</option>
                     </select>
                 </div>
-                <a class="btn btn-brand create-btn" href="{{ route('create_card') }}">
+                <a class="btn btn-brand create-btn" href="{{ route('show_bins') }}">
                     <span>+</span>
                     <span>Create Card</span>
+                </a>
+                <a class="btn btn-brand create-btn" href="{{ route('fetch_bins') }}">
+                    <span>Sync BINs</span>
                 </a>
             </div>
         </div>
 
-        <section id="cards-grid" class="cards-list" data-create-card-url="{{ route('create_card') }}">
+        <section id="cards-grid" class="cards-list" data-create-card-url="{{ route('show_bins') }}">
         </section>
         
     </main>

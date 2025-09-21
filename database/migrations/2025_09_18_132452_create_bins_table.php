@@ -12,15 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('bins', function (Blueprint $table) {
-            $table->id();
-            $table->string('bin_id');
+            $table->string('id')->primary(); // use API id as primary key
             $table->string('bin');
             $table->string('cr');
             $table->string('organization');
             $table->string('actualOpenCardPrice');
             $table->string('actualRechargeFeeRate');
-            $table->boolean('enable');
-            $table->string('description');
+            $table->boolean('enable')->default(true);
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }
