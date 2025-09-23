@@ -39,6 +39,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/cards/opencard', [CardController::class, 'open_card'])->name('open_card');
 
     Route::get('/fundings', [FundController::class, 'index'])->name('fundings');
+    Route::post('/fundings/deposit', [FundController::class, 'deposit'])->name('deposit');
+
     Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions');
 
     Route::get('/kyc', [DashboardController::class, 'kyc'])->name('kyc');

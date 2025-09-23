@@ -21,6 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'trx_address',
+        'trx_private_key'
     ];
 
     /**

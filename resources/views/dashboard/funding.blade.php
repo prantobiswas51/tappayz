@@ -1,5 +1,7 @@
 <x-app-layout>
     <main class="main" style="background: white; color: #333;">
+
+
         <div class="topbar">
             <div class="brand" style="gap:8px;">
                 <div class="brand-badge" style="width:28px;height:28px;"></div>
@@ -18,58 +20,63 @@
                     <div class="card-title" style="color: #333;">Instant Method</div>
                 </div>
 
+
                 <div class="card payment-method-card"
                     style="margin-top: 10px; background: #f8f9fa; border: 1px solid #e9ecef;">
                     <div class="card-title" style="color: #ff6b35;">₿ Crypto Deposit</div>
                     <div class="help" style="color: #6c757d;">Instant crypto deposit to your wallet</div>
+                    <form action="{{ route('deposit') }}" method="POST">
+                        @csrf
+                        
+                        <input type="hidden" value="{{ Auth::id() }}" name="user_id">
 
-                    <div class="field" style="margin-top:10px;">
-                        <label class="label" style="color: #6c757d;">Select Cryptocurrency</label>
-                        <select class="input" id="crypto-select"
-                            style="background: white; border: 1px solid #e9ecef; color: #333;">
-                            <option value="USDT">USDT (Tether)</option>
-                            <option value="USDC">USDC (USD Coin)</option>
-                            <option value="TRX">TRX (TRON)</option>
-                            <option value="BTC">BTC (Bitcoin)</option>
-                        </select>
-                    </div>
-
-                    <div class="field">
-                        <label class="label" style="color: #6c757d;">Deposit Amount</label>
-                        <input class="input" id="crypto-amount" type="number" placeholder="0.00" min="1" step="0.01"
-                            style="background: white; border: 1px solid #e9ecef; color: #333;" />
-                    </div>
-
-                    <div class="field">
-                        <label class="label" style="color: #6c757d;">Your Wallet Address</label>
-                        <input class="input" id="wallet-address" placeholder="Enter your TRON wallet address"
-                            style="background: white; border: 1px solid #e9ecef; color: #333;" />
-                    </div>
-
-                    <div class="field">
-                        <label class="label" style="color: #6c757d;">Tappayz Deposit Address</label>
-                        <div style="display: flex; gap: 8px;">
-                            <input class="input" id="deposit-address" value="TQn9Y2khEsLJW1ChVWFMSMeRDow5KcbLSE"
-                                readonly style="background: white; border: 1px solid #e9ecef; color: #333; flex: 1;" />
-                            <button class="btn btn-ghost copy-btn"
-                                onclick="copyToClipboard('TQn9Y2khEsLJW1ChVWFMSMeRDow5KcbLSE')">Copy</button>
+                        {{-- currency --}}
+                        <div class="field" style="margin-top:10px;">
+                            <label class="label" style="color: #6c757d;">Select Cryptocurrency</label>
+                            <select class="input" id="crypto-select" name="currency"
+                                style="background: white; border: 1px solid #e9ecef; color: #333;">
+                                <option value="USDT">USDT (Tether)</option>
+                                <option value="USDC">USDC (USD Coin)</option>
+                                <option value="TRX">TRX (TRON)</option>
+                                <option value="BTC">BTC (Bitcoin)</option>
+                            </select>
                         </div>
-                    </div>
 
-                    <div class="field">
-                        <div class="help" style="color: #6c757d; font-size: 12px;">
-                            <strong>How it works:</strong><br>
-                            1. Send crypto to our address above<br>
-                            2. Our TronScan API monitors the transaction<br>
-                            3. Funds are instantly added to your balance<br>
-                            4. Minimum deposit: $10 equivalent
+                        {{-- amount field --}}
+                        <div class="field">
+                            <label class="label" style="color: #6c757d;">Deposit Amount</label>
+                            <input class="input" id="crypto-amount" type="number" value="10" min="1" name="amount"
+                                style="background: white; border: 1px solid #e9ecef; color: #333;" />
                         </div>
-                    </div>
 
-                    <button class="btn btn-brand" id="crypto-deposit-btn" onclick="initiateCryptoDeposit()"
-                        style="width: 100%; margin-top: 10px;">
-                        💰 Start Crypto Deposit
-                    </button>
+                        <div class="field">
+                            <label class="label" style="color: #6c757d;">Tappayz Deposit Address</label>
+                            <div style="display: flex; gap: 8px;">
+                                <input class="input" id="deposit-address" value="{{ Auth::user()->trx_address }}"
+                                    readonly
+                                    style="background: white; border: 1px solid #e9ecef; color: #333; flex: 1;" />
+                                <button class="btn btn-ghost copy-btn"
+                                    data-address="{{ Auth::user()->trx_address }}">Copy</button>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="help" style="color: #6c757d; font-size: 12px;">
+                                <strong>How it works:</strong><br>
+                                1. Send crypto to our address above<br>
+                                2. Our TronScan API monitors the transaction<br>
+                                3. Funds are instantly added to your balance<br>
+                                4. Minimum deposit: $10 equivalent. <br>
+                                5. Wait 1 minute before clicking "💰 Payment Sent!" button after sending the payment!
+                            </div>
+                        </div>
+
+
+                        <button type="submit" class="btn btn-brand" id="open_deposit"
+                            style="width: 100%; margin-top: 10px;">
+                            💰 Payment Sent!
+                        </button>
+                    </form>
 
                     <!-- Status indicator -->
                     <div id="crypto-status"
@@ -198,4 +205,16 @@
             </div>
         </div>
     </main>
+
+    <script>
+        document.querySelectorAll('.copy-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+            const text = btn.getAttribute('data-address');
+            navigator.clipboard.writeText(text)
+                .then(() => alert('Copied: ' + text))
+                .catch(err => console.error(err));
+            });
+        });
+    </script>
+
 </x-app-layout>
