@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Deposit;
 use App\Models\User;
+use App\Models\Deposit;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Crypt;
+use Symfony\Component\Process\Process;
 
 class FundController extends Controller
 {
@@ -16,11 +19,11 @@ class FundController extends Controller
         return view('dashboard/funding', compact('trx_address'));
     }
 
-    // User-triggered deposit check (TRX only)
     public function deposit(Request $request)
     {
         $user = Auth::user();
         $this->checkUserTRXDeposits($user);
+        $this->checkUserUSDTDeposits($user);
 
         return response()->json([
             'status' => 'success',
@@ -29,26 +32,24 @@ class FundController extends Controller
         ]);
     }
 
-    // Automatic deposit checker for all users (TRX + TRC20 USDT)
     public function checkDeposits()
     {
         $users = User::all();
 
         foreach ($users as $user) {
-            // Check TRX deposits
             $this->checkUserTRXDeposits($user);
-
-            // Check USDT (TRC20) deposits
             $this->checkUserUSDTDeposits($user);
         }
 
         return 'Deposits checked';
     }
 
-    // Helper: Check TRX deposits for a single user
     private function checkUserTRXDeposits($user)
     {
-        $response = Http::get("https://api.trongrid.io/v1/accounts/{$user->trx_address}/transactions");
+        $response = Http::withHeaders([
+            'TRON-PRO-API-KEY' => env('TRONGRID_API_KEY'),
+        ])->get("https://api.trongrid.io/v1/accounts/{$user->trx_address}/transactions");
+
         $txs = $response->json()['data'] ?? [];
 
         foreach ($txs as $tx) {
@@ -68,15 +69,20 @@ class FundController extends Controller
 
                 $user->balance += $amount;
                 $user->save();
+
+                // sweep to main wallet
+                $this->sweepFunds($user, $amount, 'TRX');
             }
         }
     }
 
-    // Helper: Check TRC20 USDT deposits for a single user
     private function checkUserUSDTDeposits($user)
     {
         $usdtContract = 'TXLAQ63Xg1NAzckPwKHvzw7CSEmLMEqcdj';
-        $response = Http::get("https://api.trongrid.io/v1/accounts/{$user->trx_address}/transactions/trc20?limit=50&contract_address={$usdtContract}");
+        $response = Http::withHeaders([
+            'TRON-PRO-API-KEY' => env('TRONGRID_API_KEY'),
+        ])->get("https://api.trongrid.io/v1/accounts/{$user->trx_address}/transactions/trc20?limit=50&contract_address={$usdtContract}");
+
         $txs = $response->json()['data'] ?? [];
 
         foreach ($txs as $tx) {
@@ -84,7 +90,7 @@ class FundController extends Controller
 
             if (Deposit::where('tx_id', $txId)->exists()) continue;
 
-            $amount = $tx['value'] / 1e6; // USDT decimals
+            $amount = $tx['value'] / 1e6;
 
             if ($amount > 0) {
                 Deposit::create([
@@ -96,7 +102,36 @@ class FundController extends Controller
 
                 $user->balance += $amount;
                 $user->save();
+
+                $this->sweepFunds($user, $amount, 'USDT');
             }
+        }
+    }
+
+    private function sweepFunds($user, $amount, $token)
+    {
+        $serverPath = base_path('resources/js/server.js'); // <- use server.js
+        $privateKey = Crypt::decryptString($user->trx_private_key); // decrypt key
+
+        $args = [
+            'node',
+            $serverPath,
+            'sweep',
+            $user->trx_address,
+            $privateKey,
+            env('MAIN_WALLET'),
+            (string)($amount * 1e6),
+            $token,
+            $token === 'USDT' ? env('USDT_CONTRACT') : ''
+        ];
+
+        $process = new Process($args);
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            Log::error("{$token} Sweep failed: " . $process->getErrorOutput());
+        } else {
+            Log::info("{$token} Sweep success: " . $process->getOutput());
         }
     }
 }

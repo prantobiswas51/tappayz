@@ -49,9 +49,11 @@
                     <x-heroicon-o-phone class="h-6 w-6 mr-2" />Support
                 </a>
             </nav>
-
             <div>
-                <a class="btn" href="{{ route('logout') }}">Logout</a>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="btn">Logout</button>
+                </form>
             </div>
         </aside>
 
