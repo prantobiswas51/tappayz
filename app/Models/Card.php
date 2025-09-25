@@ -17,4 +17,10 @@ class Card extends Model
         'create_time',
         'state',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
+

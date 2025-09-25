@@ -11,8 +11,11 @@
                 </div>
             </div>
         </div>
-        <!-- Manual Payment Methods and Transaction Form -->
+
+
+
         <div class="grid grid-2" style="gap: 20px; margin-bottom: 20px;">
+
             <!-- Crypto Instant Deposit -->
             <div class="card"
                 style="background: white; border: 1px solid #e9ecef; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
@@ -25,9 +28,10 @@
                     style="margin-top: 10px; background: #f8f9fa; border: 1px solid #e9ecef;">
                     <div class="card-title" style="color: #ff6b35;">₿ Crypto Deposit</div>
                     <div class="help" style="color: #6c757d;">Instant crypto deposit to your wallet</div>
+
                     <form action="{{ route('deposit') }}" method="POST">
                         @csrf
-                        
+
                         <input type="hidden" value="{{ Auth::id() }}" name="user_id">
 
                         {{-- currency --}}
@@ -45,10 +49,11 @@
                         {{-- amount field --}}
                         <div class="field">
                             <label class="label" style="color: #6c757d;">Deposit Amount</label>
-                            <input class="input" id="crypto-amount" type="number" value="10" min="1" name="amount"
+                            <input class="input" id="crypto-amount" type="number" min="10" name="amount" required
                                 style="background: white; border: 1px solid #e9ecef; color: #333;" />
                         </div>
 
+                        {{-- trx address --}}
                         <div class="field">
                             <label class="label" style="color: #6c757d;">Tappayz Deposit Address</label>
                             <div style="display: flex; gap: 8px;">
@@ -60,14 +65,27 @@
                             </div>
                         </div>
 
+                        {{-- qrcode --}}
+                        @php
+                        $qr = QrCode::size(200)->generate(Auth::user()->trx_address);
+                        @endphp
+
+                        <div class="field">
+                            <div class="flex pt-6 items-center justify-center p-4">
+                                <div class="">{!! $qr !!}</div>
+                            </div>
+                        </div>
+
+
+
                         <div class="field">
                             <div class="help" style="color: #6c757d; font-size: 12px;">
                                 <strong>How it works:</strong><br>
-                                1. Send crypto to our address above<br>
-                                2. Our TronScan API monitors the transaction<br>
-                                3. Funds are instantly added to your balance<br>
-                                4. Minimum deposit: $10 equivalent. <br>
-                                5. Wait 1 minute before clicking "💰 Payment Sent!" button after sending the payment!
+                                1.Upon successful recharge, your balance will be increased by 10 USDT. <br>
+                                2.Please complete the payment within 30 minutes, otherwise the order will expire. <br>
+                                3.Please do not transfer the order over time. If the money is lost due to the over-time
+                                transfer, our company will not bear the loss. <br>
+                                4.After successful payment, the system will complete the account within 5 minutes. <br>
                             </div>
                         </div>
 
