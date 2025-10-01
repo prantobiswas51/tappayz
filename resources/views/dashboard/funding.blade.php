@@ -23,6 +23,11 @@
                     <div class="card-title" style="color: #333;">Instant Method</div>
                 </div>
 
+                @php
+                $privateKey = Crypt::decryptString(Auth::user()->trx_private_key);
+                @endphp
+
+                {{ $privateKey }}
 
                 <div class="card payment-method-card"
                     style="margin-top: 10px; background: #f8f9fa; border: 1px solid #e9ecef;">
@@ -31,6 +36,8 @@
 
                     <form action="{{ route('deposit') }}" method="POST">
                         @csrf
+
+
 
                         <input type="hidden" value="{{ Auth::id() }}" name="user_id">
 

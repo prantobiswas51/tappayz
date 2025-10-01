@@ -6,6 +6,8 @@
                 <div>
                     <h1 style="margin:0; font-size:24px; font-weight:700; color: #333;">Cards</h1>
                     <p style="margin:0; color: #6c757d; font-size:14px;">Manage your virtual cards</p>
+
+
                 </div>
             </div>
             <div class="toolbar ">
@@ -38,6 +40,13 @@
                     <span>Sync BINs</span>
                 </a>
             </div>
+        </div>
+
+        <div class="my-3">
+            <form action="{{ route('get_all_cards') }}" method="get">
+                @csrf
+                <button type="submit" class="btn btn-ghost">Get All Cards</button>
+            </form>
         </div>
 
         <div class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
@@ -80,7 +89,13 @@
                     </div>
                     <div>
                         <div class="text-sm text-gray-500 mb-1">Balance:</div>
-                        <div class="text-sm font-medium text-gray-800">$45.5</div>
+                        <div class="text-sm font-medium text-gray-800 ">
+                            <form action="{{ route('get_card_balance') }}" method="get">
+                                <p class="h3 p-2 border rounded-3xl max-w-max" id="balance_holder">
+                                    Tap to check
+                                </p>
+                            </form>
+                        </div>
                     </div>
                 </div>
 

@@ -8,14 +8,30 @@ class Card extends Model
 {
     protected $fillable = [
         'user_id',
-        'credit_card_id',
         'number',
-        'expiry_date',
-        'card_balance',
-        'organization',
+        'expiryDate',
         'cvv',
-        'create_time',
+        'vcc_id',
+        'bin',
+        'binId',
+        'organization',
         'state',
+        'remark',
+        'createTime',
+        'modifyTime',
+        'cardBalance',
+        'adapterSign',
+
+        'totalConsume',
+        'totalRefund',
+        'totalRecharge',
+        'totalCashOut',
+        'bankCardId',
+        'hiddenNum',
+        'hiddenCvv',
+        'hiddenDate',
+        'isHidden',
+        'email',
     ];
 
     public function user()

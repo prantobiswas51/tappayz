@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Bin;
+use App\Models\Card;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 
 class CardController extends Controller
 {
@@ -86,7 +90,6 @@ class CardController extends Controller
     public function open_card(Request $request)
     {
 
-
         $request->validate([
             'user_id' => 'required|numeric',
             'email'  => 'required|email',
@@ -113,14 +116,16 @@ class CardController extends Controller
 
         $response = Http::asForm()->post($this->baseUrl . '/bank_card/open_card', $params);
 
-        // ✅ Log everything once (success or failure)
-        Log::info('Open card API call', [
-            'params' => $params,
-            'status' => $response->status(),
-            'body'   => $response->body(),
-        ]);
+
 
         if ($response->failed()) {
+            // ✅ Log everything once (success or failure)
+            Log::info('Open card API call', [
+                'params' => $params,
+                'status' => $response->status(),
+                'body'   => $response->body(),
+            ]);
+
             return response()->json([
                 'success' => false,
                 'message' => 'API request failed',
@@ -130,10 +135,115 @@ class CardController extends Controller
 
         $data = $response->json();
 
-        // Optionally save card info to DB here
-        // Example:
-        // Card::create([...]);
+        $orderId = $data['content']['id'] ?? null;
 
-        return response()->json($data);
+        // next call
+        $timeStamp = (string) round(microtime(true) * 1000);
+
+        $params = [
+            'userSerial' => $this->userSerial,
+            'timeStamp'  => $timeStamp,
+            'orderId'    => $orderId,
+        ];
+
+        $params['sign'] = $this->sign($params);
+
+        // ✅ Must be form-data, not JSON
+        $response = Http::asForm()->post($this->baseUrl . '/bank_card/open_detail', $params);
+
+        if ($response->failed()) {
+            Log::info('Card detail API call', [
+                'params' => $params,
+                'status' => $response->status(),
+                'body'   => $response->body(),
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Card detail request failed',
+                'error'   => $response->body(),
+            ], 500);
+        }
+
+        $card = new Card();
+        $card->number  = $response['content']['userBankCardNum'];
+        $card->user_id = Auth::id();
+        $card->save();
+
+        return response()->json($response->json());
+    }
+
+    public function get_all_cards()
+    {
+
+        $timeStamp = (string) round(microtime(true) * 1000);
+
+        $params = [
+            'userSerial' => $this->userSerial,
+            'timeStamp'  => $timeStamp,
+        ];
+
+        $params['sign'] = $this->sign($params);
+
+        // ✅ Must be form-data, not JSON
+        $response = Http::asJson()->get($this->baseUrl . '/bank_card/my_cards', $params);
+
+        Log::info('Card detail API call', [
+            'params' => $params,
+            'status' => $response->status(),
+            'body'   => $response->body(),
+        ]);
+
+        if ($response->failed()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Card detail request failed',
+                'error'   => $response->body(),
+            ], 500);
+        }
+
+        $cards = $response->json('content', []);
+
+        foreach ($cards as $c) {
+            $bankCardId = Arr::get($c, 'bankCardId') ?: Arr::get($c, 'binId') ?: Arr::get($c, 'id');
+
+            // Skip if this card number already exists
+            if (Card::where('number', $c['number'])->exists()) {
+                continue;
+            }
+
+            $payload = [
+                'number'         => Arr::get($c, 'number'),
+                'expiryDate'     => Arr::get($c, 'expiryDate'),
+                'cvv'            => Arr::get($c, 'cvv'),
+                'vcc_id'         => Arr::get($c, 'id'),
+                'bin'            => Arr::get($c, 'bin'),
+                'binId'          => Arr::get($c, 'binId'),
+                'organization'   => Arr::get($c, 'organization'),
+                'state'          => Arr::get($c, 'state'),
+                'remark'         => Arr::get($c, 'remark'),
+                'createTime'     => Arr::get($c, 'createTime') ? Carbon::parse($c['createTime']) : null,
+                'modifyTime'     => Arr::get($c, 'modifyTime') ? Carbon::parse($c['modifyTime']) : null,
+
+                'cardBalance'    => is_numeric(Arr::get($c, 'cardBalance')) ? (float)$c['cardBalance'] : 0,
+
+                'adapterSign'    => Arr::get($c, 'adapterSign'),
+                'totalConsume'   => is_numeric(Arr::get($c, 'totalConsume')) ? (float)$c['totalConsume'] : null,
+                'totalRefund'    => is_numeric(Arr::get($c, 'totalRefund')) ? (float)$c['totalRefund'] : null,
+                'totalRecharge'  => is_numeric(Arr::get($c, 'totalRecharge')) ? (float)$c['totalRecharge'] : null,
+                'totalCashOut'   => is_numeric(Arr::get($c, 'totalCashOut')) ? (float)$c['totalCashOut'] : null,
+                'bankCardId'     => $bankCardId,
+                'hiddenNum'      => Arr::get($c, 'hiddenNum'),
+                'hiddenCvv'      => Arr::get($c, 'hiddenCvv'),
+                'hiddenDate'     => Arr::get($c, 'hiddenDate'),
+                'isHidden'       => Arr::get($c, 'isHidden') ? true : false,
+                'email'          => Arr::get($c, 'email'),
+            ];
+
+            Card::create($payload);
+        }
+
+
+        return response()->json(['success' => true, 'message' => 'Cards synced', 'count' => count($cards)]);
     }
 }

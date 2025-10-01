@@ -35,7 +35,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/cards', [CardController::class, 'index'])->name('cards');
     Route::get('/cards/create', [CardController::class, 'show_bins'])->name('show_bins');
 
+    // cards
     Route::get('/cards/fetch', [CardController::class, 'fetch_bins'])->name('fetch_bins');
+    Route::get('/cards/get_all_cards', [CardController::class, 'get_all_cards'])->name('get_all_cards');
+    Route::get('/cards/get_card_balance', [CardController::class, 'get_card_balance'])->name('get_card_balance'); //get the card balance
     Route::post('/cards/opencard', [CardController::class, 'open_card'])->name('open_card');
 
     Route::get('/fundings', [FundController::class, 'index'])->name('fundings');

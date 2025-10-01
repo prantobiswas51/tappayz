@@ -14,14 +14,33 @@ return new class extends Migration
         Schema::create('cards', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
-            $table->string('credit_card_id');
-            $table->string('number');
-            $table->string('expiry_date');
-            $table->string('cvv');
-            $table->string('card_balance');
-            $table->string('organization');
-            $table->string('create_time')->nullable();
-            $table->string('state');
+            $table->string('number')->unique();
+            $table->string('expiryDate')->nullable();
+            $table->string('cvv')->nullable();
+            $table->string('vcc_id')->nullable();
+            $table->string('organization')->nullable();
+            $table->string('email')->nullable();
+            $table->decimal('cardBalance', 12, 2)->default(0);
+
+            $table->string('bin')->nullable();
+            $table->string('binId')->nullable();
+
+            $table->string('state')->nullable();
+            $table->string('remark')->nullable();
+            $table->string('createTime')->nullable();
+            $table->string('modifyTime')->nullable();
+            $table->string('adapterSign')->nullable();
+            $table->string('totalConsume')->nullable();
+            $table->string('totalRefund')->nullable();
+            $table->string('totalRecharge')->nullable();
+
+            $table->string('totalCashOut')->nullable();
+            $table->string('bankCardId')->nullable();
+
+            $table->string('hiddenNum')->nullable();
+            $table->string('hiddenCvv')->nullable();
+            $table->string('hiddenDate')->nullable();
+            $table->string('isHidden')->nullable();
             $table->timestamps();
         });
     }
