@@ -1,192 +1,281 @@
-<!DOCTYPE html>
-<html lang="en">
+<x-guest-layout>
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20 bg-gradient-to-br from-blue-50 to-purple-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <p class="text-primary-green text-sm font-medium mb-4">Trusted by 100,000+ users worldwide</p>
+                    <h1 class="text-5xl lg:text-6xl font-bold text-black mb-6">
+                        The Future of
+                        <span class="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                            Digital Payments
+                        </span>
+                    </h1>
+                    <p class="text-xl text-gray-600 mb-8">
+                        Create virtual cards instantly, fund with multiple currencies, and make secure payments anywhere
+                        in the world. Mastercard & Visa powered.
+                    </p>
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tappayz – Fast, Secure Payments</title>
-    <meta name="description"
-        content="Tappayz is the fastest way to send and receive money globally with secure transactions and low fees." />
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-
-<body>
-    <header class="site">
-        <div class="container" style="display:flex; align-items:center; justify-content:space-between; padding:16px 0;">
-            <a href="/" class="brand" style="text-decoration:none; color:inherit;">
-                <div class="brand-badge"></div>
-                <div>Tappayz</div>
-            </a>
-            <nav style="display:flex; gap:14px; align-items:center;">
-                <a href="#features" class="help">Features</a>
-                <a href="{{ route('pricing') }}" class="help">Pricing</a>
-                <a href="{{ route('faq') }}" class="help">FAQ</a>
-                <a href="{{ route('contact') }}" class="help">Contact</a>
-                @auth
-                    <a class="btn btn-brand" href="{{ route('dashboard') }}">Dashboard</a>
-                @else
-                    <a class="btn btn-ghost" href="{{ route('login') }}">Sign in</a>
-                    <a class="btn btn-brand" href="{{ route('register') }}">Get started</a>
-                @endauth
-            </nav>
-        </div>
-    </header>
-    <section class="banner sky">
-        <div class="container banner-inner">
-            <div>
-                <div class="badge text-white">New</div>
-                <h2 class="heading text-white">Launch cards in minutes, not weeks</h2>
-                <div class="sub text-white">No paperwork marathon. Create virtual cards instantly and
-                    control spend in real time.</div>
-                <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                    <a class="btn btn-brand" href="{{ route('register') }}">Start free</a>
-                    <a class="btn btn-ghost" href="{{ route('login') }}">Sign in</a>
-                </div>
-                <div style="margin-top:24px; padding-top:20px; border-top:1px solid #e9ecef;">
-                    <h1 class="text-white" style="margin:0 0 6px; font-size:32px; line-height:1.1;">Issue virtual cards
-                        with
-                        control and clarity</h1>
-                    <p class="help" style="max-width:600px; margin:0 0 18px; color: #6c757d;">Empower your team to spend
-                        securely. Real-time limits, instant cards, and detailed reporting — all in one elegant
-                        dashboard.</p>
-                    <div style="display:flex; gap:12px; flex-wrap:wrap;">
-                        <a class="btn btn-brand" href="{{ route('dashboard') }}">Create free account</a>
-                        <a class="btn btn-ghost" href="#features"
-                            style="background: #f8f9fa; color: #333; border: 1px solid #e9ecef;">Explore features</a>
-                    </div>
-                </div>
-            </div>
-            <div class="right" style="display:grid; gap:14px; justify-items:end;">
-                <div class="world-scene">
-                    <svg class="world-map" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                        <defs>
-                            <linearGradient id="sea" x1="0" x2="1">
-                                <stop offset="0" stop-color="#0a1b34" />
-                                <stop offset="1" stop-color="#0e2547" />
-                            </linearGradient>
-                            <linearGradient id="land" x1="0" x2="1">
-                                <stop offset="0" stop-color="#1b365f" />
-                                <stop offset="1" stop-color="#24477a" />
-                            </linearGradient>
-                        </defs>
-                        <rect width="600" height="400" fill="url(#sea)" rx="16" />
-                        <g fill="url(#land)" opacity=".9">
-                            <path d="M60 150l40-20 30 10 30-12 25 10 10 20-20 10-30 5-35-10-25-13z" />
-                            <path d="M210 120l34-10 40 15 30 2 22 14-18 18-28 8-38-6-22-12z" />
-                            <path d="M400 130l30-6 24 8 28 18-12 20-24 10-26-6-22-18z" />
-                            <path d="M120 230l24-6 20 8 16 14-10 16-22 8-20-6-12-14z" />
-                        </g>
-                    </svg>
-                    <div class="vcard blue animate card-on-map">
-                        <div class="brandmark"></div>
-                        <div class="number">5244 ••42 ••65 ••88</div>
-                        <div class="meta">
-                            <div>Marketing</div>
-                            <div>12/29</div>
+                    <div class="space-y-4 mb-8">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 text-primary-green mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-700">Create cards in under 30 seconds</span>
+                        </div>
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 text-primary-green mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-700">Bank-level security & encryption</span>
+                        </div>
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 text-primary-green mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-700">Accepted worldwide</span>
                         </div>
                     </div>
-                    <span class="pin us"></span>
-                    <span class="pin eu"></span>
-                    <span class="pin asia"></span>
-                    <span class="pin sa"></span>
-                    <span class="pulse small" style="left:88px; top:88px;"></span>
-                    <span class="pulse medium" style="left:216px; top:70px;"></span>
-                    <span class="pulse large" style="right:68px; top:96px;"></span>
-                    <span class="line us-eu"></span>
-                    <span class="line eu-asia"></span>
-                    <span class="line us-sa"></span>
+
+                    <div class="flex items-center space-x-6 mb-8">
+                        <div class="flex items-center">
+                            <div class="flex text-yellow-400">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                    </path>
+                                </svg>
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                    </path>
+                                </svg>
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                    </path>
+                                </svg>
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                    </path>
+                                </svg>
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                    </path>
+                                </svg>
+                            </div>
+                            <span class="ml-2 text-gray-600">4.9/5 Trustpilot</span>
+                        </div>
+                        <div class="text-gray-600">Join 100K+ users</div>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <div class="grid grid-cols-2 gap-6">
+                        <!-- Mastercard -->
+                        <div
+                            class="bg-black rounded-2xl p-5 text-white hover:shadow-xl transition-all duration-1000 transform translate-x-full opacity-0 animate-slide-in-left">
+                            <div class="flex justify-between items-start mb-3">
+                                <div class="text-sm opacity-80">MASTERCARD</div>
+                                <div class="w-8 h-6 bg-white rounded flex items-center justify-center">
+                                    <div class="w-4 h-3 bg-gray-300 rounded-sm"></div>
+                                </div>
+                            </div>
+                            <div class="text-sm opacity-80 mb-2">Debit Card</div>
+                            <div class="text-lg font-semibold mb-3">John Doe</div>
+                            <div class="text-sm opacity-80">**** **** **** 5678</div>
+                            <div class="text-sm opacity-80">12/25</div>
+                        </div>
+
+                        <!-- Visa -->
+                        <div
+                            class="bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-5 text-white hover:shadow-xl transition-all duration-1000 transform translate-x-full opacity-0 animate-slide-in-right">
+                            <div class="flex justify-between items-start mb-3">
+                                <div class="text-sm opacity-80">Tappayz Debit Card • USD</div>
+                                <div class="text-sm font-bold">VISA</div>
+                            </div>
+                            <div class="text-lg font-semibold mb-3">John Doe</div>
+                            <div class="text-sm opacity-80">**** **** **** 1234</div>
+                            <div class="text-sm opacity-80">12/25</div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 space-y-4">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 text-primary-green mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-700">Instant card generation</span>
+                        </div>
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 text-primary-green mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-700">Real-time balance updates</span>
+                        </div>
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 text-primary-green mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-700">Multi-currency support</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="brands">
-        <div class="container brands-inner">
-            <div class="brands-track">
-                <span class="brand-chip"><span class="brand-dot"></span> PayPal</span>
-                <span class="brand-chip"><span class="brand-dot"></span> AliExpress</span>
-                <span class="brand-chip"><span class="brand-dot"></span> Alibaba</span>
-                <span class="brand-chip"><span class="brand-dot"></span> eBay</span>
-                <span class="brand-chip"><span class="brand-dot"></span> Amazon</span>
-                <span class="brand-chip"><span class="brand-dot"></span> Google Ads</span>
-                <span class="brand-chip"><span class="brand-dot"></span> Meta Ads</span>
-                <span class="brand-chip"><span class="brand-dot"></span> Netflix</span>
-                <span class="brand-chip"><span class="brand-dot"></span> Spotify</span>
-                <span class="brand-chip"><span class="brand-dot"></span> Azure</span>
-                <span class="brand-chip"><span class="brand-dot"></span> AWS</span>
-                <span class="brand-chip"><span class="brand-dot"></span> DigitalOcean</span>
-                <span class="brand-chip"><span class="brand-dot"></span> Payoneer</span>
-                <span class="brand-chip"><span class="brand-dot"></span> Wise</span>
-                <!-- duplicate for seamless loop -->
-                <span class="brand-chip"><span class="brand-dot"></span> PayPal</span>
-                <span class="brand-chip"><span class="brand-dot"></span> AliExpress</span>
-                <span class="brand-chip"><span class="brand-dot"></span> Alibaba</span>
-                <span class="brand-chip"><span class="brand-dot"></span> eBay</span>
-                <span class="brand-chip"><span class="brand-dot"></span> Amazon</span>
-                <span class="brand-chip"><span class="brand-dot"></span> Google Ads</span>
-                <span class="brand-chip"><span class="brand-dot"></span> Meta Ads</span>
-                <span class="brand-chip"><span class="brand-dot"></span> Netflix</span>
-                <span class="brand-chip"><span class="brand-dot"></span> Spotify</span>
-                <span class="brand-chip"><span class="brand-dot"></span> Azure</span>
-                <span class="brand-chip"><span class="brand-dot"></span> AWS</span>
-                <span class="brand-chip"><span class="brand-dot"></span> DigitalOcean</span>
-                <span class="brand-chip"><span class="brand-dot"></span> Payoneer</span>
-                <span class="brand-chip"><span class="brand-dot"></span> Wise</span>
+    <!-- Virtual Payment Cards Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl lg:text-5xl font-bold text-black mb-6">Virtual Payment Cards That Work</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Get a Virtual Payment Card for seamless online purchases, subscriptions, and international
+                    transactions.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Create Virtual Cards -->
+                <div class="text-center p-8 rounded-2xl hover:shadow-lg transition-shadow duration-300">
+                    <div class="w-16 h-16 bg-black rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4zM18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-black mb-4">Create Virtual Cards</h3>
+                    <p class="text-gray-600">
+                        Create Virtual Payment Cards with multiple currencies for effortless payments on online stores,
+                        subscriptions, and checkouts.
+                    </p>
+                </div>
+
+                <!-- Fund Virtual Cards -->
+                <div class="text-center p-8 rounded-2xl hover:shadow-lg transition-shadow duration-300">
+                    <div class="w-16 h-16 bg-primary-orange rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z">
+                            </path>
+                            <path fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-black mb-4">Fund Virtual Cards</h3>
+                    <p class="text-gray-600">
+                        Fund Virtual Payment Cards by transferring from any bank to your dedicated account, or with
+                        cryptocurrency.
+                    </p>
+                </div>
+
+                <!-- View & Use Card -->
+                <div class="text-center p-8 rounded-2xl hover:shadow-lg transition-shadow duration-300">
+                    <div class="w-16 h-16 bg-primary-blue rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-black mb-4">View & Use Card</h3>
+                    <p class="text-gray-600">
+                        Check your card balance and view credentials anytime with the Tappayz app.
+                    </p>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="section-alt">
-        <div class="container" style="padding:24px 0 28px;">
-            <div class="panel-curved">
-                <div class="grid grid-2">
-                    <div class="feature-rows">
-                        <div class="feature-row">
-                            <div class="icon"></div>
-                            <div class="content">
-                                <div class="title">Controls your finance team will love</div>
-                                <div class="desc">Set per-card limits, freeze instantly, and label spend by team or
-                                    project.</div>
-                            </div>
-                        </div>
-                        <div class="feature-row">
-                            <div class="icon" style="background:linear-gradient(135deg, var(--accent), var(--brand));">
-                            </div>
-                            <div class="content">
-                                <div class="title">Faster onboarding</div>
-                                <div class="desc">Create your first card right after signup. No long waits.</div>
-                            </div>
-                        </div>
-                        <div class="feature-row">
-                            <div class="icon"
-                                style="background:linear-gradient(135deg, var(--success), var(--brand-strong));"></div>
-                            <div class="content">
-                                <div class="title">Real-time insights</div>
-                                <div class="desc">Track every transaction and keep teams on budget.</div>
-                            </div>
+    <!-- Feature Blocks Section -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Free Instant Virtual Card -->
+                <div class="bg-primary-blue rounded-2xl p-8 text-white">
+                    <h3 class="text-2xl font-bold mb-4">3D Secure Virtual cards</h3>
+                    <p class="text-lg mb-6">Use the card at checkout like a regular card. 3D Secure prompts you to
+                        authenticate.</p>
+                </div>
+
+                <!-- Real time notifications -->
+                <div class="bg-white rounded-2xl p-8 shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-2xl font-bold text-black">Real time notifications</h3>
+                        <div class="relative">
+                            <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L14 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z">
+                                </path>
+                            </svg>
+                            <div class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
                         </div>
                     </div>
+                    <p class="text-gray-600 mb-6">
+                        Top up your Tappayz virtual card in real time, get your card in real time, be notified of each
+                        expense, block and unblock your card in real time, etc.
+                    </p>
+                    <button
+                        class="bg-primary-green text-white px-6 py-3 rounded-lg font-medium hover:bg-green-600 transition-colors">
+                        Download App
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Watch Our Videos Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-black mb-4">Watch Our Videos</h2>
+                <p class="text-xl text-gray-600">Learn how Tappayz virtual cards work and see real user experiences.</p>
+            </div>
+
+            <div class="max-w-4xl mx-auto">
+                <div class="relative bg-gray-900 rounded-2xl overflow-hidden mb-8">
+                    <div class="aspect-video">
+                        <iframe width="100%" height="100%"
+                            src="https://www.youtube.com/embed/0F-Qh0oRJDQ?si=916c3YfLncv04xzU&amp;start=41"
+                            title="YouTube video player" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen
+                            class="rounded-2xl"></iframe>
+                    </div>
+                </div>
+
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
                     <div>
-                        <div class="stats-strip">
-                            <div class="stat">
-                                <div class="num">$12.4k</div>
-                                <div class="lbl">Balance</div>
-                            </div>
-                            <div class="stat">
-                                <div class="num">8</div>
-                                <div class="lbl">Active cards</div>
-                            </div>
-                            <div class="stat">
-                                <div class="num">$4.9k</div>
-                                <div class="lbl">30d spend</div>
-                            </div>
-                            <div class="stat">
-                                <div class="num">3</div>
-                                <div class="lbl">Pending</div>
-                            </div>
+                        <h3 class="text-2xl font-bold text-black mb-2">How to Use Tappayz Virtual Cards</h3>
+                        <p class="text-gray-600 mb-4">Complete guide to creating and managing your virtual payment
+                            cards.</p>
+                        <p class="text-gray-600">
+                            Learn how to create virtual cards instantly, fund them with multiple currencies, and make
+                            secure payments anywhere in the world. Our virtual cards work with Mastercard and Visa
+                            networks for maximum acceptance.
+                        </p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-4 mt-6 lg:mt-0 lg:ml-8">
+                        <div class="text-sm text-gray-500 text-center lg:text-right">
+                        </div>
+                        <div class="flex gap-4">
                         </div>
                     </div>
                 </div>
@@ -194,158 +283,49 @@
         </div>
     </section>
 
+    <!-- FAQ Section -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-black mb-4">Frequently Asked Questions</h2>
+                <p class="text-xl text-gray-600">
+                    We've compiled common questions to give you more information and enhance your overall experience
+                    with Tappayz.
+                </p>
+            </div>
 
-    <section id="features" class="container" style="padding:30px 0 10px;">
-        <div class="grid grid-3">
-            <div class="widget">
-                <div class="kpi">
-                    <div class="label">Instant issuance</div>
-                    <div class="value">Create in seconds</div>
+            <div class="space-y-8">
+                <div class="bg-white rounded-2xl p-8 shadow-sm">
+                    <h3 class="text-xl font-bold text-black mb-4">What are Tappayz Virtual Cards, and how do they work?
+                    </h3>
+                    <p class="text-gray-600">
+                        Tappayz Virtual Cards are virtual debit cards designed for international online payments. They
+                        can be funded from your local or USD wallet and are available as Basic Dollar Card (Mastercard)
+                        and Standard Dollar Card (Visa). These cards work just like traditional debit cards but exist
+                        only digitally, allowing you to make secure online purchases worldwide.
+                    </p>
                 </div>
-                <div class="help" style="margin-top:8px;">Spin up virtual cards with custom limits and labels.</div>
-            </div>
-            <div class="widget">
-                <div class="kpi">
-                    <div class="label">Powerful controls</div>
-                    <div class="value">Per-card limits</div>
+
+                <div class="bg-white rounded-2xl p-8 shadow-sm">
+                    <h3 class="text-xl font-bold text-black mb-4">How can I fund my Tappayz Virtual Cards?</h3>
+                    <p class="text-gray-600">
+                        Funding your Tappayz Virtual Cards is easy and flexible. You can fund them using your local
+                        wallet or USD wallet to create and load virtual debit cards. This allows you to allocate
+                        specific amounts for online transactions, giving you better control over your spending and
+                        enhanced security for your financial activities.
+                    </p>
                 </div>
-                <div class="help" style="margin-top:8px;">Freeze, terminate, and set spend policies with ease.</div>
-            </div>
-            <div class="widget">
-                <div class="kpi">
-                    <div class="label">Detailed insights</div>
-                    <div class="value">Real-time data</div>
+
+                <div class="bg-white rounded-2xl p-8 shadow-sm">
+                    <h3 class="text-xl font-bold text-black mb-4">What distinguishes Tappayz Virtual Dollar Cards?</h3>
+                    <p class="text-gray-600">
+                        Tappayz Virtual Dollar Cards are digital debit cards that you can create and fund with multiple
+                        currencies. They are available as Basic Dollar Cards (Mastercard) and Standard Dollar Cards
+                        (Visa), facilitating seamless payments for international online purchases, subscriptions, and
+                        transactions worldwide.
+                    </p>
                 </div>
-                <div class="help" style="margin-top:8px;">Track transactions and budgets in a modern UI.</div>
             </div>
         </div>
     </section>
-
-    <section class="container" style="padding:10px 0 10px;">
-        <div class="grid grid-3">
-            <div class="card">
-                <div class="card-title">Use cases</div>
-                <ul class="help" style="margin:8px 0 0; padding-left:18px;">
-                    <li>Ad accounts and media buying</li>
-                    <li>Subscriptions and SaaS trials</li>
-                    <li>Team budgets and one-off purchases</li>
-                </ul>
-            </div>
-            <div class="card">
-                <div class="card-title">How it works</div>
-                <ol class="help" style="margin:8px 0 0; padding-left:18px;">
-                    <li>Create account and verify KYC</li>
-                    <li>Fund your balance</li>
-                    <li>Issue cards with limits and labels</li>
-                </ol>
-            </div>
-            <div class="card">
-                <div class="card-title">Security & compliance</div>
-                <ul class="help" style="margin:8px 0 0; padding-left:18px;">
-                    <li>Card tokenization</li>
-                    <li>Spend controls and monitoring</li>
-                    <li>Data encryption in transit and at rest</li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
-
-
-
-    <section class="container" style="padding:10px 0 40px;">
-        <div class="card">
-            <div class="card-title" style="margin-bottom:6px;">FAQ</div>
-            <div class="grid grid-2">
-                <div>
-                    <div class="help"><strong>How do I fund my account?</strong> Bank transfer, crypto USDT, or card
-                        top-up.</div>
-                    <div class="help" style="margin-top:8px;"><strong>Can I cancel a card?</strong> Yes, freeze or
-                        terminate instantly.</div>
-                </div>
-                <div>
-                    <div class="help"><strong>Is there an API?</strong> Yes, integrate issuance and controls with your
-                        stack.</div>
-                    <div class="help" style="margin-top:8px;"><strong>Do you support multi-currency?</strong> Yes,
-                        USD/EUR/GBP today.</div>
-                </div>
-            </div>
-            <a class="btn btn-ghost" style="margin-top:12px;" href="pages/faq.html">See all FAQs</a>
-        </div>
-    </section>
-
-    <section class="container" style="padding:20px 0 60px;">
-        <div class="card"
-            style="display:flex; gap:16px; align-items:center; justify-content:space-between; flex-wrap:wrap;">
-            <div>
-                <div class="card-title">Ready to get started?</div>
-                <div class="card-subtitle">Sign up in minutes and issue your first card today.</div>
-            </div>
-            <div style="display:flex; gap:10px;">
-                <a class="btn btn-brand" href="pages/register.html">Create account</a>
-                <a class="btn btn-ghost" href="{{ route('login') }}">Sign in</a>
-            </div>
-        </div>
-    </section>
-
-    <footer style="background:#0b1124; border-top:1px solid var(--border); margin-top:40px;">
-        <div class="container" style="padding:40px 0 30px;">
-            <div class="grid grid-4" style="margin-bottom:30px;">
-                <div>
-                    <div class="brand" style="gap:8px; margin-bottom:12px;">
-                        <div class="brand-badge" style="width:28px;height:28px;"></div>
-                        <div>Tappayz</div>
-                    </div>
-                    <div class="help" style="margin-bottom:8px;">123 Business Street, Suite 100<br />New York, NY 10001,
-                        USA</div>
-                    <div class="help">support@tappayz.com<br />+1 (555) 123-4567</div>
-                </div>
-                <div>
-                    <div class="card-title" style="margin-bottom:12px;">Product</div>
-                    <div style="display:grid; gap:8px;">
-                        <a href="pages/pricing.html" class="help" style="text-decoration:none;">Pricing</a>
-                        <a href="#features" class="help" style="text-decoration:none;">Features</a>
-                        <a href="pages/faq.html" class="help" style="text-decoration:none;">FAQ</a>
-                        <a href="pages/support.html" class="help" style="text-decoration:none;">Support</a>
-                    </div>
-                </div>
-                <div>
-                    <div class="card-title" style="margin-bottom:12px;">Company</div>
-                    <div style="display:grid; gap:8px;">
-                        <a href="pages/about.html" class="help" style="text-decoration:none;">About</a>
-                        <a href="pages/contact.html" class="help" style="text-decoration:none;">Contact</a>
-                        <a href="pages/privacy.html" class="help" style="text-decoration:none;">Privacy Policy</a>
-                        <a href="pages/terms.html" class="help" style="text-decoration:none;">Terms of Service</a>
-                    </div>
-                </div>
-                <div>
-                    <div class="card-title" style="margin-bottom:12px;">Payment Methods</div>
-                    <div style="display:grid; gap:8px;">
-                        <div class="help">We accept:</div>
-                        <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                            <span class="status success">Bitcoin</span>
-                            <span class="status success">USDT</span>
-                            <span class="status success">Ethereum</span>
-                            <span class="status success">Bank Transfer</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div
-                style="border-top:1px solid var(--border); padding-top:20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;">
-                <div class="help">© 2025 Tappayz. All rights reserved.</div>
-                <div style="display:flex; align-items:center; gap:12px;">
-                    <div class="help">Trusted by 10,000+ businesses</div>
-                    <div style="display:flex; align-items:center; gap:4px;">
-                        <span style="color:#ffd700;">★★★★★</span>
-                        <span class="help">4.9/5 on Trustpilot</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-    <script src="assets/js/main.js"></script>
-</body>
-
-</html>
+</x-guest-layout>
