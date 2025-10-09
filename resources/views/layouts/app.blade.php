@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Cards') }}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -14,6 +14,7 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script id="chatway" async="true" src="https://cdn.chatway.app/widget.js?id=ZiAPCuGL3IpX"></script>
 </head>
 
 <body class="font-sans antialiased">
@@ -21,8 +22,7 @@
 
         <aside class="sidebar bg-gray-300 text-gray-700" style="background-color: aliceblue !important;">
             <div class="brand">
-                <div class="brand-badge"></div>
-                <div>Tappayz</div>
+                <div><img src="{{ asset('images/logo.png') }}" alt="Tappayz"></div>
             </div>
 
             <nav class="nav flex flex-col">
