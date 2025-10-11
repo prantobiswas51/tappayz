@@ -4,7 +4,7 @@
         <div class="topbar">
             <div class="brand" style="gap:8px;">
                 <div class="brand-badge" style="width:28px;height:28px;"></div>
-                <div>Overview</div>
+                <div>Overview | {{ Auth::user()->name }} </div>
             </div>
             <input class="input search" placeholder="Search…"
                 style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333;" />
@@ -12,11 +12,11 @@
         <section class="grid grid-4" style="max-width: 800px; margin: 0;">
             <div class="widget kpi" style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333; padding: 16px;">
                 <div class="label" style="color: #6c757d; font-size: 12px;">Total Balance</div>
-                <div class="value" style="color: #28a745; font-weight: 700; font-size: 18px;">$12,480.16</div>
+                <div class="value" style="color: #28a745; font-weight: 700; font-size: 18px;">${{ Auth::user()->balance }} </div>
             </div>
             <div class="widget kpi" style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333; padding: 16px;">
                 <div class="label" style="color: #6c757d; font-size: 12px;">Active Cards</div>
-                <div class="value" style="color: #007bff; font-weight: 700; font-size: 18px;">8</div>
+                <div class="value" style="color: #007bff; font-weight: 700; font-size: 18px;">{{ Auth::user()->active_cards }}</div>
             </div>
             <div class="widget kpi" style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333; padding: 16px;">
                 <div class="label" style="color: #6c757d; font-size: 12px;">Spending (30d)</div>

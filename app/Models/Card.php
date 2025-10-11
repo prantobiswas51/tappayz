@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Card extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'user_id',
         'number',
@@ -39,4 +42,3 @@ class Card extends Model
         return $this->belongsTo(User::class);
     }
 }
-

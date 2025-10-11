@@ -42,96 +42,60 @@
             </div>
         </div>
 
-        <div class="my-3">
-            <form action="{{ route('get_all_cards') }}" method="get">
-                @csrf
-                <button type="submit" class="btn btn-ghost">Get All Cards</button>
-            </form>
-        </div>
-
         <div class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
+            @foreach ($mycards as $card)
             <div class="flex items-center space-x-6">
                 <!-- Card Icon -->
-                <div
-                    class="w-16 h-12 bg-gradient-to-r from-blue-500 to-blue-700 rounded-lg flex items-center justify-center">
-                    <div class="w-8 h-6 bg-white rounded-sm flex items-center justify-center">
-                        <div
-                            class="w-6 h-4 bg-gradient-to-r from-blue-400 to-blue-600 rounded-sm relative overflow-hidden">
-                            <div class="absolute top-1 left-1 w-1 h-1 bg-white rounded-full"></div>
-                            <div class="absolute top-1 right-1 w-1 h-1 bg-white rounded-full"></div>
-                            <div class="absolute bottom-1 left-1 w-1 h-1 bg-white rounded-full"></div>
-                            <div class="absolute bottom-1 right-1 w-1 h-1 bg-white rounded-full"></div>
-                        </div>
+                
+                    <div class=" bg-white rounded-sm flex items-center justify-center">
+                        @php
+                        if($card->organization == 'VISA'){
+                        echo '<img src="/images/visa-a.png" alt="VISA" class="h-10">';
+                        } else if($card->organization == 'MASTERCARD'){
+                        echo '<img src="/images/mastercard.png" alt="MasterCard" class="h-10">';
+                        } else {
+                        echo '<img src="/images/card.png" alt="Card" class="h-10">';
+                        }
+                        @endphp
                     </div>
-                </div>
 
                 <!-- Card Details -->
                 <div class="flex-1 grid grid-cols-2 md:grid-cols-6 gap-6">
                     <div>
                         <div class="text-sm text-gray-500 mb-1">Card Type:</div>
-                        <div class="text-sm font-medium text-gray-800">Visa</div>
+                        <div class="text-sm font-medium text-gray-800">{{ $card->organization }}</div>
+                    </div>
+                    <div>
+                        <div class="text-sm text-gray-500 mb-1">Email</div>
+                        <div class="text-sm font-medium text-gray-800">{{ $card->email }}</div>
                     </div>
                     <div>
                         <div class="text-sm text-gray-500 mb-1">Card Number:</div>
-                        <div class="text-sm font-medium text-gray-800 font-mono">4576 62** **** ****</div>
+                        <div class="text-sm font-medium text-gray-800 font-mono">{{ $card->hiddenNum }}</div>
                     </div>
                     <div>
                         <div class="text-sm text-gray-500 mb-1">Expire:</div>
-                        <div class="text-sm font-medium text-gray-800">12/27</div>
+                        <div class="text-sm font-medium text-gray-800">{{ $card->hiddenDate }}</div>
                     </div>
                     <div>
                         <div class="text-sm text-gray-500 mb-1">CVV:</div>
-                        <div class="text-sm font-medium text-gray-800">455</div>
+                        <div class="text-sm font-medium text-gray-800">{{ $card->hiddenCvv }}</div>
                     </div>
                     <div>
                         <div class="text-sm text-gray-500 mb-1">Name in Card:</div>
                         <div class="text-sm font-medium text-gray-800">{{ Auth::user()->name }}</div>
                     </div>
-                    <div>
-                        <div class="text-sm text-gray-500 mb-1">Balance:</div>
-                        <div class="text-sm font-medium text-gray-800 ">
-                            <form action="{{ route('get_card_balance') }}" method="get">
-                                <p class="h3 p-2 border rounded-3xl max-w-max" id="balance_holder">
-                                    Tap to check
-                                </p>
-                            </form>
-                        </div>
-                    </div>
                 </div>
- 
+
                 <!-- Action Buttons -->
                 <div class="flex items-center space-x-4">
                     <button id="seeNumberBtn"
-                        class="text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors">
-                        See Number
+                        class="text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors border border-blue-600 px-3 py-1 rounded-lg">
+                        See Details
                     </button>
-                    <button id="topUpBtn"
-                        class="text-blue-600 hover:text-blue-800 text-sm font-bold uppercase transition-colors">
-                        TOP UP
-                    </button>
-                    <div class="relative">
-                        <button id="menuBtn" class="text-gray-400 hover:text-gray-600">
-                            <i class="fas fa-ellipsis-v"></i>
-                        </button>
-                        <!-- Dropdown Menu -->
-                        <div id="dropdownMenu"
-                            class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 hidden z-50">
-                            <div class="py-2">
-                                <button id="freezeBtn"
-                                    class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2">
-                                    <i class="fas fa-snowflake text-blue-500"></i>
-                                    <span>Freeze Card</span>
-                                </button>
-                                <button id="terminateBtn"
-                                    class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2">
-                                    <i class="fas fa-times-circle text-red-500"></i>
-                                    <span>Terminate Card</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
+            @endforeach
         </div>
 
     </main>

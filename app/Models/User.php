@@ -34,8 +34,28 @@ class User extends Authenticatable
         ];
     }
 
+    /**
+     * Get all cards belonging to this user.
+     */
     public function cards()
     {
         return $this->hasMany(Card::class);
+    }
+
+    /**
+     * Get only the active cards belonging to this user.
+     */
+    public function activeCards()
+    {
+        return $this->hasMany(Card::class)->where('state', 'Active');
+    }
+
+    /**
+     * Get the count of active cards for this user.
+     * This is used in the dashboard to display active cards count.
+     */
+    public function getActiveCardsAttribute(): int
+    {
+        return $this->activeCards()->count();
     }
 }
