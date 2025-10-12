@@ -115,10 +115,12 @@ class CardController extends Controller
         ];
 
         $params['sign'] = $this->sign($params);
+
         $response = Http::asForm()->post($this->baseUrl.'/bank_card/open_card', $params);
-        $data = $response->json();
+        $data = json_decode($response, true);
         $orderId = $data['content']['id'];
-        Log::info('OrderId is : '.$orderId);
+
+        Log::info('OrderId is : ' . $orderId);
 
         // next call
         $params = [
@@ -130,7 +132,7 @@ class CardController extends Controller
         $params['sign'] = $this->sign($params);
 
         // ✅ Must be form-data, not JSON
-        $details_response = Http::asForm()->post($this->baseUrl.'/bank_card/open_detail', $params);
+        $details_response = Http::asForm()->post($this->baseUrl . '/bank_card/open_detail', $params);
         $responseData = $details_response->json(); // returns the order related details
         $card_number = $responseData['content']['userBankCardNum'];
         // $card_number = '4938751973059576';
