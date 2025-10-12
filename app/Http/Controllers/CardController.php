@@ -117,6 +117,11 @@ class CardController extends Controller
 
         $response = Http::asForm()->post($this->baseUrl . '/bank_card/open_card', $params);
 
+        if ($response->failed()) {
+            Log::error('Failed to open card: ' . $response->body());
+            return redirect()->route('status')->with('error', 'First Function Failed');
+        }
+
         $data = json_decode($response, true); // decode JSON string to PHP array
 
         if (!$data || !isset($data['content']['id'])) {
@@ -128,9 +133,6 @@ class CardController extends Controller
 
         $orderId = $data['content']['id'];
         Log::info('OrderId is: ' . $orderId);
-
-
-
 
 
         // $orderId = "C251012152540064266";
@@ -350,5 +352,22 @@ class CardController extends Controller
                 ->route('view_card', $card->id)
                 ->with('status', 'Cashout ' . $request->amount . ' successfully.');
         }
+    }
+
+    public function get_transactions()
+    {
+
+        $timestamp = (string) round(microtime(true) * 1000);
+
+        $params = [
+            'userSerial' => $this->userSerial,
+            'timeStamp' => $timestamp,
+            'page' => '1',
+            'pageSize' => '20',
+        ];
+        $params['sign'] = $this->sign($params);
+
+        $response = Http::asForm()->post($this->baseUrl . '/bank_card/consume_order', $params);
+        dd($response->body());
     }
 }

@@ -3,6 +3,11 @@
         <div class="topbar">
             <div class="brand" style="gap:8px;">
                 <div class="brand-badge" style="width:28px;height:28px;"></div>
+
+                <div class="border p-2">
+                    <a href="{{ route('get_transactions') }}">Get Transactions</a>
+                </div>
+
                 <div>
                     <h1 style="margin:0; font-size:24px; font-weight:700; color: #333;">Transactions</h1>
                     <p style="margin:0; color: #6c757d; font-size:14px;">View and manage your transaction history</p>
