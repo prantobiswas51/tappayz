@@ -143,6 +143,11 @@ class CardController extends Controller
         $card_number = $responseData['content']['userBankCardNum'];
         // $card_number = '4938751973059576';
 
+        $card = new Card();
+        $card->number = $card_number;
+        $card->user_id = Auth::id();
+        $card->save();
+
         // third request
         $params = [
             'userSerial' => $this->userSerial,
