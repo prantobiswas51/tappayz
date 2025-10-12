@@ -18,6 +18,15 @@
 </head>
 
 <body class="font-sans antialiased">
+
+    <div class="container mx-auto mt-4">
+        @if (session('status'))
+            <div class="alert alert-success">
+                {{ session('status') }}
+            </div>
+        @endif
+    </div>
+
     <div class="app min-h-screen bg-gray-100">
 
         <aside class="sidebar bg-gray-300 text-gray-700" style="background-color: aliceblue !important;">

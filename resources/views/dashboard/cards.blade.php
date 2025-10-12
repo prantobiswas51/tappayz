@@ -46,18 +46,18 @@
             @foreach ($mycards as $card)
             <div class="flex items-center space-x-6">
                 <!-- Card Icon -->
-                
-                    <div class=" bg-white rounded-sm flex items-center justify-center">
-                        @php
-                        if($card->organization == 'VISA'){
-                        echo '<img src="/images/visa-a.png" alt="VISA" class="h-10">';
-                        } else if($card->organization == 'MASTERCARD'){
-                        echo '<img src="/images/mastercard.png" alt="MasterCard" class="h-10">';
-                        } else {
-                        echo '<img src="/images/card.png" alt="Card" class="h-10">';
-                        }
-                        @endphp
-                    </div>
+
+                <div class=" bg-white rounded-sm flex items-center justify-center">
+                    @php
+                    if($card->organization == 'VISA'){
+                    echo '<img src="/images/visa-a.png" alt="VISA" class="h-10">';
+                    } else if($card->organization == 'MASTERCARD'){
+                    echo '<img src="/images/mastercard.png" alt="MasterCard" class="h-10">';
+                    } else {
+                    echo '<img src="/images/card.png" alt="Card" class="h-10">';
+                    }
+                    @endphp
+                </div>
 
                 <!-- Card Details -->
                 <div class="flex-1 grid grid-cols-2 md:grid-cols-6 gap-6">
@@ -89,10 +89,10 @@
 
                 <!-- Action Buttons -->
                 <div class="flex items-center space-x-4">
-                    <button id="seeNumberBtn"
-                        class="text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors border border-blue-600 px-3 py-1 rounded-lg">
+                    <a href="{{ route('view_card', $card->id) }}"
+                        class="text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors border border-blue-600 px-3 py-1 rounded-lg hover:bg-blue-50">
                         See Details
-                    </button>
+                    </a>
                 </div>
             </div>
             @endforeach

@@ -38,8 +38,14 @@ Route::middleware('auth')->group(function () {
     // cards
     Route::get('/cards/fetch', [CardController::class, 'fetch_bins'])->name('fetch_bins');
     Route::get('/cards/get_all_cards', [CardController::class, 'get_all_cards'])->name('get_all_cards');
-    Route::get('/cards/get_card_balance', [CardController::class, 'get_card_balance'])->name('get_card_balance'); //get the card balance
-    Route::post('/cards/opencard', [CardController::class, 'open_card'])->name('open_card');
+
+    Route::get('/cards/{id}', [CardController::class, 'view_card'])->name('view_card'); // view card details
+    Route::get('/cards/update/{id}', [CardController::class, 'update_balance'])->name('update_balance');
+    Route::post('/cards/cashout', [CardController::class, 'card_cashout'])->name('card_cashout');
+
+    Route::get('/cards/single_card', [CardController::class, 'get_single_card'])->name('get_single_card'); // fetch single card details from API
+
+    Route::post('/cards/open_card', [CardController::class, 'open_card'])->name('open_card');
 
     Route::get('/fundings', [FundController::class, 'index'])->name('fundings');
     Route::post('/fundings/deposit', [FundController::class, 'deposit'])->name('deposit');
