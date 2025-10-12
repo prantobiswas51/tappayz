@@ -41,8 +41,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/cards/update/{id}', [CardController::class, 'update_balance'])->name('update_balance');
     Route::post('/cards/cashout', [CardController::class, 'card_cashout'])->name('card_cashout');
 
-    Route::get('/cards/single_card', [CardController::class, 'get_single_card'])->name('get_single_card'); // fetch single card details from API
-
+    Route::get('/cards/single_card', [CardController::class, 'get_single_card'])->name('get_single_card');
+    Route::get('/transactions/get', [CardController::class, 'get_transactions'])->name('get_transactions');
     Route::post('/cards/open_card', [CardController::class, 'open_card'])->name('open_card');
 
     Route::get('/fundings', [FundController::class, 'index'])->name('fundings');
@@ -54,4 +54,4 @@ Route::middleware('auth')->group(function () {
     Route::get('/settings', [DashboardController::class, 'settings'])->name('settings');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
