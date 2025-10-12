@@ -123,8 +123,9 @@ class CardController extends Controller
             return redirect()->route('status')->with('error', 'Failed to open card. Please try again.');
         }
 
-        $data = json_decode($response, true);
+        $data = $response->json();
         $orderId = $data['content']['id'];
+        // $orderId = "C251012142546325264";
 
         Log::info('OrderId is : ' . $orderId);
 
