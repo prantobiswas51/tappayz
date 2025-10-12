@@ -118,7 +118,7 @@ class CardController extends Controller
         $response = Http::asForm()->post($this->baseUrl . '/bank_card/open_card', $params);
 
         $data = json_decode($response, true); // decode JSON string to PHP array
-        
+
         if (!$data || !isset($data['content']['id'])) {
             Log::error('Failed to open card: Invalid JSON or missing ID');
             return redirect()->route('status')->with('error', 'Failed to open card. Please try again.');
@@ -128,9 +128,14 @@ class CardController extends Controller
 
         $orderId = $data['content']['id'];
         Log::info('OrderId is: ' . $orderId);
+
+
+
+
+
         // $orderId = "C251012152540064266";
 
-        // next call
+        // next call to get card details
         $params = [
             'userSerial' => $this->userSerial,
             'timeStamp' => $timestamp,
@@ -147,11 +152,14 @@ class CardController extends Controller
             return redirect()->route('status')->with('error', 'Failed to fetch card details. Please try again.');
         }
 
-        $responseData = $details_response->json(); // returns the order related details
-        $card_number = $responseData['content']['userBankCardNum'];
+        Log::info('Details response: ' . $details_response->body());
+
+        $responseData = json_decode($details_response, true); // returns the order related details
+        $card_number = $responseData['content']['userBankCardNum'] ?? null;
+        $userBankCardId = $responseData['content']['userBankCardId'] ?? null;
 
         Log::info('Card number is : ' . $card_number);
-
+        Log::info('User Bank Card ID is : ' . $userBankCardId);
 
         // third request
         $params = [

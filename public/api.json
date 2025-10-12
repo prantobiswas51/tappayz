@@ -1,0 +1,13 @@
+{
+    "code": 0,
+    "msg": "",
+    "content": {
+        "id": "111222333",
+        "clientId":"11111111",
+        "userBankCardId":"464654546",
+        "state": "1",
+        "remark": "card 1",
+        "createTime": "2023-01-01 00:00:00",
+        "modifyTime": "2023-01-01 00:00:00"
+    }
+}
