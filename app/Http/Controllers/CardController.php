@@ -145,21 +145,38 @@ class CardController extends Controller
         $params['sign'] = $this->sign($params);
 
         // ✅ Must be form-data, not JSON
-        $details_response = Http::asForm()->post($this->baseUrl . '/bank_card/open_detail', $params);
+        $maxRetries = 5;
+        $attempt = 0;
+        $card_number = null;
+        $userBankCardId = null;
 
-        if ($details_response->failed()) {
-            Log::error('Failed to fetch card details: ' . $details_response->body());
-            return redirect()->route('status')->with('error', 'Failed to fetch card details. Please try again.');
+        while ($attempt < $maxRetries && !$card_number) {
+            $details_response = Http::asForm()->post($this->baseUrl . '/bank_card/open_detail', $params);
+
+            if ($details_response->failed()) {
+                Log::error('Failed to fetch card details: ' . $details_response->body());
+                return redirect()->route('status')->with('error', 'Failed to fetch card details. Please try again.');
+            }
+
+            $responseData = $details_response->json();
+
+            $card_number = $responseData['content']['userBankCardNum'] ?? null;
+            $userBankCardId = $responseData['content']['userBankCardId'] ?? null;
+
+            if (!$card_number) {
+                $attempt++;
+                Log::info("Card not ready, retrying in 5 seconds... (Attempt $attempt/$maxRetries)");
+                sleep(5); // wait before next retry
+            }
         }
 
-        Log::info('Details response: ' . $details_response->body());
+        if (!$card_number) {
+            Log::error('Card number still not available after 5 attempts.');
+            return redirect()->route('status')->with('error', 'Card not ready. Please try again later.');
+        }
 
-        $responseData = json_decode($details_response, true); // returns the order related details
-        $card_number = $responseData['content']['userBankCardNum'] ?? null;
-        $userBankCardId = $responseData['content']['userBankCardId'] ?? null;
-
-        Log::info('Card number is : ' . $card_number);
-        Log::info('User Bank Card ID is : ' . $userBankCardId);
+        Log::info('Card number is: ' . $card_number);
+        Log::info('User Bank Card ID is: ' . $userBankCardId);
 
         // third request
         $params = [
