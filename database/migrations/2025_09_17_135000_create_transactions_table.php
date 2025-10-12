@@ -13,14 +13,15 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('payment_method'); //Paypal , payeer, crypto, bank, card
-            $table->string('payment_id')->nullable()->unique();
-            $table->string('payer_email')->nullable();
-            $table->string('merchant')->nullable();
-            $table->decimal('amount', 10, 2); // 525
-            $table->enum('status', ['Pending', 'Approved', 'Insufficient Balance', 'Canceled'])->default('Pending'); //pending, failed, success
-            $table->enum('type', ['Deposit', 'Withdrawal', 'Credit', 'Debit']);
+            $table->string('vcc_id')->unique();
+            $table->string('transactionId')->unique();
+            $table->string('cardNum')->nullable();
+            $table->string('clientId')->nullable();
+            $table->string('type')->nullable();
+            $table->string('status')->nullable();
+            $table->decimal('amount', 10, 2);
+            $table->string('merchantName')->nullable();
+            $table->string('recordTime')->nullable();
             $table->timestamps();
         });
     }

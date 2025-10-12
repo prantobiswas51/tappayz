@@ -5,7 +5,9 @@
                 <div class="brand-badge" style="width:28px;height:28px;"></div>
 
                 <div class="border p-2">
-                    <a href="{{ route('get_transactions') }}">Get Transactions</a>
+                    <form action="{{ route('get_transactions') }}" method="get">
+                        <button type="submit">Get Transactions</button>
+                    </form>
                 </div>
 
                 <div>

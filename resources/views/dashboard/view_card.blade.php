@@ -34,7 +34,7 @@
                     &times;
                 </button>
             </div>
-            
+
             <!-- Modal Body -->
             <form action="{{ route('card_cashout') }}" method="post" class="space-y-4">
                 @csrf
@@ -44,38 +44,25 @@
                     </label>
                     <div class="relative">
                         <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
-                        <input 
-                            type="number" 
-                            id="cashout_amount"
-                            name="amount" 
-                            placeholder="0.00" 
-                            min="1" 
-                            max="{{ $card->cardBalance ?? 0 }}"
-                            step="0.01"
-                            required
-                            class="w-full pl-8 pr-3 py-2 border text-gray-600 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        >
+                        <input type="number" id="cashout_amount" name="amount" placeholder="0.00" min="1"
+                            max="{{ $card->cardBalance ?? 0 }}" step="0.01" required
+                            class="w-full pl-8 pr-3 py-2 border text-gray-600 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                     </div>
                     <p class="text-xs text-gray-500 mt-1">
                         Available: ${{ number_format($card->cardBalance ?? 0, 2) }}
                     </p>
                 </div>
-                
+
                 <input type="hidden" name="card_id" value="{{ $card->id }}">
-                
+
                 <!-- Modal Footer -->
                 <div class="flex space-x-3 pt-4">
-                    <button 
-                        type="button" 
-                        id="cancelCashout"
-                        class="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors"
-                    >
+                    <button type="button" id="cancelCashout"
+                        class="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">
                         Cancel
                     </button>
-                    <button 
-                        type="submit" 
-                        class="flex-1 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-                    >
+                    <button type="submit"
+                        class="flex-1 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
                         Cash Out
                     </button>
                 </div>
@@ -168,7 +155,7 @@
                 <!-- Action Buttons -->
                 <div class="lg:col-span-2 flex flex-col  space-y-6">
 
-                    <div class="border w-fit p-2 rounded-xl bg-primary-blue/10 text-primary-blue">
+                    <div class="border w-fit p-2 rounded-xl">
                         <a href="{{ route('update_balance', $card->id) }}">Update Balance</a>
                     </div>
 
@@ -180,7 +167,9 @@
                             <div class="flex flex-col">
                                 <div>
                                     <p class="text-sm font-medium text-gray-500 mb-1">Available Balance</p>
-                                    <p class="text-2xl font-bold text-gray-900">${{ number_format($card->cardBalance ?? 0, 2) }}</p>
+                                    <p class="text-2xl font-bold text-gray-900">${{ number_format($card->cardBalance ??
+                                        1247.85,
+                                        2) }}</p>
                                 </div>
                             </div>
                         </div>
@@ -222,8 +211,7 @@
                             Recharge
                         </button>
 
-                        <button
-                            id="openCashoutModal"
+                        <button id="openCashoutModal"
                             class="bg-gradient-to-r rounded-[50px] from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3  transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 w-full">
                             <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -308,6 +296,16 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
+
+                            {{-- dynamic transactions --}}
+                            @if($thisCardTransactions->isEmpty())
+                            <tr>
+                                <td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                    No transactions found.
+                                </td>
+                            </tr>
+                            @else
+                            @foreach ($thisCardTransactions as $transaction)
                             <tr class="hover:bg-gray-50 transition-colors">
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center">
@@ -316,156 +314,35 @@
                                             <span class="text-orange-600 font-bold text-sm">A</span>
                                         </div>
                                         <div class="ml-4">
-                                            <div class="text-sm font-medium text-gray-900">Amazon</div>
-                                            <div class="text-sm text-gray-500">Online Purchase</div>
+                                            <div class="text-sm font-medium text-gray-900">{{ $transaction->merchantName
+                                                }}</div>
+                                            <div class="text-sm text-gray-500">{{ $transaction->type }}</div>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Oct 10, 2025 14:32</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">-$89.99</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{
+                                    \Carbon\Carbon::parse($transaction->recordTime)->format('Y-m-d h:i A') }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{
+                                    $transaction->amount }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
+                                    @if($transaction->status == 'Finish')
                                     <span
-                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Success</span>
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">{{
+                                        $transaction->status }}</span>
+                                    @else
+                                    <span
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">{{
+                                        $transaction->status }}</span>
+                                    @endif
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-mono">TXN789123456
-                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-mono">{{
+                                    $transaction->vcc_id }}</td>
                             </tr>
+                            @endforeach
+                            @endif
 
-                            <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div
-                                            class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                                            <span class="text-blue-600 font-bold text-sm">T</span>
-                                        </div>
-                                        <div class="ml-4">
-                                            <div class="text-sm font-medium text-gray-900">Top-up</div>
-                                            <div class="text-sm text-gray-500">Card Recharge</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Oct 9, 2025 09:15</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-green-600">+$500.00</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Success</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-mono">TXN789123455
-                                </td>
-                            </tr>
 
-                            <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
-                                            <span class="text-red-600 font-bold text-sm">G</span>
-                                        </div>
-                                        <div class="ml-4">
-                                            <div class="text-sm font-medium text-gray-900">Google Ads</div>
-                                            <div class="text-sm text-gray-500">Advertising</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Oct 8, 2025 16:45</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">-$125.50</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">Pending</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-mono">TXN789123454
-                                </td>
-                            </tr>
-
-                            <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
-                                            <span class="text-red-600 font-bold text-sm">N</span>
-                                        </div>
-                                        <div class="ml-4">
-                                            <div class="text-sm font-medium text-gray-900">Netflix</div>
-                                            <div class="text-sm text-gray-500">Subscription</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Oct 7, 2025 12:00</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">-$15.99</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Success</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-mono">TXN789123453
-                                </td>
-                            </tr>
-
-                            <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div
-                                            class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
-                                            <span class="text-purple-600 font-bold text-sm">S</span>
-                                        </div>
-                                        <div class="ml-4">
-                                            <div class="text-sm font-medium text-gray-900">Shopify</div>
-                                            <div class="text-sm text-gray-500">E-commerce</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Oct 6, 2025 18:22</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">-$245.00</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Failed</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-mono">TXN789123452
-                                </td>
-                            </tr>
-
-                            <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div
-                                            class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                                            <span class="text-blue-600 font-bold text-sm">M</span>
-                                        </div>
-                                        <div class="ml-4">
-                                            <div class="text-sm font-medium text-gray-900">Microsoft</div>
-                                            <div class="text-sm text-gray-500">Office 365</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Oct 5, 2025 10:30</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">-$12.99</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Success</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-mono">TXN789123451
-                                </td>
-                            </tr>
-
-                            <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div
-                                            class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
-                                            <span class="text-gray-600 font-bold text-sm">S</span>
-                                        </div>
-                                        <div class="ml-4">
-                                            <div class="text-sm font-medium text-gray-900">Steam</div>
-                                            <div class="text-sm text-gray-500">Gaming</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Oct 4, 2025 20:15</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">-$59.99</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Success</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-mono">TXN789123450
-                                </td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>

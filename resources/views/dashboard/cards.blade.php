@@ -6,8 +6,6 @@
                 <div>
                     <h1 style="margin:0; font-size:24px; font-weight:700; color: #333;">Cards</h1>
                     <p style="margin:0; color: #6c757d; font-size:14px;">Manage your virtual cards</p>
-
-
                 </div>
             </div>
             <div class="toolbar ">
@@ -42,9 +40,16 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
+        <div class="bg-white rounded-2xl  border-gray-200 shadow-sm">
+
+            @if($mycards->isEmpty())
+
+            <p class="text-gray-500">No cards available. Please create a card.</p>
+
+            @else
+
             @foreach ($mycards as $card)
-            <div class="flex items-center space-x-6">
+            <div class="flex items-center space-x-6 border my-2 rounded-md p-4 shadow-sm">
                 <!-- Card Icon -->
 
                 <div class=" bg-white rounded-sm flex items-center justify-center">
@@ -96,6 +101,8 @@
                 </div>
             </div>
             @endforeach
+
+            @endif
         </div>
 
     </main>

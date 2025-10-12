@@ -23,9 +23,7 @@ Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -43,8 +41,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/cards/update/{id}', [CardController::class, 'update_balance'])->name('update_balance');
     Route::post('/cards/cashout', [CardController::class, 'card_cashout'])->name('card_cashout');
 
-    Route::get('/cards/single_card', [CardController::class, 'get_single_card'])->name('get_single_card');
-    Route::get('/cards/transactions', [CardController::class, 'get_transactions'])->name('get_transactions');
+    Route::get('/cards/single_card', [CardController::class, 'get_single_card'])->name('get_single_card'); // fetch single card details from API
 
     Route::post('/cards/open_card', [CardController::class, 'open_card'])->name('open_card');
 

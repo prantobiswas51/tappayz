@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Bin;
 use App\Models\Card;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
+use App\Models\Transaction;
 use Illuminate\Support\Arr;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 class CardController extends Controller
 {
@@ -315,8 +316,11 @@ class CardController extends Controller
     public function view_card(Request $request, $id)
     {
         $card = Card::findOrFail($id);
+        $thisCardTransactions = Transaction::where('cardNum', $card->number)
+            ->orderBy('recordTime', 'desc')
+            ->get();
 
-        return view('dashboard.view_card', compact('card'));
+        return view('dashboard.view_card', compact('card', 'thisCardTransactions'));
     }
 
     public function card_cashout(Request $request)
@@ -347,6 +351,9 @@ class CardController extends Controller
         }
 
         if ($response->successful()) {
+
+            // Auth::user()->balance += $request->amount;
+
             return redirect()
                 ->route('view_card', $card->id)
                 ->with('status', 'Cashout ' . $request->amount . ' successfully.');
@@ -355,7 +362,6 @@ class CardController extends Controller
 
     public function get_transactions()
     {
-
         $timestamp = (string) round(microtime(true) * 1000);
 
         $params = [
@@ -366,7 +372,36 @@ class CardController extends Controller
         ];
         $params['sign'] = $this->sign($params);
 
-        $response = Http::asForm()->post($this->baseUrl . '/bank_card/consume_order', $params);
-        dd($response->body());
+        $response = Http::asForm()->get($this->baseUrl . '/bank_card/consume_order', $params);
+
+        if ($response->failed()) {
+            Log::error('Transaction fetch failed: ' . $response->body());
+            return back()->with('error', 'Failed to fetch transactions.');
+        }
+
+        $data = $response->json();
+
+        if ($data['code'] !== 0 || empty($data['rows'])) {
+            return back()->with('error', 'No transactions found.');
+        }
+
+        foreach ($data['rows'] as $row) {
+            Transaction::updateOrCreate(
+                ['transactionId' => $row['transactionId']], // prevent duplicates
+                [
+                    'vcc_id'        => $row['id'] ?? null,
+                    'transactionId' => $row['transactionId'] ?? null,
+                    'cardNum'       => $row['cardNum'] ?? null,
+                    'clientId'      => $row['clientId'] ?? null,
+                    'type'          => $row['type'] ?? null,
+                    'status'        => $row['status'] ?? null,
+                    'amount'        => $row['amount'] ?? 0,
+                    'merchantName'  => $row['merchantName'] ?? null,
+                    'recordTime'    => $row['recordTime'] ?? null,
+                ]
+            );
+        }
+
+        return back()->with('status', 'Transactions synced successfully.');
     }
 }
