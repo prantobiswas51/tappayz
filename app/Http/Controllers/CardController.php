@@ -119,14 +119,14 @@ class CardController extends Controller
 
         if ($response->failed()) {
             Log::error('Failed to open card: ' . $response->body());
-            return redirect()->route('status')->with('error', 'First Function Failed');
+            return redirect()->route('cards')->with('error', 'First Function Failed');
         }
 
         $data = json_decode($response, true); // decode JSON string to PHP array
 
         if (!$data || !isset($data['content']['id'])) {
             Log::error('Failed to open card: Invalid JSON or missing ID');
-            return redirect()->route('status')->with('error', 'Failed to open card. Please try again.');
+            return redirect()->route('cards')->with('error', 'Failed to open card. Please try again.');
         }
 
         Log::info('Open Card Success');
