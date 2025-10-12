@@ -117,6 +117,12 @@ class CardController extends Controller
         $params['sign'] = $this->sign($params);
 
         $response = Http::asForm()->post($this->baseUrl.'/bank_card/open_card', $params);
+
+        if ($response->failed()) {
+            Log::error('Failed to open card: ' . $response->body());
+            return redirect()->route('status')->with('error', 'Failed to open card. Please try again.');
+        }
+
         $data = json_decode($response, true);
         $orderId = $data['content']['id'];
 
