@@ -119,21 +119,20 @@ class CardController extends Controller
 
         if ($response->failed()) {
             Log::error('Failed to open card: ' . $response->body());
-            return redirect()->route('cards')->with('error', 'First Function Failed');
+            return redirect()->route('cards')->with('status', 'First Function Failed');
         }
 
         $data = json_decode($response, true); // decode JSON string to PHP array
 
         if (!$data || !isset($data['content']['id'])) {
             Log::error('Failed to open card: Invalid JSON or missing ID');
-            return redirect()->route('cards')->with('error', 'Failed to open card. Please try again.');
+            return redirect()->route('cards')->with('status', 'Failed to open card. Please try again.');
         }
 
         Log::info('Open Card Success');
 
         $orderId = $data['content']['id'];
         Log::info('OrderId is: ' . $orderId);
-
 
         // $orderId = "C251012152540064266";
 
@@ -157,7 +156,7 @@ class CardController extends Controller
 
             if ($details_response->failed()) {
                 Log::error('Failed to fetch card details: ' . $details_response->body());
-                return redirect()->route('cards')->with('error', 'Failed to fetch card details. Please try again.');
+                return redirect()->route('cards')->with('status', 'Failed to fetch card details. Please try again.');
             }
 
             $responseData = $details_response->json();
@@ -174,7 +173,7 @@ class CardController extends Controller
 
         if (!$card_number) {
             Log::error('Card number still not available after 5 attempts.');
-            return redirect()->route('cards')->with('error', 'Card not ready. Please try again later.');
+            return redirect()->route('cards')->with('status', 'Card not ready. Please try again later.');
         }
 
         Log::info('Card number is: ' . $card_number);
@@ -344,7 +343,7 @@ class CardController extends Controller
         if ($response->failed()) {
             return redirect()
                 ->route('view_card', $card->id)
-                ->with('error', 'Cashout request failed. Please try again.');
+                ->with('status', 'Cashout request failed. Please try again.');
         }
 
         if ($response->successful()) {
