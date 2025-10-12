@@ -157,7 +157,7 @@ class CardController extends Controller
 
             if ($details_response->failed()) {
                 Log::error('Failed to fetch card details: ' . $details_response->body());
-                return redirect()->route('status')->with('error', 'Failed to fetch card details. Please try again.');
+                return redirect()->route('cards')->with('error', 'Failed to fetch card details. Please try again.');
             }
 
             $responseData = $details_response->json();
@@ -174,7 +174,7 @@ class CardController extends Controller
 
         if (!$card_number) {
             Log::error('Card number still not available after 5 attempts.');
-            return redirect()->route('status')->with('error', 'Card not ready. Please try again later.');
+            return redirect()->route('cards')->with('error', 'Card not ready. Please try again later.');
         }
 
         Log::info('Card number is: ' . $card_number);
