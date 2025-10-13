@@ -70,11 +70,12 @@
         </div>
     </div>
 
-    <div class="text-gray-700">
+    <div class="text-gray-700 ">
         <!-- Header Section -->
-        <div class="text-gray-700">
-            <div class="px-6 py-8">
-                <div class="flex items-center justify-between">
+        <div class="text-gray-700 px-6 py-4 mb-6">
+
+            <div class="">
+                <div class="flex items-center  justify-between">
                     <div>
                         <h1 class="text-3xl font-bold mb-2">Card Details</h1>
                         <p class="text-gray-400">Manage your virtual card and view transactions</p>
@@ -82,199 +83,157 @@
                     <div class="flex space-x-3">
 
                         <a href="{{ route('cards') }}"
-                            class="bg-gray-800 backdrop-blur-sm hover:bg-white/30 text-white px-4 py-2 rounded-lg transition-colors">
+                            class="bg-gray-800 backdrop-blur-sm hover:bg-gray-700/30 text-white px-4 py-2 rounded-lg transition-colors">
                             ← Back to Cards
                         </a>
                     </div>
                 </div>
+
+
+
             </div>
         </div>
 
         <!-- Main Content -->
-        <div class=" px-6 py-8">
-            <!-- Card and Action Buttons Row -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8 ">
-                <!-- Card Display -->
-                <div class="lg:col-span-1 flex  ">
-                    <div
-                        class="card-3d w-96 h-56  relative transition-transform duration-600 hover:rotate-y-1 hover:rotate-x-1">
-                        <div class="bg-white rounded-3xl shadow-lg p-8 relative overflow-hidden">
-                            <!-- Large Cloud Background -->
-                            <div
-                                class="large-cloud absolute -top-5 -right-8 w-30 h-20 bg-gradient-to-br from-red-600 to-red-500 opacity-80">
-                            </div>
+        <div class=" px-6 ">
 
-                            <!-- Card Content -->
-                            <div class="relative z-10 h-full flex flex-col">
-                                <!-- Top Section -->
-                                <div class="flex justify-between items-start mb-4">
-                                    <div class="flex items-center">
-                                        <div class="flex items-center font-bold font-sans">
-                                            <img src="{{ asset('images/logo.png') }}" class="w-24" alt="">
-                                        </div>
-                                    </div>
-                                    <div class="flex items-center space-x-1">
-                                        <div class="w-5 h-5 bg-red-600 rounded-full"></div>
-                                        <div class="w-5 h-5 bg-orange-500 rounded-full -ml-2"></div>
-                                    </div>
-                                </div>
+            {{-- buttons --}}
+            <div class="lg:col-span-2 mb-6 flex flex-col mt-6 justify-end space-y-6">
+                {{-- action cards --}}
+                <div class=" flex gap-3 max-w-sm justify-evenly">
+                    <button class="p-2 rounded-lg bg-gray-300 hover:bg-gray-500">
+                        Recharge
+                    </button>
 
-                                <!-- Middle Section - Card Number -->
-                                <div class="flex justify-between flex-1">
-                                    <div
-                                        class="text-black font-mono tracking-wider font-normal text-xl whitespace-nowrap">
-                                        {{ substr($card->number, 0, 4) }} {{ substr($card->number, 4, 4) }} {{
-                                        substr($card->number, 8, 4) }} {{ substr($card->number, 12, 4) }}
-                                        <span
-                                            class="text-xs cursor-pointer border p-2 rounded-md text-blue-600 hover:text-blue-800 ml-2"
-                                            onclick="copyCardNumber('{{ $card->number }}')">Copy</span>
-                                    </div>
-                                </div>
+                    <button class="p-2 rounded-lg bg-gray-300" id="openCashoutModal">
+                        Cash Out
+                    </button>
 
-                                <!-- Bottom Section -->
-                                <div class="flex justify-between items-end">
-                                    <div>
-                                        <div class="text-lg font-bold text-black my-2">{{ strtoupper(Auth::user()->name)
-                                            }}</div>
-                                        <div class="text-xs text-gray-600 font-medium mt-1">VALID THRU</div>
-                                        <div class="text-lg text-black font-mono font-normal tracking-wide">{{
-                                            $card->expiryDate ?? '01/28' }}</div>
-                                    </div>
-                                    <div class="text-right">
-                                        <div class="text-xs text-gray-600 font-medium">CVV</div>
-                                        <div
-                                            class="text-sm text-black bg-black bg-opacity-5 px-2 py-1 rounded font-mono font-normal tracking-wide">
-                                            {{ $card->cvv ?? '789' }}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
+                    <form class="p-2 rounded-lg bg-gray-300 border " action="{{ route('freeze_card') }}" method="post">
+                        @csrf
+                        <input type="hidden" name="card_id" value="{{ $card->id }}">
+                        <button type="submit">Freeze</button>
+                    </form>
+
+
+                    <form class="p-2 rounded-lg bg-gray-300 border " action="{{ route('cancel_card') }}" method="post">
+
+                        @csrf
+
+                        <input type="hidden" name="card_id" value="{{ $card->id }}">
+                        <button type="submit">Cancel Card</button>
+                    </form>
+
                 </div>
+            </div>
 
-                <!-- Action Buttons -->
-                <div class="lg:col-span-2 flex flex-col  space-y-6">
-
-                    <div class="border w-fit p-2 rounded-xl">
-                        <a href="{{ route('update_balance', $card->id) }}">Update Balance</a>
-                    </div>
-
-                    <!-- Stats Cards -->
-                    <div class="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                        <!-- Balance Card -->
+            {{-- Card Design --}}
+            <div class=" ">
+                <div
+                    class="card-3d w-96 h-56  relative transition-transform duration-600 hover:rotate-y-1 hover:rotate-x-1">
+                    <div class="bg-white rounded-3xl shadow-lg p-8 relative overflow-hidden">
+                        <!-- Large Cloud Background -->
                         <div
-                            class="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 p-6 border border-gray-100">
-                            <div class="flex flex-col">
+                            class="large-cloud absolute -top-5 -right-8 w-30 h-20 bg-gradient-to-br from-red-600 to-red-500 opacity-80">
+                        </div>
+
+                        <!-- Card Content -->
+                        <div class="relative z-10 h-full flex flex-col">
+                            <!-- Top Section -->
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="flex items-center">
+                                    <div class="flex items-center font-bold font-sans">
+                                        <img src="{{ asset('images/logo.png') }}" class="w-24" alt="">
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-1">
+                                    <div class="w-5 h-5 bg-red-600 rounded-full"></div>
+                                    <div class="w-5 h-5 bg-orange-500 rounded-full -ml-2"></div>
+                                </div>
+                            </div>
+
+                            <!-- Middle Section - Card Number -->
+                            <div class="flex justify-between flex-1">
+                                <div class="text-black font-mono tracking-wider font-normal text-xl whitespace-nowrap">
+                                    {{ substr($card->number, 0, 4) }} {{ substr($card->number, 4, 4) }} {{
+                                    substr($card->number, 8, 4) }} {{ substr($card->number, 12, 4) }}
+                                    <span
+                                        class="text-xs cursor-pointer border p-2 rounded-md text-blue-600 hover:text-blue-800 ml-2"
+                                        onclick="copyCardNumber('{{ $card->number }}')">Copy</span>
+                                </div>
+                            </div>
+
+                            <!-- Bottom Section -->
+                            <div class="flex justify-between items-end">
                                 <div>
-                                    <p class="text-sm font-medium text-gray-500 mb-1">Available Balance</p>
-                                    <p class="text-2xl font-bold text-gray-900">${{ number_format($card->cardBalance ??
-                                        1247.85,
-                                        2) }}</p>
+                                    <div class="text-lg font-bold text-black my-2">{{ strtoupper(Auth::user()->name)
+                                        }}</div>
+                                    <div class="text-xs text-gray-600 font-medium mt-1">VALID THRU</div>
+                                    <div class="text-lg text-black font-mono font-normal tracking-wide">{{
+                                        $card->expiryDate ?? '01/28' }}</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-xs text-gray-600 font-medium">CVV</div>
+                                    <div
+                                        class="text-sm text-black bg-black bg-opacity-5 px-2 py-1 rounded font-mono font-normal tracking-wide">
+                                        {{ $card->cvv ?? '789' }}</div>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Total Spent Card -->
-                        <div
-                            class="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 p-6 border border-gray-100">
-                            <div class="flex flex-col">
-                                <div>
-                                    <p class="text-sm font-medium text-gray-500 mb-1">Total Spent</p>
-                                    <p class="text-2xl font-bold text-gray-900">${{ number_format($card->totalConsume ??
-                                        549.46,
-                                        2) }}</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Card Status -->
-                        <div
-                            class="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 p-6 border border-gray-100">
-                            <div class="flex flex-col">
-
-                                <div>
-                                    <p class="text-sm font-medium text-gray-500 mb-1">Card Status</p>
-                                    <p class="text-2xl font-bold text-emerald-600">{{ $card->state ?? 'Active' }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- action cards --}}
-                    <div class=" flex gap-3">
-                        <button
-                            class="bg-gradient-to-r rounded-[50px] from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white px-6 py-3  transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 w-full">
-                            <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                            </svg>
-                            Recharge
-                        </button>
-
-                        <button id="openCashoutModal"
-                            class="bg-gradient-to-r rounded-[50px] from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3  transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 w-full">
-                            <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1">
-                                </path>
-                            </svg>
-                            Cash Out
-                        </button>
-
-                        <button
-                            class="bg-gradient-to-r rounded-[50px] from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-6 py-3  transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 w-full">
-                            <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L5.636 5.636">
-                                </path>
-                            </svg>
-                            Freeze
-                        </button>
-                        <button
-                            class="bg-gradient-to-r rounded-[50px] from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-6 py-3 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 w-full">
-                            <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                                </path>
-                            </svg>
-                            Cancel Card
-                        </button>
                     </div>
                 </div>
             </div>
 
+            <div class=" max-w-sm my-3">
+                <div class="p-2 flex justify-between">
+                    <div class="">Card Balance</div>
+                    <div class="flex">${{ number_format($card->cardBalance ?? null, 2) }}
+                        <a class=" ml-2" href="{{ route('update_balance', $card->id) }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="25" height="25"
+                                role="img" aria-label="Sync">
+                                <g class="spin" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 12a9 9 0 1 1-3.51-7.13" />
+                                    <polyline points="21 3 21 9 15 9" />
+                                </g>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
 
+                <div class="p-2 flex justify-between">
+                    <div class="">Card Status</div>
+                    <div class="">
+                        @php
+                        $state = $card->state ?? 1;
+                        @endphp
+                        {{ $state == 1 ? 'Active' : ($state == 2 ? 'Frozen' : 'Canceled') }}
+                    </div>
+
+                </div>
+
+                <div class="p-2 flex justify-between">
+                    <div class="">Total Spend</div>
+                    <div class="">${{ number_format($card->totalConsume ?? null, 2) }}</div>
+                </div>
+
+
+            </div>
 
             <!-- Transaction History Table -->
-            <div class="bg-white rounded-3xl shadow-lg overflow-hidden">
+            <div class="bg-white  shadow-lg overflow-hidden">
                 <!-- Table Header -->
                 <div class="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-b border-gray-200">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                         <div>
-                            <h2 class="text-xl font-semibold text-gray-900">Transaction History</h2>
-                            <p class="mt-1 text-sm text-gray-500">Recent activity on your virtual card</p>
-                        </div>
-                        <div class="mt-4 sm:mt-0 flex space-x-3">
-                            <select
-                                class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                <option>All Status</option>
-                                <option>Success</option>
-                                <option>Pending</option>
-                                <option>Failed</option>
-                            </select>
-                            <select
-                                class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                <option>Last 30 Days</option>
-                                <option>Last 7 Days</option>
-                                <option>This Month</option>
-                                <option>Last Month</option>
-                            </select>
+                            Recent Card Transactions
                         </div>
                     </div>
                 </div>
 
                 <!-- Table Content -->
-                <div class="overflow-x-auto">
+                <div class="overflow-x-auto border border-gray-300">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
@@ -300,7 +259,7 @@
                             {{-- dynamic transactions --}}
                             @if($thisCardTransactions->isEmpty())
                             <tr>
-                                <td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                <td colspan="5" class="px-6 py-4  whitespace-nowrap text-sm text-gray-500 text-center">
                                     No transactions found.
                                 </td>
                             </tr>
@@ -347,38 +306,7 @@
                     </table>
                 </div>
 
-                <!-- Table Footer with Pagination -->
-                <div class="bg-gray-50 px-6 py-3 border-t border-gray-200">
-                    <div class="flex items-center justify-between">
-                        <div class="text-sm text-gray-500">
-                            Showing <span class="font-medium">1</span> to <span class="font-medium">7</span> of <span
-                                class="font-medium">23</span> transactions
-                        </div>
-                        <div class="flex space-x-2">
-                            <button
-                                class="px-3 py-1 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50"
-                                disabled>
-                                Previous
-                            </button>
-                            <button
-                                class="px-3 py-1 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700">
-                                1
-                            </button>
-                            <button
-                                class="px-3 py-1 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
-                                2
-                            </button>
-                            <button
-                                class="px-3 py-1 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
-                                3
-                            </button>
-                            <button
-                                class="px-3 py-1 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
-                                Next
-                            </button>
-                        </div>
-                    </div>
-                </div>
+
             </div>
         </div>
     </div>

@@ -37,9 +37,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/cards/fetch', [CardController::class, 'fetch_bins'])->name('fetch_bins');
     Route::get('/cards/get_all_cards', [CardController::class, 'get_all_cards'])->name('get_all_cards');
 
-    Route::get('/cards/{id}', [CardController::class, 'view_card'])->name('view_card'); // view card details
+    Route::get('/cards/{id}', [CardController::class, 'view_card'])->name('view_card');
     Route::get('/cards/update/{id}', [CardController::class, 'update_balance'])->name('update_balance');
     Route::post('/cards/cashout', [CardController::class, 'card_cashout'])->name('card_cashout');
+
+    Route::post('/cards/freeze', [CardController::class, 'freeze_card'])->name('freeze_card');
+    Route::post('/cards/cancel', [CardController::class, 'cancel_card'])->name('cancel_card');
 
     Route::get('/cards/single_card', [CardController::class, 'get_single_card'])->name('get_single_card');
     Route::get('/transactions/get', [CardController::class, 'get_transactions'])->name('get_transactions');

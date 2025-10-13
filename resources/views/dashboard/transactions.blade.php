@@ -4,11 +4,7 @@
             <div class="brand" style="gap:8px;">
                 <div class="brand-badge" style="width:28px;height:28px;"></div>
 
-                <div class="border p-2">
-                    <form action="{{ route('get_transactions') }}" method="get">
-                        <button type="submit">Get Transactions</button>
-                    </form>
-                </div>
+
 
                 <div>
                     <h1 style="margin:0; font-size:24px; font-weight:700; color: #333;">Transactions</h1>
@@ -38,6 +34,11 @@
                 </div>
             </div>
         </div>
+
+        <div class="border p-2 rounded-lg">
+            <a href="{{ route('get_transactions') }}">Get Transactions</a>
+        </div>
+
         <div class="card"
             style="background: white; border: 1px solid #e9ecef; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-top: 20px;">
             <table class="table" style="color: #333;">

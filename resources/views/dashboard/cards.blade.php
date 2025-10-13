@@ -44,7 +44,7 @@
 
             @if($mycards->isEmpty())
 
-            <p class="text-gray-500">No cards available. Please create a card.</p>
+            <p class="text-gray-500 p-4 px-6">No cards available. Please create a card.</p>
 
             @else
 

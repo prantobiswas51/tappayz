@@ -77,7 +77,7 @@ class CardController extends Controller
             }
         }
 
-        return back();
+        return redirect()->route('cards')->with('status', 'Card updated successfully.');
     }
 
     public function show_bins()
@@ -360,6 +360,43 @@ class CardController extends Controller
         }
     }
 
+    public function card_recharge(Request $request)
+    {
+
+        $request->validate([
+            'amount' => 'required|numeric|min:1',
+            'card_id' => 'required|numeric',
+        ]);
+
+        $card = Card::findOrFail($request->card_id);
+        $timestamp = (string) round(microtime(true) * 1000);
+
+        $params = [
+            'userSerial' => $this->userSerial,
+            'timeStamp' => $timestamp,
+            'amount' => $request->amount,
+            'bankCardNum' => $card->number,
+        ];
+        $params['sign'] = $this->sign($params);
+
+        $response = Http::asForm()->post($this->baseUrl . '/bank_card/card_cash_out', $params);
+
+        if ($response->failed()) {
+            return redirect()
+                ->route('view_card', $card->id)
+                ->with('status', 'Cashout request failed. Please try again.');
+        }
+
+        if ($response->successful()) {
+
+            // Auth::user()->balance += $request->amount;
+
+            return redirect()
+                ->route('view_card', $card->id)
+                ->with('status', 'Cashout ' . $request->amount . ' successfully.');
+        }
+    }
+
     public function get_transactions()
     {
         $timestamp = (string) round(microtime(true) * 1000);
@@ -367,22 +404,22 @@ class CardController extends Controller
         $params = [
             'userSerial' => $this->userSerial,
             'timeStamp' => $timestamp,
-            'page' => '1',
-            'pageSize' => '20',
+            'page' => '0',
+            'pageSize' => '50',
         ];
-        $params['sign'] = $this->sign($params);
 
+        $params['sign'] = $this->sign($params);
         $response = Http::asForm()->get($this->baseUrl . '/bank_card/consume_order', $params);
 
         if ($response->failed()) {
             Log::error('Transaction fetch failed: ' . $response->body());
-            return back()->with('error', 'Failed to fetch transactions.');
+            return back()->with('status', 'Failed to fetch transactions.');
         }
 
         $data = $response->json();
 
         if ($data['code'] !== 0 || empty($data['rows'])) {
-            return back()->with('error', 'No transactions found.');
+            return back()->with('status', 'No transactions found.');
         }
 
         foreach ($data['rows'] as $row) {
@@ -403,5 +440,63 @@ class CardController extends Controller
         }
 
         return back()->with('status', 'Transactions synced successfully.');
+    }
+
+    public function cancel_card(Request $request)
+    {
+        $request->validate([
+            'card_id' => 'required|numeric',
+        ]);
+
+        $card = Card::findOrFail($request->card_id);
+
+        $timestamp = (string) round(microtime(true) * 1000);
+
+        $params = [
+            'userSerial' => $this->userSerial,
+            'timeStamp' => $timestamp,
+            'cardNum' => $card->number,
+        ];
+        $params['sign'] = $this->sign($params);
+
+        $response = Http::asForm()->delete($this->baseUrl . '/bank_card/cancel', $params);
+
+        if ($response->failed()) {
+            return redirect()->route('cards')->with('status', 'Card Delete request failed. Please try again.');
+        }
+
+        if ($response->successful()) {
+            $card->state = '0';
+            return redirect()->route('cards')->with('status', 'Card deleted successfully.');
+        }
+    }
+
+    public function freeze_card(Request $request)
+    {
+        $request->validate([
+            'card_id' => 'required|numeric',
+        ]);
+
+        $card = Card::findOrFail($request->card_id);
+        $timestamp = (string) round(microtime(true) * 1000);
+
+        $params = [
+            'userSerial' => $this->userSerial,
+            'timeStamp' => $timestamp,
+            'cardNum' => $card->number,
+        ];
+        $params['sign'] = $this->sign($params);
+
+        $response = Http::asForm()->put($this->baseUrl . '/bank_card/suspend', $params);
+
+        if ($response->failed()) {
+            return redirect()->route('cards')->with('status', 'Card Freeze request failed. Please try again.');
+        }
+
+        if ($response->successful()) {
+            $card->state = '2';
+
+            return redirect()->route('cards')->with('status', 'Card Freezed successfully.');
+        }
     }
 }
