@@ -70,6 +70,51 @@
         </div>
     </div>
 
+    {{-- Recharge Modal --}}
+    <div id="rechargeModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-2xl h-[270px] bg-white">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-900">Recharge</h3>
+                <button id="closeRechargeModal" class="text-gray-400 hover:text-gray-600 text-2xl font-bold">
+                    &times;
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <form action="{{ route('card_recharge') }}" method="post" class="space-y-4">
+                @csrf
+                <div>
+                    <label for="recharge_amount" class="block text-sm font-medium text-gray-700 mb-2">
+                        Recharge Amount
+                    </label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+                        <input type="number" id="recharge_amount" name="amount" placeholder="0.00" min="1" required
+                            class="w-full pl-8 pr-3 py-2 border text-gray-600 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">
+                        Available: ${{ number_format($card->cardBalance ?? 0, 2) }}
+                    </p>
+                </div>
+
+                <input type="hidden" name="card_id" value="{{ $card->id }}">
+
+                <!-- Modal Footer -->
+                <div class="flex space-x-3 pt-4">
+                    <button type="button" id="cancelRechargeModal"
+                        class="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                        class="flex-1 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                        Recharge
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="text-gray-700 ">
         <!-- Header Section -->
         <div class="text-gray-700 px-6 py-4 mb-6">
@@ -101,28 +146,43 @@
             <div class="lg:col-span-2 mb-6 flex flex-col mt-6 justify-end space-y-6">
                 {{-- action cards --}}
                 <div class=" flex gap-3 max-w-sm justify-evenly">
-                    <button class="p-2 rounded-lg bg-gray-300 hover:bg-gray-500">
+                    
+                    <button id="openRechargeModal" class="p-2 rounded-lg bg-gray-300 hover:bg-amber-300" @if($card->state == 2) disabled
+                        @endif>
                         Recharge
                     </button>
 
-                    <button class="p-2 rounded-lg bg-gray-300" id="openCashoutModal">
+                    <button class="p-2 rounded-lg bg-gray-300 hover:bg-amber-300" id="openCashoutModal" @if($card->state == 2) disabled @endif>
                         Cash Out
                     </button>
 
+                    @if($card->state == 2)
 
-                    <form class="p-2 rounded-lg bg-gray-300 border " action="{{ route('freeze_card') }}" method="post">
+                    <form class="p-2 rounded-lg bg-gray-300 border hover:bg-amber-300"
+                        action="{{ route('unfreeze_card') }}" method="post">
+
+                        @csrf
+
+                        <input type="hidden" name="card_id" value="{{ $card->id }}">
+                        <button type="submit">Unfreeze</button>
+                    </form>
+                    @else
+
+                    <form class="p-2 rounded-lg bg-gray-300 border hover:bg-amber-300"
+                        action="{{ route('freeze_card') }}" method="post">
                         @csrf
                         <input type="hidden" name="card_id" value="{{ $card->id }}">
                         <button type="submit">Freeze</button>
                     </form>
+                    @endif
 
-
-                    <form class="p-2 rounded-lg bg-gray-300 border " action="{{ route('cancel_card') }}" method="post">
+                    <form class="p-2 rounded-lg bg-gray-300 border hover:bg-amber-300"
+                        action="{{ route('cancel_card') }}" method="post">
 
                         @csrf
 
                         <input type="hidden" name="card_id" value="{{ $card->id }}">
-                        <button type="submit">Cancel Card</button>
+                        <button type="submit" @if($card->state == 2) disabled @endif>Cancel Card</button>
                     </form>
 
                 </div>
@@ -131,7 +191,7 @@
             {{-- Card Design --}}
             <div class=" ">
                 <div
-                    class="card-3d w-96 h-56  relative transition-transform duration-600 hover:rotate-y-1 hover:rotate-x-1">
+                    class="card-3d w-96 h-56 {{ $card->state == 2 ? 'filter grayscale' : '' }} transition-transform duration-600 hover:rotate-y-1 hover:rotate-x-1">
                     <div class="bg-white rounded-3xl shadow-lg p-8 relative overflow-hidden">
                         <!-- Large Cloud Background -->
                         <div
@@ -330,12 +390,43 @@
             });
         }
 
-        // Modal functionality
+        // Cashout Modal functionality
         document.addEventListener('DOMContentLoaded', function() {
             const modal = document.getElementById('cashoutModal');
             const openButton = document.getElementById('openCashoutModal');
             const closeButton = document.getElementById('closeCashoutModal');
             const cancelButton = document.getElementById('cancelCashout');
+
+            openButton.addEventListener('click', () => {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            });
+
+            closeButton.addEventListener('click', () => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            });
+
+            cancelButton.addEventListener('click', () => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            });
+
+            // Close modal when clicking outside
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                }
+            });
+        });
+
+        // Recharge Modal functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('rechargeModal');
+            const openButton = document.getElementById('openRechargeModal');
+            const closeButton = document.getElementById('closeRechargeModal');
+            const cancelButton = document.getElementById('cancelRechargeModal');
 
             openButton.addEventListener('click', () => {
                 modal.classList.remove('hidden');

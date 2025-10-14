@@ -103,7 +103,6 @@ class CardController extends Controller
             'remark' => 'nullable|string|max:50',
         ]);
 
-
         // First call to open card
         $params = [
             'userSerial' => $this->userSerial,
@@ -379,12 +378,12 @@ class CardController extends Controller
         ];
         $params['sign'] = $this->sign($params);
 
-        $response = Http::asForm()->post($this->baseUrl . '/bank_card/card_cash_out', $params);
+        $response = Http::asForm()->post($this->baseUrl . '/bank_card/recharge', $params);
 
         if ($response->failed()) {
             return redirect()
                 ->route('view_card', $card->id)
-                ->with('status', 'Cashout request failed. Please try again.');
+                ->with('status', 'Recharge request failed. Please try again.');
         }
 
         if ($response->successful()) {
@@ -467,6 +466,8 @@ class CardController extends Controller
 
         if ($response->successful()) {
             $card->state = '0';
+            $card->save();
+
             return redirect()->route('cards')->with('status', 'Card deleted successfully.');
         }
     }
@@ -495,8 +496,39 @@ class CardController extends Controller
 
         if ($response->successful()) {
             $card->state = '2';
+            $card->save();
 
             return redirect()->route('cards')->with('status', 'Card Freezed successfully.');
+        }
+    }
+
+    public function unfreeze_card(Request $request)
+    {
+        $request->validate([
+            'card_id' => 'required|numeric',
+        ]);
+
+        $card = Card::findOrFail($request->card_id);
+        $timestamp = (string) round(microtime(true) * 1000);
+
+        $params = [
+            'userSerial' => $this->userSerial,
+            'timeStamp' => $timestamp,
+            'cardNum' => $card->number,
+        ];
+        $params['sign'] = $this->sign($params);
+
+        $response = Http::asForm()->put($this->baseUrl . '/bank_card/enable', $params);
+
+        if ($response->failed()) {
+            return redirect()->route('cards')->with('status', 'Card Unfreeze request failed. Please try again.');
+        }
+
+        if ($response->successful()) {
+            $card->state = '1';
+            $card->save();
+
+            return redirect()->route('cards')->with('status', 'Card Unfreezed successfully.');
         }
     }
 }
