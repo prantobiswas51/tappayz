@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Card;
 use App\Models\Transaction;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
@@ -15,9 +14,9 @@ class DashboardController extends Controller
 
         $transactions = Transaction::whereIn('cardNum', $cardNumbers)
             ->orderBy('recordTime', 'desc')
-            ->take(5)
+            ->take(8)
             ->get();
-            
+
         return view('dashboard', compact('transactions'));
     }
 

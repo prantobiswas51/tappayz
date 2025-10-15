@@ -147,18 +147,18 @@
                 {{-- action cards --}}
                 <div class=" flex gap-3 max-w-sm justify-evenly">
                     
-                    <button id="openRechargeModal" class="p-2 rounded-lg bg-gray-300 hover:bg-amber-300" @if($card->state == 2) disabled
+                    <button id="openRechargeModal" class="p-2 px-4 rounded-lg bg-gray-300 hover:bg-amber-300" @if($card->state == 2) disabled
                         @endif>
                         Recharge
                     </button>
 
-                    <button class="p-2 rounded-lg bg-gray-300 hover:bg-amber-300" id="openCashoutModal" @if($card->state == 2) disabled @endif>
+                    <button class="p-2 px-4 rounded-lg bg-gray-300 hover:bg-amber-300" id="openCashoutModal" @if($card->state == 2) disabled @endif>
                         Cash Out
                     </button>
 
                     @if($card->state == 2)
 
-                    <form class="p-2 rounded-lg bg-gray-300 border hover:bg-amber-300"
+                    <form class="p-2 px-4 rounded-lg bg-gray-300 border hover:bg-amber-300"
                         action="{{ route('unfreeze_card') }}" method="post">
 
                         @csrf
@@ -168,7 +168,7 @@
                     </form>
                     @else
 
-                    <form class="p-2 rounded-lg bg-gray-300 border hover:bg-amber-300"
+                    <form class="p-2 px-4 rounded-lg bg-gray-300 border hover:bg-amber-300"
                         action="{{ route('freeze_card') }}" method="post">
                         @csrf
                         <input type="hidden" name="card_id" value="{{ $card->id }}">
@@ -182,7 +182,7 @@
                         @csrf
 
                         <input type="hidden" name="card_id" value="{{ $card->id }}">
-                        <button type="submit" @if($card->state == 2) disabled @endif>Cancel Card</button>
+                        <button type="submit" @if($card->state == 2) disabled @endif>Cancel</button>
                     </form>
 
                 </div>
@@ -282,7 +282,7 @@
             </div>
 
             <!-- Transaction History Table -->
-            <div class="bg-white  shadow-lg overflow-hidden">
+            <div class="bg-white mb-8 shadow-lg overflow-hidden">
                 <!-- Table Header -->
                 <div class="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-b border-gray-200">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">

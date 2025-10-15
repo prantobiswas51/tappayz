@@ -24,7 +24,8 @@
         <div id="alertBox"
             class="flex items-center justify-between bg-green-100 border border-green-400 text-green-700 px-6 py-3 rounded-xl shadow-lg max-w-md animate-fade-in">
             <span>{{ session('status') }}</span>
-            <button onclick="document.getElementById('alertBox').remove()" class="ml-4 text-green-700 hover:text-green-900 font-bold text-2xl">X</button>
+            <button onclick="document.getElementById('alertBox').remove()"
+                class="ml-4 text-green-700 hover:text-green-900 font-bold text-2xl">X</button>
         </div>
     </div>
 
@@ -56,26 +57,54 @@
             </div>
 
             <nav class="nav flex flex-col">
-                <a class="hover:text-green-600 hover:bg-gray-300/30 active py-4 border-gray-400/50 border px-2 rounded-md  flex"
-                    href="{{ route('dashboard') }}">
+                <a href="{{ route('dashboard') }}"
+                    @class([ 'py-4 border-gray-400/50 border px-2 rounded-md flex items-center gap-2'
+                    , 'text-green-600 bg-gray-500/60'=> request()->routeIs('dashboard'),
+                    'hover:text-green-600 hover:bg-gray-300/30' => !request()->routeIs('dashboard'),
+                    ])>
                     <x-heroicon-o-queue-list class="h-6 w-6 mr-2" /> Dashboard
                 </a>
-                <a class="hover:text-green-600 py-4 flex" href="{{ route('cards') }}">
+
+                <a href="{{ route('cards') }}" @class([ 'py-4 flex items-center gap-2'
+                    , 'text-green-600 bg-gray-500/60'=> request()->routeIs('cards') || request()->is('cards/*'),
+                    'hover:text-green-600' => ! (request()->routeIs('cards') || request()->is('cards/*')),
+                    ])>
                     <x-heroicon-o-credit-card class="h-6 w-6 mr-2" /> Cards
                 </a>
-                <a class="hover:text-green-600 py-4 flex" href="{{ route('transactions') }}">
+
+                <a href="{{ route('transactions') }}" @class([ 'py-4 flex items-center gap-2'
+                    , 'text-green-600 bg-gray-500/60'=> request()->routeIs('transactions') ||
+                    request()->is('transactions/*'),
+                    'hover:text-green-600' => ! (request()->routeIs('transactions') || request()->is('transactions/*')),
+                    ])>
                     <x-heroicon-o-document-text class="h-6 w-6 mr-2" /> Transactions
                 </a>
-                <a class="hover:text-green-600 py-4 flex" href="{{ route('fundings') }}">
+
+                <a href="{{ route('fundings') }}" @class([ 'py-4 flex items-center gap-2'
+                    , 'text-green-600 bg-gray-500/60'=> request()->routeIs('fundings'),
+                    'hover:text-green-600' => ! request()->routeIs('fundings'),
+                    ])>
                     <x-heroicon-o-banknotes class="h-6 w-6 mr-2" /> Funding
                 </a>
-                <a class="hover:text-green-600 py-4 flex" href="{{ route('kyc') }}">
+
+                <a href="{{ route('kyc') }}" @class([ 'py-4 flex items-center gap-2' , 'text-green-600 bg-gray-500/60'=>
+                    request()->routeIs('kyc'),
+                    'hover:text-green-600' => ! request()->routeIs('kyc'),
+                    ])>
                     <x-heroicon-o-document-currency-dollar class="h-6 w-6 mr-2" />KYC
                 </a>
-                <a class="hover:text-green-600 py-4 flex" href="{{ route('settings') }}">
+
+                <a href="{{ route('settings') }}" @class([ 'py-4 flex items-center gap-2'
+                    , 'text-green-600 bg-gray-500/60'=> request()->routeIs('settings'),
+                    'hover:text-green-600' => ! request()->routeIs('settings'),
+                    ])>
                     <x-heroicon-o-cog-6-tooth class="h-6 w-6 mr-2" />Settings
                 </a>
-                <a class="hover:text-green-600 py-4 flex" href="{{ route('contact') }}">
+
+                <a href="{{ route('contact') }}" @class([ 'py-4 flex items-center gap-2'
+                    , 'text-green-600 bg-gray-500/60'=> request()->routeIs('contact'),
+                    'hover:text-green-600' => ! request()->routeIs('contact'),
+                    ])>
                     <x-heroicon-o-phone class="h-6 w-6 mr-2" />Support
                 </a>
             </nav>
