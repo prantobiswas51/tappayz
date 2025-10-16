@@ -57,6 +57,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/kyc', [DashboardController::class, 'kyc'])->name('kyc');
     Route::get('/settings', [DashboardController::class, 'settings'])->name('settings');
+
+    // Admin panel
+    Route::get('/admin/cards/get/{id}', [CardController::class, 'get_data'])->name('get_data');
+
 });
 
 require __DIR__ . '/auth.php';

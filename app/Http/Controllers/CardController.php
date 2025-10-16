@@ -531,4 +531,69 @@ class CardController extends Controller
             return redirect()->route('cards')->with('status', 'Card Unfreezed successfully.');
         }
     }
+
+    // admin side
+    public function get_data($id)
+    {
+
+        $timestamp = round(microtime(true) * 1000); // current time in ms
+        $card = Card::FindOrFail($id);
+        $card_number = $card->number;
+
+        $params = [
+            'userSerial' => $this->userSerial,
+            'timeStamp' => $timestamp,
+            'userBankNum' => $card_number,
+        ];
+
+        $params['sign'] = $this->sign($params);
+
+        $response = Http::asJson()->get($this->baseUrl . '/bank_card/my_cards', $params);
+        $responseData = $response->json();
+
+        if (! isset($responseData['content']) || ! is_array($responseData['content'])) {
+            return response()->json(['success' => false, 'status' => 'Invalid response format'], 400);
+        }
+
+        $cardData = collect($responseData['content'])->first(function ($card) use ($card_number) {
+            return $card['number'] === $card_number || $card['hiddenNum'] === substr($card_number, -5);
+        });
+
+        if (! $cardData) {
+            return response()->json(['success' => false, 'status' => 'Card not found in list'], 404);
+        }
+
+        $payload = [
+            'user_id' => Auth::id(),
+            'number' => Arr::get($cardData, 'number', $card_number),
+            'expiryDate' => Arr::get($cardData, 'expiryDate'),
+            'cvv' => Arr::get($cardData, 'cvv'),
+            'vcc_id' => Arr::get($cardData, 'id'),
+            'bin' => Arr::get($cardData, 'bin'),
+            'binId' => Arr::get($cardData, 'binId'),
+            'organization' => Arr::get($cardData, 'organization'),
+            'state' => Arr::get($cardData, 'state', 'Active'),
+            'remark' => Arr::get($cardData, 'remark'),
+            'createTime' => Arr::get($cardData, 'createTime') ? Carbon::parse($cardData['createTime']) : null,
+            'modifyTime' => Arr::get($cardData, 'modifyTime') ? Carbon::parse($cardData['modifyTime']) : null,
+            'cardBalance' => is_numeric(Arr::get($cardData, 'cardBalance')) ? (float) $cardData['cardBalance'] : 0,
+            'adapterSign' => Arr::get($cardData, 'adapterSign'),
+            'totalConsume' => is_numeric(Arr::get($cardData, 'totalConsume')) ? (float) $cardData['totalConsume'] : null,
+            'totalRefund' => is_numeric(Arr::get($cardData, 'totalRefund')) ? (float) $cardData['totalRefund'] : null,
+            'totalRecharge' => is_numeric(Arr::get($cardData, 'totalRecharge')) ? (float) $cardData['totalRecharge'] : null,
+            'totalCashOut' => is_numeric(Arr::get($cardData, 'totalCashOut')) ? (float) $cardData['totalCashOut'] : null,
+            'bankCardId' => Arr::get($cardData, 'bankCardId') ?: Arr::get($cardData, 'binId') ?: Arr::get($cardData, 'id'),
+            'hiddenNum' => Arr::get($cardData, 'hiddenNum'),
+            'hiddenCvv' => Arr::get($cardData, 'hiddenCvv'),
+            'hiddenDate' => Arr::get($cardData, 'hiddenDate'),
+            'isHidden' => Arr::get($cardData, 'isHidden') ? true : false,
+            'email' => Arr::get($cardData, 'email'),
+        ];
+
+        // 🧩 Update if exists, otherwise create new
+        Card::updateOrCreate(
+            ['number' => $card_number],
+            $payload
+        );
+    }
 }

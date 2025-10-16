@@ -146,13 +146,15 @@
             <div class="lg:col-span-2 mb-6 flex flex-col mt-6 justify-end space-y-6">
                 {{-- action cards --}}
                 <div class=" flex gap-3 max-w-sm justify-evenly">
-                    
-                    <button id="openRechargeModal" class="p-2 px-4 rounded-lg bg-gray-300 hover:bg-amber-300" @if($card->state == 2) disabled
+
+                    <button id="openRechargeModal" class="p-2 px-4 rounded-lg bg-gray-300 hover:bg-amber-300"
+                        @if($card->state == 2) disabled
                         @endif>
                         Recharge
                     </button>
 
-                    <button class="p-2 px-4 rounded-lg bg-gray-300 hover:bg-amber-300" id="openCashoutModal" @if($card->state == 2) disabled @endif>
+                    <button class="p-2 px-4 rounded-lg bg-gray-300 hover:bg-amber-300" id="openCashoutModal"
+                        @if($card->state == 2) disabled @endif>
                         Cash Out
                     </button>
 
@@ -189,9 +191,22 @@
             </div>
 
             {{-- Card Design --}}
-            <div class=" ">
+            <div class="">
                 <div
-                    class="card-3d w-96 h-56 {{ $card->state == 2 ? 'filter grayscale' : '' }} transition-transform duration-600 hover:rotate-y-1 hover:rotate-x-1">
+                    class="card-3d w-96 h-56 {{ $card->state == 2 ? 'filter grayscale' : '' }} transition-transform duration-600 hover:rotate-y-1 hover:rotate-x-1 relative">
+                    <!-- Lock Icon Overlay -->
+                    @if($card->state == 2)
+                    <div
+                        class="absolute inset-0 flex items-center justify-center z-[999] bg-black bg-opacity-40 rounded-3xl">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-white" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 11c1.104 0 2 .896 2 2v2h-4v-2c0-1.104.896-2 2-2zm0-7a5 5 0 00-5 5v3h10V9a5 5 0 00-5-5z" />
+                            <rect width="12" height="8" x="6" y="13" rx="2" ry="2" stroke-width="2" />
+                        </svg>
+                    </div>
+                    @endif
+
                     <div class="bg-white rounded-3xl shadow-lg p-8 relative overflow-hidden">
                         <!-- Large Cloud Background -->
                         <div
@@ -227,8 +242,8 @@
                             <!-- Bottom Section -->
                             <div class="flex justify-between items-end">
                                 <div>
-                                    <div class="text-lg font-bold text-black my-2">{{ strtoupper(Auth::user()->name)
-                                        }}</div>
+                                    <div class="text-lg font-bold text-black my-2">{{ strtoupper(Auth::user()->name) }}
+                                    </div>
                                     <div class="text-xs text-gray-600 font-medium mt-1">VALID THRU</div>
                                     <div class="text-lg text-black font-mono font-normal tracking-wide">{{
                                         $card->expiryDate ?? '01/28' }}</div>
@@ -244,6 +259,7 @@
                     </div>
                 </div>
             </div>
+
 
             <div class=" max-w-sm my-3">
                 <div class="p-2 flex justify-between">
