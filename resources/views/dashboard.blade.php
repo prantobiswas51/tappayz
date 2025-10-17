@@ -17,8 +17,7 @@
             </div>
             <div class="widget kpi" style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333; padding: 16px;">
                 <div class="label" style="color: #6c757d; font-size: 12px;">Active Cards</div>
-                <div class="value" style="color: #007bff; font-weight: 700; font-size: 18px;">{{
-                    Auth::user()->active_cards }}</div>
+                <div class="value" style="color: #007bff; font-weight: 700; font-size: 18px;">{{ $activeCardsCount }}</div>
             </div>
             <div class="widget kpi" style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333; padding: 16px;">
                 <div class="label" style="color: #6c757d; font-size: 12px;">Spending (30d)</div>

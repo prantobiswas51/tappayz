@@ -385,7 +385,9 @@ class CardController extends Controller
 
         $balance = Auth::user()->balance;
         $request_balance = $request->amount;
-        $total_balance_to_cut = $request_balance + 5 + (0.06 * $request_balance); // including fees
+        $total_balance_to_cut = $request_balance + (0.10 * $request_balance); // including fees
+
+        // dd($total_balance_to_cut);
 
         if ($balance < $total_balance_to_cut) {
             return redirect()->route('cards')->with('status', 'Insufficient balance');
@@ -522,7 +524,9 @@ class CardController extends Controller
             $card->state = '2';
             $card->save();
 
-            return redirect()->route('cards')->with('status', 'Card Freezed successfully.');
+            return redirect()
+                ->route('view_card', $card->id)
+                ->with('status', 'Card Freezed successfully.');
         }
     }
 
@@ -552,7 +556,9 @@ class CardController extends Controller
             $card->state = '1';
             $card->save();
 
-            return redirect()->route('cards')->with('status', 'Card Unfreezed successfully.');
+            return redirect()
+                ->route('view_card', $card->id)
+                ->with('status', 'Card unfreezed successfully.');
         }
     }
 

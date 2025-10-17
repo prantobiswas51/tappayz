@@ -11,7 +11,6 @@
             right: -30px;
             width: 120px;
             height: 80px;
-            background: linear-gradient(135deg, #dc2626, #ef4444);
             border-radius: 60px 60px 60px 60px / 40px 40px 40px 40px;
             opacity: 0.8;
         }
@@ -209,9 +208,15 @@
 
                     <div class="bg-white rounded-3xl shadow-lg p-8 relative overflow-hidden">
                         <!-- Large Cloud Background -->
+                        @if($card->organization == 'VISA')
                         <div
-                            class="large-cloud absolute -top-5 -right-8 w-30 h-20 bg-gradient-to-br from-red-600 to-red-500 opacity-80">
+                            class="large-cloud absolute -top-5 -right-8 w-30 h-20 bg-gradient-to-br from-blue-800 to-blue-400 opacity-80">
                         </div>
+                        @else
+                        <div
+                            class="large-cloud absolute -top-5 -right-8 w-30 h-20 bg-gradient-to-br  from-orange-500 to-red-700 opacity-80">
+                        </div>
+                        @endif
 
                         <!-- Card Content -->
                         <div class="relative z-10 h-full flex flex-col">
@@ -223,8 +228,15 @@
                                     </div>
                                 </div>
                                 <div class="flex items-center space-x-1">
+                                    @if($card->organization == 'VISA')
+                                    <div class="bg-sky-600 text-white rounded-md px-3 py-2 text-sm font-bold">
+                                        VISA
+                                    </div>
+                                    @else
+
                                     <div class="w-5 h-5 bg-red-600 rounded-full"></div>
                                     <div class="w-5 h-5 bg-orange-500 rounded-full -ml-2"></div>
+                                    @endif
                                 </div>
                             </div>
 
@@ -233,9 +245,9 @@
                                 <div class="text-black font-mono tracking-wider font-normal text-xl whitespace-nowrap">
                                     {{ substr($card->number, 0, 4) }} {{ substr($card->number, 4, 4) }} {{
                                     substr($card->number, 8, 4) }} {{ substr($card->number, 12, 4) }}
-                                    <span
-                                        class="text-xs cursor-pointer border p-2 rounded-md text-blue-600 hover:text-blue-800 ml-2"
-                                        onclick="copyCardNumber('{{ $card->number }}')">Copy</span>
+                                    <span onclick="copyCard()"
+                                        class="text-xs cursor-pointer border p-2 rounded-md text-blue-600 hover:text-blue-800 ml-2">Copy</span>
+                                    <input id="card_number" type="hidden" value="{{ $card->number }}">
                                 </div>
                             </div>
 
@@ -265,6 +277,9 @@
                 <div class="p-2 flex justify-between">
                     <div class="">Card Balance</div>
                     <div class="flex">${{ number_format($card->cardBalance ?? null, 2) }}
+                        @if($card->state == 2)
+                        <span class="text-red-600">(Frozen)</span>
+                        @else
                         <a class=" ml-2" href="{{ route('update_balance', $card->id) }}">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="25" height="25"
                                 role="img" aria-label="Sync">
@@ -275,6 +290,7 @@
                                 </g>
                             </svg>
                         </a>
+                        @endif
                     </div>
                 </div>
 
@@ -388,23 +404,12 @@
     </div>
 
     <script>
-        function copyCardNumber(cardNumber) {
-            navigator.clipboard.writeText(cardNumber).then(function() {
-                // Show success message
-                const span = event.target;
-                const originalText = span.textContent;
-                span.textContent = 'Copied!';
-                span.classList.add('text-green-600');
-                
-                setTimeout(function() {
-                    span.textContent = originalText;
-                    span.classList.remove('text-green-600');
-                }, 2000);
-            }).catch(function(err) {
-                console.error('Could not copy text: ', err);
-                alert('Failed to copy card number');
-            });
-        }
+        function copyCard() {
+            const cardNumber = document.getElementById('card_number').value;
+            navigator.clipboard.writeText(cardNumber)
+                .then(() => alert('Card number copied!'))
+                .catch(err => alert('Failed to copy'));
+            }
 
         // Cashout Modal functionality
         document.addEventListener('DOMContentLoaded', function() {

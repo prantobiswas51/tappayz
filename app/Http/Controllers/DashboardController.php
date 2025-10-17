@@ -12,12 +12,16 @@ class DashboardController extends Controller
     {
         $cardNumbers = Card::where('user_id', Auth::id())->pluck('number');
 
+        $activeCardsCount = Card::where('user_id', Auth::id())
+            ->where('state', 1)
+            ->count();
+
         $transactions = Transaction::whereIn('cardNum', $cardNumbers)
             ->orderBy('recordTime', 'desc')
             ->take(8)
             ->get();
 
-        return view('dashboard', compact('transactions'));
+        return view('dashboard', compact('transactions', 'activeCardsCount'));
     }
 
     public function kyc()
