@@ -17,10 +17,9 @@ class CardForm
                     ->relationship('user', 'name', fn($query) => $query->select('id', 'name', 'email'))
                     ->getOptionLabelFromRecordUsing(fn($record) => "{$record->name} ({$record->email})")
                     ->searchable()
-                    ->preload()
-                    ->required(),
+                    ->preload(),
 
-                TextInput::make('number'),
+                TextInput::make('number')->required(),
                 TextInput::make('expiryDate'),
                 TextInput::make('cvv'),
                 TextInput::make('vcc_id'),

@@ -34,9 +34,6 @@
                     <span>+</span>
                     <span>Create Card</span>
                 </a>
-                <a class="btn btn-brand create-btn" href="{{ route('fetch_bins') }}">
-                    <span>Sync BINs</span>
-                </a>
             </div>
         </div>
 

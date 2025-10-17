@@ -15,9 +15,7 @@ use Illuminate\Support\Facades\Http;
 class CardController extends Controller
 {
     protected string $baseUrl = 'http://api.vcc.center';
-
     protected string $userSerial = '0852811946422621';
-
     protected string $secretKey = 'Okfc-yMDRgKig4E2V75pxw==';
 
     public function index()
@@ -62,6 +60,11 @@ class CardController extends Controller
 
         if (isset($data['code']) && $data['code'] === 0) {
             foreach ($data['content'] as $bin) {
+
+                if ($bin['bin'] == '49387519') {
+                    continue;
+                }
+
                 Bin::updateOrCreate(
                     ['id' => $bin['id']], // ✅ use API id column
                     [
@@ -77,7 +80,7 @@ class CardController extends Controller
             }
         }
 
-        return redirect()->route('cards')->with('status', 'Card updated successfully.');
+        return redirect('/admin');
     }
 
     public function show_bins()
@@ -103,6 +106,15 @@ class CardController extends Controller
             'remark' => 'nullable|string|max:50',
         ]);
 
+        // get balance info
+        $balance = Auth::user()->balance;
+        $request_balance = $request->amount;
+        $total_balance_to_cut = $request_balance + 5 + (0.06 * $request_balance); // including fees
+
+        if ($balance < $total_balance_to_cut) {
+            return redirect()->route('cards')->with('status', 'Insufficient balance');
+        }
+        
         // First call to open card
         $params = [
             'userSerial' => $this->userSerial,
@@ -130,6 +142,10 @@ class CardController extends Controller
         }
 
         Log::info('Open Card Success');
+
+        // cut balance from user
+        $balance -= $total_balance_to_cut;
+        Auth::user()->update(['balance' => $balance]);
 
         $orderId = $data['content']['id'];
         Log::info('OrderId is: ' . $orderId);
@@ -366,6 +382,14 @@ class CardController extends Controller
             'amount' => 'required|numeric|min:1',
             'card_id' => 'required|numeric',
         ]);
+
+        $balance = Auth::user()->balance;
+        $request_balance = $request->amount;
+        $total_balance_to_cut = $request_balance + 5 + (0.06 * $request_balance); // including fees
+
+        if ($balance < $total_balance_to_cut) {
+            return redirect()->route('cards')->with('status', 'Insufficient balance');
+        }
 
         $card = Card::findOrFail($request->card_id);
         $timestamp = (string) round(microtime(true) * 1000);

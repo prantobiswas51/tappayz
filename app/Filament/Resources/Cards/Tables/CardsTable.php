@@ -24,18 +24,11 @@ class CardsTable
                     ->searchable(),
                 TextColumn::make('number')
                     ->searchable(),
-                TextColumn::make('expiryDate')
-                    ->searchable(),
-                TextColumn::make('cvv')
-                    ->searchable(),
                 TextColumn::make('organization')
                     ->searchable(),
                 TextColumn::make('email')
                     ->label('Email address')
                     ->searchable(),
-                TextColumn::make('cardBalance')
-                    ->numeric()
-                    ->sortable(),
                 TextColumn::make('state')
                     ->searchable()->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('remark')
