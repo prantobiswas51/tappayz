@@ -47,8 +47,9 @@
                             max="{{ $card->cardBalance ?? 0 }}" step="0.01" required
                             class="w-full pl-8 pr-3 py-2 border text-gray-600 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                     </div>
-                    <p class="text-xs text-gray-500 mt-1">
-                        Available: ${{ number_format($card->cardBalance ?? 0, 2) }}
+                    <p class=" text-sm text-black ">
+                        <span class="text-green-600">Available: ${{ number_format($card->cardBalance ?? 0, 2) }}</span> <br>
+                        You will get: <span class="text-red-500">${{ number_format($card->cardBalance - ($card->cardBalance * 0.2) ?? 0, 2) }} (Card Balance - 20%)</span>
                     </p>
                 </div>
 
@@ -83,18 +84,26 @@
             <!-- Modal Body -->
             <form action="{{ route('card_recharge') }}" method="post" class="space-y-4">
                 @csrf
+
                 <div>
                     <label for="recharge_amount" class="block text-sm font-medium text-gray-700 mb-2">
                         Recharge Amount
                     </label>
                     <div class="relative">
                         <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
-                        <input type="number" id="recharge_amount" name="amount" placeholder="0.00" min="1" required
+
+                        <input type="number" name="amount" min="10" value="10" max="{{ Auth::user()->balance }}"
+                            required id="recharge_amount" onchange="updateRechargeTotal()"
+                            style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333;"
                             class="w-full pl-8 pr-3 py-2 border text-gray-600 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+
                     </div>
-                    <p class="text-xs text-gray-500 mt-1">
-                        Available: ${{ number_format($card->cardBalance ?? 0, 2) }}
+                    <p class=" text-sm text-black ">
+                        <span class="text-green-600">Available: ${{ number_format(Auth::user()->balance ?? 0, 2)
+                            }}</span>
+                        | Total: <span class="text-red-500" id="total_amount">$11.00 (Fee 10%)</span>
                     </p>
+
                 </div>
 
                 <input type="hidden" name="card_id" value="{{ $card->id }}">
@@ -409,7 +418,14 @@
             navigator.clipboard.writeText(cardNumber)
                 .then(() => alert('Card number copied!'))
                 .catch(err => alert('Failed to copy'));
-            }
+        }
+
+         function updateRechargeTotal() {
+            let amountInput = document.getElementById('recharge_amount');
+            fee_percent = amountInput.value * 0.10;
+            total_amount = parseFloat(amountInput.value) + fee_percent;
+            document.getElementById('total_amount').innerText = "$" + total_amount.toFixed(2);
+        }
 
         // Cashout Modal functionality
         document.addEventListener('DOMContentLoaded', function() {

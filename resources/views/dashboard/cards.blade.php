@@ -56,7 +56,7 @@
                     } else if($card->organization == 'MASTERCARD'){
                     echo '<img src="/images/mastercard.png" alt="MasterCard" class="h-10">';
                     } else {
-                    echo '<img src="/images/card.png" alt="Card" class="h-10">';
+                    echo '<div class="h-10 w-[55px]"></div>';
                     }
                     @endphp
                 </div>
@@ -73,7 +73,7 @@
                     </div>
                     <div>
                         <div class="text-sm text-gray-500 mb-1">Card Number:</div>
-                        <div class="text-sm font-medium text-gray-800 font-mono">{{ $card->hiddenNum }}</div>
+                        <div class="text-sm font-medium text-gray-800 font-mono @if($card->state == 4) blur @endif">{{ $card->hiddenNum }}</div>
                     </div>
                     <div>
                         <div class="text-sm text-gray-500 mb-1">Expire:</div>

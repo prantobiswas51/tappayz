@@ -16,10 +16,10 @@
                 <div class="card-title" style="margin-bottom:8px; color: #333;">Profile</div>
                 <form class="form">
                     <div class="field"><label class="label" style="color: #6c757d;">Full name</label><input
-                            class="input" value="John Doe"
+                            class="input" value="{{ Auth::user()->name }}"
                             style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333;" /></div>
                     <div class="field"><label class="label" style="color: #6c757d;">Email</label><input class="input"
-                            value="you@business.com"
+                            value="{{ Auth::user()->email }}"
                             style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333;" /></div>
                     <a class="btn btn-brand" href="#">Save</a>
                 </form>

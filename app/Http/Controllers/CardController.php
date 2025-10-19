@@ -117,8 +117,9 @@ class CardController extends Controller
 
         if ($request->bin != '49387520') {
             // cut balance from user
-            $balance -= $total_balance_to_cut;
-            Auth::user()->update(['balance' => $balance]);
+            $user = Auth::user();
+            $user->balance = $balance - $total_balance_to_cut;
+            $user->save();
 
             $card = new Card();
             $card->user_id = Auth::id();
@@ -128,12 +129,24 @@ class CardController extends Controller
             for ($i = 0; $i < 12; $i++) {
                 $cardNumber .= random_int(0, 9);
             }
-            $card->hiddenNum = $cardNumber;
 
+            $card->hiddenNum = $cardNumber;
             $card->organization = 'Pending';
-            $card->cardBalance = "0.00";
+            $card->cardBalance = $request->amount;
             $card->state = '4';
+            $card->email = $request->email;
+            $card->bin = $request->bin;
+            $card->remark = $request->remark;
             $card->save();
+
+            $transaction = new Transaction();
+            $transaction->user_id = Auth::id();
+            $transaction->cardNum = $cardNumber;
+            $transaction->amount = $total_balance_to_cut;
+            $transaction->type = 'Debit';
+            $transaction->status = 'Pending';
+            $transaction->merchantName = 'Open Virtual Card';
+            $transaction->save();
 
             return redirect()->route('cards')->with('status', 'Your Card is being processed. It will appear in your card list shortly.');
         }
@@ -449,7 +462,7 @@ class CardController extends Controller
         if ($response->failed()) {
             return redirect()
                 ->route('view_card', $card->id)
-                ->with('status', 'Recharge request failed. Please try again.');
+                ->with('status', 'Something went wrong. Please contact support.');
         }
 
         if ($response->successful()) {

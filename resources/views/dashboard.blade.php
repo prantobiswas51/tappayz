@@ -19,12 +19,12 @@
                 <div class="value" style="color: #007bff; font-weight: 700; font-size: 18px;">{{ $activeCardsCount }}</div>
             </div>
             <div class="widget kpi" style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333; padding: 16px;">
-                <div class="label" style="color: #6c757d; font-size: 12px;">Spending (30d)</div>
-                <div class="value" style="color: #fd7e14; font-weight: 700; font-size: 18px;">$4,902.55</div>
+                <div class="label" style="color: #6c757d; font-size: 12px;">Pending Cards</div>
+                <div class="value" style="color: #fd7e14; font-weight: 700; font-size: 18px;">{{ $pendingCardsCount }}</div>
             </div>
             <div class="widget kpi" style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333; padding: 16px;">
-                <div class="label" style="color: #6c757d; font-size: 12px;">Pending Authorizations</div>
-                <div class="value" style="color: #ffc107; font-weight: 700; font-size: 18px;">3</div>
+                <div class="label" style="color: #6c757d; font-size: 12px;">Frozen Cards</div>
+                <div class="value" style="color: #ffc107; font-weight: 700; font-size: 18px;">{{ $freezedCardsCount }}</div>
             </div>
         </section>
 

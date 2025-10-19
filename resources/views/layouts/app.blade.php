@@ -8,7 +8,11 @@
 
     <title>{{ config('app.name', 'Cards') }}</title>
     <meta name="google-adsense-account" content="ca-pub-1076115507843658">
-    <!-- Fonts -->
+    <meta name="description"
+        content="TapPayz offers instant virtual payment cards with 3DS support for secure online transactions. Create your card today and shop with confidence!">
+    <meta name="keywords"
+        content="virtual payment cards, 3DS support, secure online transactions, instant card creation, TapPayz, online shopping, digital payments, prepaid cards, virtual credit cards, secure payments">
+
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
