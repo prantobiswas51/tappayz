@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('vcc_id')->unique();
-            $table->string('transactionId')->unique();
+            $table->string('vcc_id')->unique()->nullable();
+            $table->string('transactionId')->unique()->nullable();
             $table->string('cardNum')->nullable();
             $table->string('clientId')->nullable();
             $table->string('type')->nullable();

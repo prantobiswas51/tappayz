@@ -4,8 +4,7 @@
         
         <div class="topbar">
             <div class="brand" style="gap:8px;">
-                <div class="brand-badge" style="width:28px;height:28px;"></div>
-                <div>Overview | {{ Auth::user()->name }} </div>
+                <div>Overview </div>
             </div>
             <input class="input search" placeholder="Search…"
                 style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333;" />

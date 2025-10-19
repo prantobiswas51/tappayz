@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('bin')->nullable();
             $table->string('binId')->nullable();
 
-            $table->string('state')->nullable();
+            $table->string('state')->nullable();  // 1: Active, 2: Frozen, 3: Deleted, 4: Pending
             $table->string('remark')->nullable();
             $table->string('createTime')->nullable();
             $table->string('modifyTime')->nullable();

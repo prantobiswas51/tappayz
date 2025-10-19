@@ -30,7 +30,26 @@ class CardsTable
                     ->label('Email address')
                     ->searchable(),
                 TextColumn::make('state')
-                    ->searchable()->toggleable(isToggledHiddenByDefault: true),
+                    ->label('State')
+                    ->formatStateUsing(function ($state) {
+                        return match ($state) {
+                            '1' => 'Active',
+                            '2' => 'Frozen',
+                            '0' => 'Canceled',
+                            '4' => 'Pending',
+                            default => 'Unknown',
+                        };
+                    })
+                    ->color(function ($state) {
+                        return match ($state) {
+                            '1' => 'success',
+                            '2' => 'warning',
+                            '0' => 'danger',
+                            '4' => 'green',
+                            default => 'gray',
+                        };
+                    })
+                    ->searchable(),
                 TextColumn::make('remark')
                     ->searchable()->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('totalConsume')

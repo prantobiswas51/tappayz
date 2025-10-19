@@ -52,8 +52,12 @@
     <div class="app min-h-screen bg-gray-100">
 
         <aside class="sidebar bg-gray-300 text-gray-700" style="background-color: aliceblue !important;">
-            <div class="brand">
-                <div><img src="{{ asset('images/logo.png') }}" alt="Tappayz"></div>
+            <div class="brand flex flex-col">
+                <div>
+                    <img src="{{ asset('images/logo.png') }}" alt="Tappayz">
+                </div>
+                <div class="text-white">{{ Auth::user()->name }} | ${{ Auth::user()->balance }}</div>
+
             </div>
 
             <nav class="nav flex flex-col">

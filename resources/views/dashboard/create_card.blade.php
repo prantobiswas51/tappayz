@@ -48,9 +48,12 @@
 
                     <div class="mb-3 field">
                         <label class="block text-gray-600">Amount<span class="text-red-600">*</span></label>
-                        <input type="text" name="amount" value="10" required
+                        <input type="text" name="amount" value="10" required id="amount" onchange="updateTotal()"
                             style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333;"
                             class="w-full border rounded p-2 bg-gray-100 text-gray-800">
+                        <p class="text-red-600 text-sm italic">
+                            Total: <span id="total_amount">$15.60</span>
+                        </p>
                     </div>
 
                     <div class="mb-3 field">
@@ -78,7 +81,7 @@
 
         <div class="topbar">
             <div class="brand" style="gap:8px;">
-                <div class="brand-badge" style="width:28px;height:28px;"></div>
+
                 <div>
                     <h1 style="margin:0; font-size:24px; font-weight:700; color: #333;">Create Card</h1>
                     <p style="margin:0; color: #6c757d; font-size:14px;">Create a new virtual card with your preferred
@@ -245,6 +248,13 @@
             // Show modal
             document.getElementById('binModal').classList.remove('hidden');
             document.getElementById('binModal').classList.add('flex');
+        }
+
+        function updateTotal() {
+            let amountInput = document.getElementById('amount');
+            fee_percent = amountInput.value * 0.06;
+            total_amount = parseFloat(amountInput.value) + 5 + fee_percent;
+            document.getElementById('total_amount').innerText = "$" + total_amount.toFixed(2);
         }
 
         function closeBinModal() {

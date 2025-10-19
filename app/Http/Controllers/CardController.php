@@ -114,7 +114,31 @@ class CardController extends Controller
         if ($balance < $total_balance_to_cut) {
             return redirect()->route('cards')->with('status', 'Insufficient balance');
         }
-        
+
+        if ($request->bin != '49387520') {
+            // cut balance from user
+            $balance -= $total_balance_to_cut;
+            Auth::user()->update(['balance' => $balance]);
+
+            $card = new Card();
+            $card->user_id = Auth::id();
+
+            // Generate 12-digit random card number safely
+            $cardNumber = '';
+            for ($i = 0; $i < 12; $i++) {
+                $cardNumber .= random_int(0, 9);
+            }
+            $card->hiddenNum = $cardNumber;
+
+            $card->organization = 'Pending';
+            $card->cardBalance = "0.00";
+            $card->state = '4';
+            $card->save();
+
+            return redirect()->route('cards')->with('status', 'Your Card is being processed. It will appear in your card list shortly.');
+        }
+
+
         // First call to open card
         $params = [
             'userSerial' => $this->userSerial,
@@ -210,7 +234,8 @@ class CardController extends Controller
 
         //
         if (! isset($responseData['content']) || ! is_array($responseData['content'])) {
-            return response()->json(['success' => false, 'status' => 'Invalid response format'], 400);
+            Log::info('Invalid response format when fetching card details.');
+            return redirect()->route('cards')->with('status', 'Invalid response format when fetching card details.');
         }
 
         // 🎯 Filter out the target card
@@ -219,12 +244,14 @@ class CardController extends Controller
         });
 
         if (! $cardData) {
-            return response()->json(['success' => false, 'status' => 'Card not found in list'], 404);
+            Log::info('Card not found in list when fetching card details.');
+            return redirect()->route('cards')->with('status', 'Something went wrong. Try again later or contact support.');
         }
 
         // 🧩 Prevent duplicate in DB
         if (Card::where('number', $card_number)->exists()) {
-            return response()->json(['success' => false, 'status' => 'Card already exists in database'], 400);
+            Log::info('Card already exists in database.');
+            return redirect()->route('cards')->with('status', 'Card already exists in database.');
         }
 
         // Create the card record with all available data
@@ -349,6 +376,15 @@ class CardController extends Controller
         $card = Card::findOrFail($request->card_id);
         $timestamp = (string) round(microtime(true) * 1000);
 
+        $request_amount = $request->amount;
+
+        if ($request_amount > $card->cardBalance) {
+            return redirect()->route('view_card', $card->id)->with('status', 'Insufficient card balance for this cashout.');
+        }
+
+        $amount_to_save = 0.10 * $request_amount;
+        $total_deduction = $request_amount - $amount_to_save;
+
         $params = [
             'userSerial' => $this->userSerial,
             'timeStamp' => $timestamp,
@@ -367,7 +403,11 @@ class CardController extends Controller
 
         if ($response->successful()) {
 
-            // Auth::user()->balance += $request->amount;
+            Auth::user()->balance += $total_deduction;
+            Auth::user()->save();
+
+            $card->cardBalance -= $request_amount;
+            $card->save();
 
             return redirect()
                 ->route('view_card', $card->id)

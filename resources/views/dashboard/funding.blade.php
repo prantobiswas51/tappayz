@@ -4,7 +4,7 @@
 
         <div class="topbar">
             <div class="brand" style="gap:8px;">
-                <div class="brand-badge" style="width:28px;height:28px;"></div>
+                
                 <div>
                     <h1 style="margin:0; font-size:24px; font-weight:700; color: #333;">Funding</h1>
                     <p style="margin:0; color: #6c757d; font-size:14px;">Manage your account funding and payments</p>

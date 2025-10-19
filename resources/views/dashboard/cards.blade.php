@@ -2,7 +2,7 @@
     <main class="main" style="background: white; color: #333;">
         <div class="topbar">
             <div class="brand" style="gap:8px;">
-                <div class="brand-badge" style="width:28px;height:28px;"></div>
+                
                 <div>
                     <h1 style="margin:0; font-size:24px; font-weight:700; color: #333;">Cards</h1>
                     <p style="margin:0; color: #6c757d; font-size:14px;">Manage your virtual cards</p>
@@ -91,10 +91,16 @@
 
                 <!-- Action Buttons -->
                 <div class="flex items-center space-x-4">
+                    @if($card->state == 4)
+                    <div
+                        class="bg-yellow-600 text-white hover:text-blue-800 hover:cursor-not-allowed text-sm font-medium transition-colors border border-yellow-600 px-3 py-1 rounded-lg hover:bg-blue-50 ">
+                        Pending</div>
+                    @else
                     <a href="{{ route('view_card', $card->id) }}"
                         class="text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors border border-blue-600 px-3 py-1 rounded-lg hover:bg-blue-50">
                         See Details
                     </a>
+                    @endif
                 </div>
             </div>
             @endforeach
