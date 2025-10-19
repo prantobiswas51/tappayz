@@ -1,6 +1,4 @@
 import './bootstrap';
-import './tron';
-
 import Alpine from 'alpinejs';
 
 window.Alpine = Alpine;

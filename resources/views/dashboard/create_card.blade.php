@@ -16,7 +16,7 @@
 
                     <div class="mb-3 field">
                         <label class="block text-gray-600">Email <span class="text-red-600">*</span></label>
-                        <span class="text-sm italic">You can use this email to receive the corresponding transaction
+                        <span class="text-sm ">You can use this email to receive the corresponding transaction
                             verification code.</span>
                         <input type="email" id="modal-email" name="email" required
                             style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333;"
@@ -48,10 +48,10 @@
 
                     <div class="mb-3 field">
                         <label class="block text-gray-600">Amount<span class="text-red-600">*</span></label>
-                        <input type="text" name="amount" value="10" required id="amount" onchange="updateTotal()"
+                        <input type="text" name="amount" min="10" value="10" required id="amount" onchange="updateTotal()"
                             style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333;"
                             class="w-full border rounded p-2 bg-gray-100 text-gray-800">
-                        <p class="text-red-600 text-sm italic">
+                        <p class="text-red-600 text-sm ">
                             Total: <span id="total_amount">$15.60</span>
                         </p>
                     </div>
