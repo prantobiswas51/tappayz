@@ -3,6 +3,7 @@
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FundController;
+use App\Http\Controllers\KycController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
@@ -56,6 +57,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions');
 
     Route::get('/kyc', [DashboardController::class, 'kyc'])->name('kyc');
+    Route::post('/kyc/submit', [KycController::class, 'submit_kyc'])->name('submit_kyc');
+
     Route::get('/settings', [DashboardController::class, 'settings'])->name('settings');
 
     // Admin panel

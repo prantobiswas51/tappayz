@@ -107,13 +107,6 @@
                     ])>
                     <x-heroicon-o-cog-6-tooth class="h-6 w-6 mr-2" />Settings
                 </a>
-
-                <a href="{{ route('contact') }}" @class([ 'py-4 flex items-center gap-2'
-                    , 'text-green-600 bg-gray-500/60'=> request()->routeIs('contact'),
-                    'hover:text-green-600' => ! request()->routeIs('contact'),
-                    ])>
-                    <x-heroicon-o-phone class="h-6 w-6 mr-2" />Support
-                </a>
             </nav>
             <div>
                 <form method="POST" action="{{ route('logout') }}">
