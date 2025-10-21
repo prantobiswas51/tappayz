@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('country')->nullable();
             $table->string('passport_number')->nullable();
             $table->string('passport_img_path')->nullable();
-            $table->string('status')->default('pending');
+            $table->enum('status', ['Pending', 'Approved', 'Rejected'])->default('Pending');
             $table->timestamps();
         });
     }

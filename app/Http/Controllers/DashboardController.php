@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kyc;
 use App\Models\Card;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
@@ -33,7 +34,8 @@ class DashboardController extends Controller
 
     public function kyc()
     {
-        return view('dashboard.kyc');
+        $status = Kyc::where('user_id', Auth::id())->value('status');
+        return view('dashboard.kyc', compact('status'));
     }
 
     public function settings()
