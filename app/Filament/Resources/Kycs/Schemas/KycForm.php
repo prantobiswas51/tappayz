@@ -2,9 +2,12 @@
 
 namespace App\Filament\Resources\Kycs\Schemas;
 
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
 
 class KycForm
 {
@@ -13,7 +16,8 @@ class KycForm
         return $schema
             ->components([
                 TextInput::make('user_id')
-                    ->numeric(),
+                    ->label('User ID')
+                    ->disabled(),
                 TextInput::make('first_name'),
                 TextInput::make('last_name'),
                 DatePicker::make('date_of_birth'),
@@ -26,7 +30,13 @@ class KycForm
                     ->email(),
                 TextInput::make('country'),
                 TextInput::make('passport_number'),
-                TextInput::make('passport_img_path'),
+                FileUpload::make('passport_img_path'),
+                Select::make('status')
+                    ->options([
+                        'Pending' => 'Pending',
+                        'Approved' => 'Approved',
+                        'Rejected' => 'Rejected',
+                    ]),
             ]);
     }
 }

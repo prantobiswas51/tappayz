@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Kycs\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -38,7 +39,7 @@ class KycsTable
                     ->searchable(),
                 TextColumn::make('passport_number')
                     ->searchable(),
-                TextColumn::make('passport_img_path')
+                ImageColumn::make('passport_img_path')
                     ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()
