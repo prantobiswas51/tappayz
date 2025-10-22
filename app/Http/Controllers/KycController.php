@@ -29,8 +29,7 @@ class KycController extends Controller
         $path = null;
 
         if ($request->hasFile('passport_img')) {
-            // Store file inside storage/app/private/passport_img
-            $path = $request->file('passport_img')->store('passport_img', 'local');
+            $path = $request->file('passport_img')->store('passport_img', 'public');
         }
 
         // Save or update KYC record

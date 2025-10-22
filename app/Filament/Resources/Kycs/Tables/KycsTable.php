@@ -39,8 +39,8 @@ class KycsTable
                     ->searchable(),
                 TextColumn::make('passport_number')
                     ->searchable(),
-                ImageColumn::make('passport_img_path')
-                    ->searchable(),
+                ImageColumn::make('passport_img_path')->label('Passport Image')
+                    ->disk('public'),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

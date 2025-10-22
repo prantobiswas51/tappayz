@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Kycs\Schemas;
 
+use Faker\Core\File;
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\ImageColumn;
@@ -30,7 +31,10 @@ class KycForm
                     ->email(),
                 TextInput::make('country'),
                 TextInput::make('passport_number'),
-                FileUpload::make('passport_img_path'),
+                FileUpload::make('passport_img_path')
+                    ->label('Passport Image')
+                    ->disk('public')
+                    ->image(),
                 Select::make('status')
                     ->options([
                         'Pending' => 'Pending',

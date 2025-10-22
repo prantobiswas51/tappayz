@@ -80,15 +80,15 @@
                         <h2 class="text-xl text-sky-300 mb-4">Personal Information</h2>
                         <div class="space-y-3">
                             <label>Legal First Name</label>
-                            <input type="text" placeholder="Alex" name="first_name"
+                            <input type="text" placeholder="Alex" name="first_name" required
                                 class="w-full p-3 border border-gray-300 rounded bg-gray-50 focus:ring-2 focus:ring-sky-500">
 
                             <label>Legal Last Name</label>
-                            <input type="text" placeholder="Doe" name="last_name"
+                            <input type="text" placeholder="Doe" name="last_name" required
                                 class="w-full p-3 border border-gray-300 rounded bg-gray-50 focus:ring-2 focus:ring-sky-500">
 
                             <label>Date of Birth</label>
-                            <input type="date" name="date_of_birth"
+                            <input type="date" name="date_of_birth" required
                                 class="w-full p-3 border border-gray-300 rounded bg-gray-50 focus:ring-2 focus:ring-sky-500">
                         </div>
                         <div class="flex justify-end mt-4">
@@ -102,7 +102,7 @@
                         <h2 class="text-xl text-sky-300 mb-4">Address Information</h2>
                         <div class="space-y-3">
                             <label>Street Address</label>
-                            <input type="text" placeholder="Street Address" name="street_address"
+                            <input type="text" placeholder="Street Address" name="street_address" required
                                 class="w-full p-3 border border-gray-300 rounded bg-gray-50 focus:ring-2 focus:ring-sky-500">
 
                             <label>Apt/Unit (optional)</label>
@@ -110,7 +110,7 @@
                                 class="w-full p-3 border border-gray-300 rounded bg-gray-50 focus:ring-2 focus:ring-sky-500">
 
                             <label>Zip Code</label>
-                            <input type="number" placeholder="23002" name="zip_code"
+                            <input type="number" placeholder="23002" name="zip_code" required
                                 class="w-full p-3 border border-gray-300 rounded bg-gray-50 focus:ring-2 focus:ring-sky-500">
                         </div>
                         <div class="flex justify-between mt-4">
@@ -126,11 +126,11 @@
                         <h2 class="text-xl text-sky-300 mb-4">Contact Information</h2>
                         <div class="space-y-3">
                             <label>Phone Number</label>
-                            <input type="number" name="phone_number"
+                            <input type="number" name="phone_number" required
                                 class="w-full p-3 border border-gray-300 rounded bg-gray-50 focus:ring-2 focus:ring-sky-500">
 
                             <label>Email Address</label>
-                            <input type="email" name="email_address"
+                            <input type="email" name="email_address" required
                                 class="w-full p-3 border border-gray-300 rounded bg-gray-50 focus:ring-2 focus:ring-sky-500">
                         </div>
                         <div class="flex justify-between mt-4">
@@ -146,15 +146,15 @@
                         <h2 class="text-xl text-sky-300 mb-4">Passport Info</h2>
                         <div class="space-y-3">
                             <label>Country</label>
-                            <input type="text" name="country"
+                            <input type="text" name="country" required
                                 class="w-full p-3 border border-gray-300 rounded bg-gray-50 focus:ring-2 focus:ring-sky-500">
 
                             <label>Passport Number</label>
-                            <input type="text" name="passport_number"
+                            <input type="text" name="passport_number" required
                                 class="w-full p-3 border border-gray-300 rounded bg-gray-50 focus:ring-2 focus:ring-sky-500">
 
                             <label>Passport File Upload</label>
-                            <input type="file" name="passport_img"
+                            <input type="file" name="passport_img" required
                                 class="w-full p-3 border border-gray-300 rounded bg-gray-50 focus:ring-2 focus:ring-sky-500">
                         </div>
                         <div class="flex justify-between mt-4">
@@ -180,38 +180,63 @@
 
     <script>
         const steps = document.querySelectorAll(".step");
-        const nextBtns = document.querySelectorAll(".next");
-        const prevBtns = document.querySelectorAll(".prev");
-        const progress = document.getElementById("progress");
-        const stepIndicators = document.querySelectorAll("#progressbar li");
-        let current = 0;
+    const nextBtns = document.querySelectorAll(".next");
+    const prevBtns = document.querySelectorAll(".prev");
+    const progress = document.getElementById("progress");
+    const stepIndicators = document.querySelectorAll("#progressbar li");
+    let current = 0;
 
-        function updateSteps() {
-            steps.forEach((step, index) => step.classList.toggle("hidden", index !== current));
-            stepIndicators.forEach((li, index) => {
-                li.classList.toggle("active", index <= current);
-                const span = li.querySelector("span");
-                span.classList.toggle("bg-sky-400", index <= current);
-                span.classList.toggle("bg-gray-300", index > current);
-            });
-            const percent = ((current + 1) / steps.length) * 100;
-            progress.style.width = percent + "%";
-        }
+    function updateSteps() {
+        steps.forEach((step, index) => step.classList.toggle("hidden", index !== current));
 
-        nextBtns.forEach(btn => {
-            btn.addEventListener("click", () => {
-                if (current < steps.length - 1) current++;
-                updateSteps();
-            });
+        stepIndicators.forEach((li, index) => {
+            li.classList.toggle("active", index <= current);
+            const span = li.querySelector("span");
+            span.classList.toggle("bg-sky-400", index <= current);
+            span.classList.toggle("bg-gray-300", index > current);
         });
 
-        prevBtns.forEach(btn => {
-            btn.addEventListener("click", () => {
-                if (current > 0) current--;
-                updateSteps();
-            });
+        const percent = ((current + 1) / steps.length) * 100;
+        progress.style.width = percent + "%";
+    }
+
+    // ✅ Validation before going to next step
+    function validateCurrentStep() {
+        const currentStep = steps[current];
+        const requiredInputs = currentStep.querySelectorAll("[required]");
+        let valid = true;
+
+        requiredInputs.forEach((input) => {
+            if (!input.value.trim()) {
+                input.classList.add("border-red-500", "focus:ring-red-500");
+                valid = false;
+            } else {
+                input.classList.remove("border-red-500", "focus:ring-red-500");
+            }
         });
 
-        updateSteps();
+        return valid;
+    }
+
+    nextBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            if (!validateCurrentStep()) {
+                
+                return;
+            }
+            if (current < steps.length - 1) current++;
+            updateSteps();
+        });
+    });
+
+    prevBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            if (current > 0) current--;
+            updateSteps();
+        });
+    });
+
+    updateSteps();
     </script>
+
 </x-app-layout>

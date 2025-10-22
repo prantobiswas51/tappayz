@@ -63,6 +63,7 @@ Route::middleware('auth')->group(function () {
 
     // Admin panel
     Route::get('/admin/cards/get/{id}', [CardController::class, 'get_data'])->name('get_data');
+    
 
 });
 
