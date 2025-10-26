@@ -9,6 +9,8 @@ class Deposit extends Model
     protected $fillable = [
         'user_id',
         'tx_id',
+        'sender_id',
+        'receiver_id',
         'amount',
         'token',
     ];

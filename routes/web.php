@@ -51,8 +51,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/transactions/get', [CardController::class, 'get_transactions'])->name('get_transactions');
     Route::post('/cards/open_card', [CardController::class, 'open_card'])->name('open_card');
 
+    Route::get('/getrate', [FundController::class, 'getTrxToUsdtRate']);
+
     Route::get('/fundings', [FundController::class, 'index'])->name('fundings');
-    Route::post('/fundings/deposit', [FundController::class, 'deposit'])->name('deposit');
+    Route::post('/fundings/deposit', [FundController::class, 'check_deposit'])->name('check_deposit');
 
     Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions');
 

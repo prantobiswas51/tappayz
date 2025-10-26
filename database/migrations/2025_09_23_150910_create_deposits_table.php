@@ -14,8 +14,11 @@ return new class extends Migration
         Schema::create('deposits', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->string('tx_id');
+            $table->string('tx_id')->nullable();
             $table->string('amount');
+            $table->string('status');
+            $table->string('sender_id')->nullable();
+            $table->string('receiver_id')->nullable();
             $table->string('token')->default('TRX'); // TRX or USDT
             $table->timestamps();
         });

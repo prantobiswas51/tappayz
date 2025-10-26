@@ -19,119 +19,102 @@ class FundController extends Controller
         return view('dashboard/funding', compact('trx_address'));
     }
 
-    public function deposit(Request $request)
+    public function check_deposit(Request $request)
     {
-        $user = Auth::user();
-        $this->checkUserTRXDeposits($user);
-        $this->checkUserUSDTDeposits($user);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Deposits checked and balance updated!',
-            'balance' => $user->balance
+        $request->validate([
+            'user_id' => 'required|numeric',
+            'tx_id' => 'required|string',
         ]);
-    }
 
-    public function checkDeposits()
-    {
-        $users = User::all();
+        $user_id = $request->input('user_id');
+        $tx_id = $request->input('tx_id');
 
-        foreach ($users as $user) {
-            $this->checkUserTRXDeposits($user);
-            $this->checkUserUSDTDeposits($user);
+        $user = User::find($user_id);
+        if (!$user) {
+            return redirect()->route('fundings')->with('status', 'Invalid user.');
         }
 
-        return 'Deposits checked';
-    }
+        // Fetch transaction data from TRON API
+        $response = Http::withoutVerifying()->get("https://apilist.tronscan.org/api/transaction-info?hash={$tx_id}");
 
-    private function checkUserTRXDeposits($user)
-    {
-        $response = Http::withHeaders([
-            'TRON-PRO-API-KEY' => env('TRONGRID_API_KEY'),
-        ])->get("https://api.trongrid.io/v1/accounts/{$user->trx_address}/transactions");
+        if (!$response->successful()) {
+            return redirect()->route('fundings')->with('status', 'Failed to fetch transaction details.');
+        }
 
-        $txs = $response->json()['data'] ?? [];
+        $json = $response->json();
+        $contractType = $json['contractType'] ?? null;
+        $confirmed = $json['confirmed'] ?? null;
+        $contractRet = $json['contractRet'];
+        $toAddress = $json['toAddress'] ?? null;
 
-        foreach ($txs as $tx) {
-            $txId = $tx['txID'];
+        // Check destination address
+        if (strtolower($toAddress) !== strtolower("TXKeZZxtnpdMw7zup2wCJ6wSxzrNFaevNc")) {
+            return redirect()->route('fundings')->with('status', 'Transaction does not belong to mentioned funding address.');
+        }
 
-            if (Deposit::where('tx_id', $txId)->exists()) continue;
+        $amountSun = $json['contractData']['amount'] ?? 0;
+        $amountTRX = $amountSun / 1_000_000; // Convert SUN → TRX
 
-            $amount = $tx['raw_data']['contract'][0]['parameter']['value']['amount'] / 1e6;
+        // Prevent duplicate processing
+        $existing = Deposit::where('user_id', $user_id)
+            ->where('tx_id', $tx_id)
+            ->first();
 
-            if ($amount > 0) {
-                Deposit::create([
-                    'user_id' => $user->id,
-                    'tx_id' => $txId,
-                    'amount' => $amount,
-                    'token' => 'TRX',
-                ]);
+        if ($existing) {
+            return redirect()->route('fundings')->with('status', 'This transaction is already recorded.');
+        }
 
-                $user->balance += $amount;
-                $user->save();
+        // Create new deposit record
+        $deposit = Deposit::create([
+            'user_id' => $user_id,
+            'tx_id' => $tx_id,
+            'status' => $contractRet,
+            'amount' => $amountTRX,
+            'token' => $contractType == 31 ? 'USDT' : 'TRX',
+        ]);
 
-                // sweep to main wallet
-                $this->sweepFunds($user, $amount, 'TRX');
+        // === Handle TRX Deposit ===
+        if ($contractType == 1) {
+            $amount_in_usdt = $amountTRX * 0.30; // Example: 1 TRX = 0.30 USD
+
+            if ($contractRet == 'SUCCESS') {
+                $user->increment('balance', $amount_in_usdt);
+                return redirect()->route('fundings')->with('status', '✅ TRX deposit confirmed and converted to USD.');
             }
+
+            return redirect()->route('fundings')->with('status', '⏳ TRX deposit pending confirmation.');
         }
-    }
 
-    private function checkUserUSDTDeposits($user)
-    {
-        $usdtContract = 'TXLAQ63Xg1NAzckPwKHvzw7CSEmLMEqcdj';
-        $response = Http::withHeaders([
-            'TRON-PRO-API-KEY' => env('TRONGRID_API_KEY'),
-        ])->get("https://api.trongrid.io/v1/accounts/{$user->trx_address}/transactions/trc20?limit=50&contract_address={$usdtContract}");
+        // === Handle USDT Deposit ===
+        if ($contractType == 31) {
+            if ($confirmed && $contractRet == 'SUCCESS') {
+                $user->increment('balance', $amountTRX);
+                $deposit->update(['status' => 'Confirmed']);
 
-        $txs = $response->json()['data'] ?? [];
-
-        foreach ($txs as $tx) {
-            $txId = $tx['transaction_id'];
-
-            if (Deposit::where('tx_id', $txId)->exists()) continue;
-
-            $amount = $tx['value'] / 1e6;
-
-            if ($amount > 0) {
-                Deposit::create([
-                    'user_id' => $user->id,
-                    'tx_id' => $txId,
-                    'amount' => $amount,
-                    'token' => 'USDT',
-                ]);
-
-                $user->balance += $amount;
-                $user->save();
-
-                $this->sweepFunds($user, $amount, 'USDT');
+                return redirect()->route('fundings')->with('status', '✅ USDT deposit confirmed.');
             }
+
+            return redirect()->route('fundings')->with('status', '⏳ USDT deposit pending confirmation.');
         }
+
+        return redirect()->route('fundings')->with('status', '⚠ Unknown transaction type.');
     }
 
-    private function sweepFunds($user, $amount, $token)
+
+    public function getTrxToUsdtRate()
     {
-        $serverPath = base_path('resources/js/server.js'); // <- use server.js
-        $privateKey = Crypt::decryptString($user->trx_private_key); // decrypt key
+        $response = Http::get('https://api.coingecko.com/api/v3/simple/price', [
+            'ids' => 'tron',
+            'vs_currencies' => 'usdt',
+        ]);
 
-        $args = [
-            'node',
-            $serverPath,
-            'sweep',
-            $user->trx_address,
-            $privateKey,
-            env('MAIN_WALLET'),
-            (string)($amount * 1e6),
-            $token,
-            $token === 'USDT' ? env('USDT_CONTRACT') : ''
-        ];
-
-        $process = new Process($args);
-        $process->run();
-
-        if (!$process->isSuccessful()) {
-            Log::error("{$token} Sweep failed: " . $process->getErrorOutput());
-        } else {
-            Log::info("{$token} Sweep success: " . $process->getOutput());
+        if ($response->successful()) {
+            $rate = $response->json()['tron']['usdt'];
+            return response()->json([
+                'trx_to_usdt' => $rate,
+            ]);
         }
+
+        return response()->json(['error' => 'Failed to fetch rate'], 500);
     }
 }

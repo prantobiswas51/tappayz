@@ -43,14 +43,14 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
 
         // Run Node script
-        $process = Process::run('node '.base_path('resources/js/tron.js'));
-        if ($process->successful()) {
-            $account = json_decode($process->output(), true);
+        // $process = Process::run('node '.base_path('resources/js/tron.js'));
+        // if ($process->successful()) {
+        //     $account = json_decode($process->output(), true);
 
-            $user->trx_address = $account['address']['base58'];
-            $user->trx_private_key = Crypt::encryptString($account['privateKey']); // encrypted in DB
-            $user->save();
-        }
+        //     $user->trx_address = $account['address']['base58'];
+        //     $user->trx_private_key = Crypt::encryptString($account['privateKey']); // encrypted in DB
+        //     $user->save();
+        // }
 
         Auth::login($user);
 
