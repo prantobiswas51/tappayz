@@ -54,8 +54,8 @@
 
                         <div class="field" style="margin-top:10px;">
                             <label class="label" style="color: #6c757d;">Enter Your Transaction ID</label>
-                            <input type="text" name="tx_id" required
-                                placeholder="Ex. Transaction hash or id" class="rounded-lg border-gray-300 border" />
+                            <input type="text" name="tx_id" required placeholder="Ex. Transaction hash or id"
+                                class="rounded-lg border-gray-300 border" />
                         </div>
 
                         <div class="field" style="margin-top:10px;">
@@ -74,5 +74,22 @@
             </div>
         </div>
     </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const copyBtn = document.querySelector(".copy-btn");
+            const depositInput = document.getElementById("deposit_address");
+
+            copyBtn.addEventListener("click", function () {
+                navigator.clipboard.writeText(depositInput.value)
+                    .then(() => {
+                        copyBtn.textContent = "Copied!";
+                        setTimeout(() => copyBtn.textContent = "Copy", 1500);
+                    })
+                    .catch(() => alert("Failed to copy"));
+            });
+        });
+    </script>
+
 
 </x-app-layout>
