@@ -32,10 +32,6 @@
             </div>
         </div>
 
-        <div class="border p-2 rounded-lg bg-sky-600 text-white">
-            <a href="{{ route('get_transactions') }}">Get Transactions</a>
-        </div>
-
         <section class="grid grid-1" style="margin-top:16px;">
             <div class="card"
                 style="background: white; border: 1px solid #e9ecef; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
