@@ -12,6 +12,11 @@ class Deposit extends Model
         'sender_id',
         'receiver_id',
         'amount',
-        'token',
+        'type',
+        'method',
+        'currency',
+        'status',
+        'screenshot_path',
+        'notes',
     ];
 }

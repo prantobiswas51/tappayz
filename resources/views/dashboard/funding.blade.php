@@ -1,6 +1,6 @@
 <x-app-layout>
 
-    <main class="main" style="background: white; color: #333;">
+    <main class="main bg-sky-400 p-2" style="background: white; color: #333;">
         <div class="topbar">
             <div class="brand" style="gap:8px;">
                 <div>
@@ -10,17 +10,15 @@
             </div>
         </div>
 
-        <div class="grid grid-2" style="gap: 20px; margin-bottom: 20px;">
+        <div class="grid lg:grid-cols-2  p-2" style="gap: 20px; margin-bottom: 20px;">
 
             <!-- Crypto Instant Deposit -->
-            <div class="card"
-                style="background: white; border: 1px solid #e9ecef; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <div class="card bg-amber-400 p-2">
                 <div class="card-header">
                     <div class="card-title" style="color: #333;">Instant Method</div>
                 </div>
 
-                <div class="card payment-method-card"
-                    style="margin-top: 10px; background: #f8f9fa; border: 1px solid #e9ecef;">
+                <div class="">
                     <div class="card-title" style="color: #ff6b35;">₿ Crypto Deposit</div>
                     <div class="help" style="color: #6c757d;">Instant crypto deposit to your wallet</div>
 
@@ -32,7 +30,7 @@
                         <div class="field" style="margin-top:10px;">
                             <label class="label" style="color: #6c757d;">Select Cryptocurrency</label>
                             <select id="crypto-select" name="currency" class="rounded-lg border-gray-300 border">
-                                <option value="TRX">TRX (TRON, TRC-20)</option>
+                                <option value="TRX">USDT (TRC-20)</option>
                             </select>
                         </div>
 
@@ -72,7 +70,159 @@
 
                 </div>
             </div>
+
+            {{-- Manual Payment --}}
+            <div class="card"
+                style="background: white; border: 1px solid #e9ecef; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div class="card-header">
+                    <div class="card-title" style="color: #333;">Manual Payment</div>
+                </div>
+
+                <form class="form transaction-form" method="POST" enctype="multipart/form-data"
+                    action="{{ route('manual_payment') }}">
+                    @csrf
+                    <div class="form-grid">
+                        <div class="field">
+                            <label class="label" for="payment-method" style="color: #6c757d;">Payment Method <span
+                                    style="color: #dc3545;">*</span></label>
+                            <select class="rounded-lg border-gray-300 border" id="payment-method" required
+                                name="payment_method">
+                                <option value="">Select Payment Method</option>
+                                <option value="payoneer">Payoneer</option>
+                                <option value="paypal">Paypal</option>
+                                <option value="bank_transfer">Bank Transfer</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label class="label" for="amount" style="color: #6c757d;">Amount <span
+                                    style="color: #dc3545;">*</span></label>
+                            <input class="rounded-lg border-gray-300 border" id="amount" type="number" step="0.01"
+                                min="1" placeholder="0.00" name="amount" />
+                        </div>
+
+                        <div class="field">
+                            <label class="label" for="currency" style="color: #6c757d;">Currency <span
+                                    style="color: #dc3545;">*</span></label>
+                            <select class="rounded-lg border-gray-300 border" id="currency" required name="currency">
+                                <option value="">Select Currency</option>
+                                <option value="USD">USD</option>
+                                <option value="EUR">EUR</option>
+                                <option value="GBP">GBP</option>
+                                <option value="BDT">BDT</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label class="label" for="transaction-id" style="color: #6c757d;">Transaction ID/Reference
+                                <span style="color: #dc3545;">*</span></label>
+                            <input class="rounded-lg border-gray-300 border" id="transaction-id" type="text"
+                                name="tx_id" placeholder="Enter transaction ID or reference" required />
+                        </div>
+
+                        <div class="field" style="grid-column: 1 / -1;">
+                            <label class="label" for="screenshot" style="color: #6c757d;">Payment
+                                Screenshot/Proof</label>
+                            <div class="file-input">
+                                <span>Choose File</span>
+                                <input class="rounded-lg border-gray-300 border w-full hover:cursor-pointer p-2"
+                                    required id="screenshot" type="file" accept="image/*" name="screenshot" />
+
+                            </div>
+                            <div class="help" style="color: #6c757d;">Upload screenshot or proof of payment (optional
+                                but recommended)</div>
+                        </div>
+
+                        <div class="field mt-2">
+                            <label class="label" for="notes" style="color: #6c757d;">Additional Notes</label>
+                            <textarea class="rounded-lg border-gray-300 border" id="notes" rows="3" name="notes"
+                                placeholder="Any additional information about the payment..."></textarea>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; gap:10px; margin-top: 20px;">
+                        <button type="submit" class="btn btn-brand">Submit Transaction</button>
+                        <button type="reset" class="btn btn-ghost">Clear Form</button>
+                    </div>
+                </form>
+            </div>
+
+
         </div>
+
+        <div class="card" style="background: white; border: 1px solid #e9ecef; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <div class="card-header">
+                <div class="card-title" style="color: #333;">Recent Transactions</div>
+                <a class="btn" href="transactions.html">View all</a>
+            </div>
+
+            <!-- Table Content -->
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Merchant</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Amount</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Transaction ID</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+
+                        {{-- dynamic transactions --}}
+                        @if($deposits->isEmpty())
+                        <tr>
+                            <td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                No transactions found.
+                            </td>
+                        </tr>
+                        @else
+                        @foreach ($deposits as $deposit)
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
+                                        <span class="text-orange-600 font-bold text-sm">A</span>
+                                    </div>
+                                    <div class="ml-4">
+                                        <div class="text-sm font-medium text-gray-900">{{ $deposit->merchantName
+                                            }}</div>
+                                        <div class="text-sm text-gray-500">{{ $deposit->type }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{
+                                \Carbon\Carbon::parse($deposit->recordTime)->format('Y-m-d h:i A') }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{
+                                $deposit->amount }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                @if($deposit->status == 'Finish')
+                                <span
+                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">{{
+                                    $deposit->status }}</span>
+                                @else
+                                <span
+                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">{{
+                                    $deposit->status }}</span>
+                                @endif
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-mono">{{
+                                $deposit->vcc_id }}</td>
+                        </tr>
+                        @endforeach
+                        @endif
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
     </main>
 
     <script>

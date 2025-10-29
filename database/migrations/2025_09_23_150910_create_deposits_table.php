@@ -15,11 +15,15 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->string('tx_id')->nullable();
-            $table->string('amount');
-            $table->string('status');
             $table->string('sender_id')->nullable();
             $table->string('receiver_id')->nullable();
-            $table->string('token')->default('TRX'); // TRX or USDT
+            $table->string('amount');
+            $table->enum('type', ['Manual', 'Auto']);
+            $table->string('method')->nullable();
+            $table->string('currency')->nullable();
+            $table->string('status')->default('pending');
+            $table->string('screenshot_path')->nullable();
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }

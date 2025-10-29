@@ -56,6 +56,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/fundings', [FundController::class, 'index'])->name('fundings');
     Route::post('/fundings/deposit', [FundController::class, 'check_deposit'])->name('check_deposit');
 
+    Route::post('/fundings/manual/deposit', [FundController::class, 'manual_payment'])->name('manual_payment');
+
     Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions');
 
     Route::get('/kyc', [DashboardController::class, 'kyc'])->name('kyc');

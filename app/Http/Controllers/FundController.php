@@ -16,7 +16,10 @@ class FundController extends Controller
     public function index()
     {
         $trx_address = Auth::user()->trx_address;
-        return view('dashboard/funding', compact('trx_address'));
+
+        $deposits = Deposit::where('user_id', Auth::id())->get();
+
+        return view('dashboard/funding', compact('trx_address', 'deposits'));
     }
 
     public function check_deposit(Request $request)
@@ -64,6 +67,8 @@ class FundController extends Controller
             return redirect()->route('fundings')->with('status', 'This transaction is already recorded.');
         }
 
+        // dd($contractRet);
+
         // Create new deposit record
         $deposit = Deposit::create([
             'user_id' => $user_id,
@@ -89,7 +94,6 @@ class FundController extends Controller
         if ($contractType == 31) {
             if ($confirmed && $contractRet == 'SUCCESS') {
                 $user->increment('balance', $amountTRX);
-                $deposit->update(['status' => 'Confirmed']);
 
                 return redirect()->route('fundings')->with('status', '✅ USDT deposit confirmed.');
             }
@@ -101,20 +105,47 @@ class FundController extends Controller
     }
 
 
-    public function getTrxToUsdtRate()
+    public function manual_payment(Request $request)
     {
-        $response = Http::get('https://api.coingecko.com/api/v3/simple/price', [
-            'ids' => 'tron',
-            'vs_currencies' => 'usdt',
+
+        // dd($request->all());
+
+        $request->validate([
+            'payment_method' => 'required|string',
+            'amount' => 'required|numeric|min:1',
+            'currency' => 'required|string',
+            'tx_id' => 'required|string',
+            'notes' => 'nullable|string',
+            'screenshot' => 'required|file|mimes:jpg,jpeg,png,pdf|max:5120', // Max 5MB
         ]);
 
-        if ($response->successful()) {
-            $rate = $response->json()['tron']['usdt'];
-            return response()->json([
-                'trx_to_usdt' => $rate,
-            ]);
+        // dd($request->all());
+
+        if ($request->file('screenshot')->getSize() > 3 * 1024 * 1024) {
+            return redirect()->route('fundings')->with('status', 'File size exceeds the maximum limit of 3MB.');
         }
 
-        return response()->json(['error' => 'Failed to fetch rate'], 500);
+        $ss_path = $request->file('screenshot')->store('manual_deposits', 'public');
+
+        $payment_method = $request->input('payment_method');
+        $amount = $request->input('amount');
+        $currency = $request->input('currency');
+        $tx_id = $request->input('tx_id');
+        $notes = $request->input('notes');
+
+        // Create a new deposit record with 'PENDING' status
+        Deposit::create([
+            'user_id' => Auth::id(),
+            'tx_id' => $tx_id,
+            'amount' => $amount,
+            'currency' => $currency,
+            'notes' => $notes,
+            'method' => $payment_method,
+            'screenshot_path' => $ss_path,
+            'type' => 'Manual',
+            'status' => 'Pending',
+        ]);
+
+        return redirect()->route('fundings')->with('status', '✅ Manual payment submitted. Awaiting admin approval.');
     }
 }
