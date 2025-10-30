@@ -2,21 +2,21 @@
 
 namespace App\Filament\Resources\Transactions;
 
-use App\Filament\Resources\Transactions\Pages\CreateTransactions;
-use App\Filament\Resources\Transactions\Pages\EditTransactions;
+use App\Filament\Resources\Transactions\Pages\CreateTransaction;
+use App\Filament\Resources\Transactions\Pages\EditTransaction;
 use App\Filament\Resources\Transactions\Pages\ListTransactions;
-use App\Filament\Resources\Transactions\Schemas\TransactionsForm;
+use App\Filament\Resources\Transactions\Schemas\TransactionForm;
 use App\Filament\Resources\Transactions\Tables\TransactionsTable;
-use App\Models\Transactions;
+use App\Models\Transaction;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
-class TransactionsResource extends Resource
+class TransactionResource extends Resource
 {
-    protected static ?string $model = Transactions::class;
+    protected static ?string $model = Transaction::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
@@ -24,7 +24,7 @@ class TransactionsResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
-        return TransactionsForm::configure($schema);
+        return TransactionForm::configure($schema);
     }
 
     public static function table(Table $table): Table
@@ -43,8 +43,8 @@ class TransactionsResource extends Resource
     {
         return [
             'index' => ListTransactions::route('/'),
-            'create' => CreateTransactions::route('/create'),
-            'edit' => EditTransactions::route('/{record}/edit'),
+            'create' => CreateTransaction::route('/create'),
+            'edit' => EditTransaction::route('/{record}/edit'),
         ];
     }
 }

@@ -113,7 +113,7 @@ class FundController extends Controller
         $request->validate([
             'payment_method' => 'required|string',
             'amount' => 'required|numeric|min:1',
-            'currency' => 'required|string',
+            'currency' => 'nullable|string',
             'tx_id' => 'required|string',
             'notes' => 'nullable|string',
             'screenshot' => 'required|file|mimes:jpg,jpeg,png,pdf|max:5120', // Max 5MB

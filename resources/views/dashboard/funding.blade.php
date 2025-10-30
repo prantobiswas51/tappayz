@@ -83,34 +83,29 @@
                     @csrf
                     <div class="form-grid">
                         <div class="field">
-                            <label class="label" for="payment-method" style="color: #6c757d;">Payment Method <span
-                                    style="color: #dc3545;">*</span></label>
+                            <label class="label" for="payment-method" style="color: #6c757d;">Payment Method
+                                <span style="color: #dc3545;">*</span>
+                            </label>
                             <select class="rounded-lg border-gray-300 border" id="payment-method" required
                                 name="payment_method">
                                 <option value="">Select Payment Method</option>
                                 <option value="payoneer">Payoneer</option>
                                 <option value="paypal">Paypal</option>
-                                <option value="bank_transfer">Bank Transfer</option>
+                                <option value="skrill">Skrill</option>
                             </select>
                         </div>
+
+                        <div class="field my-3" style="margin-top:10px; color:#6c757d; display: flex; align-items: center; gap: 8px;">
+                            Sent to : <div id="show_msg" style="flex: 1;"></div>
+                            <span id="copy_btn" style="cursor:pointer; color:#007bff; display:none;">Copy</span>
+                        </div>
+
 
                         <div class="field">
                             <label class="label" for="amount" style="color: #6c757d;">Amount <span
                                     style="color: #dc3545;">*</span></label>
                             <input class="rounded-lg border-gray-300 border" id="amount" type="number" step="0.01"
                                 min="1" placeholder="0.00" name="amount" />
-                        </div>
-
-                        <div class="field">
-                            <label class="label" for="currency" style="color: #6c757d;">Currency <span
-                                    style="color: #dc3545;">*</span></label>
-                            <select class="rounded-lg border-gray-300 border" id="currency" required name="currency">
-                                <option value="">Select Currency</option>
-                                <option value="USD">USD</option>
-                                <option value="EUR">EUR</option>
-                                <option value="GBP">GBP</option>
-                                <option value="BDT">BDT</option>
-                            </select>
                         </div>
 
                         <div class="field">
@@ -238,6 +233,39 @@
                     })
                     .catch(() => alert("Failed to copy"));
             });
+        });
+
+        const paymentSelect = document.getElementById('payment-method');
+        const msgDiv = document.getElementById('show_msg');
+        const copyBtn = document.getElementById('copy_btn');
+
+        paymentSelect.addEventListener('change', function() {
+            let message = '';
+
+            switch (this.value) {
+            case 'payoneer':
+                message = 'payoneer@example.com';
+                break;
+            case 'paypal':
+                message = 'paypal@example.com';
+                break;
+            case 'skrill':
+                message = 'skrill@example.com';
+                break;
+            default:
+                message = '';
+            }
+
+            msgDiv.textContent = message;
+            copyBtn.style.display = message ? 'inline' : 'none';
+        });
+
+        copyBtn.addEventListener('click', () => {
+            if (msgDiv.textContent.trim() !== '') {
+            navigator.clipboard.writeText(msgDiv.textContent.trim());
+            copyBtn.textContent = 'Copied!';
+            setTimeout(() => copyBtn.textContent = 'Copy', 1500);
+            }
         });
     </script>
 

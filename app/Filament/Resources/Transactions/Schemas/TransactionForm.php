@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Filament\Resources\Deposits\Schemas;
+namespace App\Filament\Resources\Transactions\Schemas;
 
+use Filament\Schemas\Schema;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Schemas\Schema;
 
-class DepositForm
+class TransactionForm
 {
     public static function configure(Schema $schema): Schema
     {
@@ -18,13 +18,17 @@ class DepositForm
                     ->getOptionLabelFromRecordUsing(fn($record) => "{$record->name} ({$record->email})")
                     ->searchable()
                     ->preload(),
-                TextInput::make('tx_id'),
+                TextInput::make('vcc_id'),
+                TextInput::make('transactionId'),
+                TextInput::make('cardNum'),
+                TextInput::make('clientId'),
+                TextInput::make('type'),
+                TextInput::make('status'),
                 TextInput::make('amount')
-                    ->required(),
-                TextInput::make('status')
-                    ->required(),
-                TextInput::make('sender_id'),
-                TextInput::make('receiver_id'),
+                    ->required()
+                    ->numeric(),
+                TextInput::make('merchantName'),
+                TextInput::make('recordTime'),
             ]);
     }
 }

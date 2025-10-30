@@ -2,13 +2,13 @@
 
 namespace App\Filament\Resources\Transactions\Pages;
 
-use App\Filament\Resources\Transactions\TransactionsResource;
+use App\Filament\Resources\Transactions\TransactionResource;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
-class EditTransactions extends EditRecord
+class EditTransaction extends EditRecord
 {
-    protected static string $resource = TransactionsResource::class;
+    protected static string $resource = TransactionResource::class;
 
     protected function getHeaderActions(): array
     {

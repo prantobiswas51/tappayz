@@ -19,4 +19,9 @@ class Deposit extends Model
         'screenshot_path',
         'notes',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
