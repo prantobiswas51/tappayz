@@ -19,6 +19,12 @@ class KycForm
                 TextInput::make('user_id')
                     ->label('User ID')
                     ->disabled(),
+                Select::make('status')
+                    ->options([
+                        'Pending' => 'Pending',
+                        'Approved' => 'Approved',
+                        'Rejected' => 'Rejected',
+                    ]),
                 TextInput::make('first_name'),
                 TextInput::make('last_name'),
                 DatePicker::make('date_of_birth'),
@@ -35,12 +41,7 @@ class KycForm
                     ->label('Passport Image')
                     ->disk('public')
                     ->image(),
-                Select::make('status')
-                    ->options([
-                        'Pending' => 'Pending',
-                        'Approved' => 'Approved',
-                        'Rejected' => 'Rejected',
-                    ]),
+
             ]);
     }
 }

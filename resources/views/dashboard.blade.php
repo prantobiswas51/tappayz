@@ -12,7 +12,7 @@
         <section class="grid grid-4" style="max-width: 800px; margin: 0;">
             <div class="widget kpi" style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333; padding: 16px;">
                 <div class="label" style="color: #6c757d; font-size: 12px;">Total Balance</div>
-                <div class="value" style="color: #28a745; font-weight: 700; font-size: 18px;">${{ Auth::user()->balance }} </div>
+                <div class="value" style="color: #28a745; font-weight: 700; font-size: 18px;">${{ Auth::user()->balance }}</div>
             </div>
             <div class="widget kpi" style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333; padding: 16px;">
                 <div class="label" style="color: #6c757d; font-size: 12px;">Active Cards</div>
@@ -33,7 +33,7 @@
                 style="background: white; border: 1px solid #e9ecef; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                 <div class="card-header">
                     <div class="card-title" style="color: #333;">Recent Transactions</div>
-                    <a class="btn" href="transactions.html">View all</a>
+                    <a class="btn" href="{{ route('transactions') }}">View all</a>
                 </div>
 
                 <!-- Table Content -->

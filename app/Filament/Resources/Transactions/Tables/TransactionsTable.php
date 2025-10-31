@@ -15,8 +15,8 @@ class TransactionsTable
     {
         return $table
             ->columns([
-                TextColumn::make('user_id')
-                    ->numeric()
+                TextColumn::make('user.name')
+                    ->searchable()
                     ->sortable(),
                 TextColumn::make('vcc_id')
                     ->searchable(),

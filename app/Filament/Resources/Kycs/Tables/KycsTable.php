@@ -15,29 +15,24 @@ class KycsTable
     {
         return $table
             ->columns([
-                TextColumn::make('user_id')
-                    ->numeric()
+                TextColumn::make('user.name')
+                    ->searchable()
                     ->sortable(),
                 TextColumn::make('first_name')
                     ->searchable(),
                 TextColumn::make('last_name')
                     ->searchable(),
-                TextColumn::make('date_of_birth')
-                    ->date()
-                    ->sortable(),
-                TextColumn::make('street_address')
-                    ->searchable(),
-                TextColumn::make('apt_unit')
-                    ->searchable(),
-                TextColumn::make('zip_code')
-                    ->searchable(),
                 TextColumn::make('phone_number')
-                    ->searchable(),
-                TextColumn::make('email_address')
                     ->searchable(),
                 TextColumn::make('country')
                     ->searchable(),
-                TextColumn::make('passport_number')
+                TextColumn::make('status')
+                    ->color(fn($state) => match ($state) {
+                        'Pending' => 'warning',
+                        'Approved' => 'success',
+                        'Rejected' => 'danger',
+                        default => 'secondary',
+                    })
                     ->searchable(),
                 ImageColumn::make('passport_img_path')->label('Passport Image')
                     ->disk('public'),
@@ -50,6 +45,15 @@ class KycsTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort(function ($query) {
+                $query->orderByRaw("CASE 
+                    WHEN status = 'Pending' THEN 1 
+                    WHEN status = 'Approved' THEN 2 
+                    WHEN status = 'Rejected' THEN 3 
+                    ELSE 4 
+                END")
+                    ->orderByDesc('created_at');
+            })
             ->filters([
                 //
             ])

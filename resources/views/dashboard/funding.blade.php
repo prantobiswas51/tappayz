@@ -95,7 +95,8 @@
                             </select>
                         </div>
 
-                        <div class="field my-3" style="margin-top:10px; color:#6c757d; display: flex; align-items: center; gap: 8px;">
+                        <div class="field my-3"
+                            style="margin-top:10px; color:#6c757d; display: flex; align-items: center; gap: 8px;">
                             Sent to : <div id="show_msg" style="flex: 1;"></div>
                             <span id="copy_btn" style="cursor:pointer; color:#007bff; display:none;">Copy</span>
                         </div>
@@ -203,13 +204,17 @@
                                     class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">{{
                                     $deposit->status }}</span>
                                 @else
-                                <span
-                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">{{
-                                    $deposit->status }}</span>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                    {{ $deposit->status == 'Approved' ? 'bg-green-100 text-green-800' : 
+                                    ($deposit->status == 'Rejected' ? 'bg-red-100 text-red-800' : 
+                                    ($deposit->status == 'Pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-800')) }}">
+                                    {{ $deposit->status }}
+                                </span>
+
                                 @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-mono">{{
-                                $deposit->vcc_id }}</td>
+                                $deposit->tx_id }}</td>
                         </tr>
                         @endforeach
                         @endif

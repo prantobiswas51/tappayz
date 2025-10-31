@@ -28,8 +28,6 @@ class UsersTable
                     ->sortable(),
                 TextColumn::make('number')
                     ->searchable(),
-                TextColumn::make('trx_address')
-                    ->searchable(),
                 TextColumn::make('email_verified_at')
                     ->dateTime()
                     ->sortable(),

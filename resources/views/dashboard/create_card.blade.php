@@ -3,7 +3,7 @@
 
         <!-- Modal -->
         <div id="binModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-            <div class="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 relative">
+            <div class="bg-white rounded-lg shadow-lg w-full  max-w-lg p-6 relative overflow-y-auto" style="max-height: 90vh;">
                 <button onclick="closeBinModal()"
                     class="absolute top-2 right-2 text-gray-500 hover:text-gray-800">✖</button>
 
