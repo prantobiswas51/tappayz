@@ -45,60 +45,50 @@ class FundController extends Controller
         }
 
         $json = $response->json();
+        // dd($json);
+
         $contractType = $json['contractType'] ?? null;
         $confirmed = $json['confirmed'] ?? null;
         $contractRet = $json['contractRet'];
-        $toAddress = $json['toAddress'] ?? null;
+        $amountUsdtRaw = $json['tokenTransferInfo']['amount_str'] ?? 0;
+        $amountUsdt = $amountUsdtRaw / 1000000;
+        $tokenTransferInfo = $json['tokenTransferInfo']['to_address'];
 
         // Check destination address
-        if (strtolower($toAddress) !== strtolower("TCMVbfPmQnFa6Aw9FT4GM5QDNAU2t5ftxK")) {
+        if ($tokenTransferInfo !== "TCMVbfPmQnFa6Aw9FT4GM5QDNAU2t5ftxK") {
             return redirect()->route('fundings')->with('status', 'Transaction does not belong to mentioned funding address.');
         }
 
-        $amountSun = $json['contractData']['amount'] ?? 0;
-        $amountTRX = $amountSun / 1_000_000; // Convert SUN → TRX
+        if (!$contractRet) {
+            return redirect()->route('fundings')->with('status', 'Something went wrong. Please Contact Customer Support.');
+        }
+
+        // Check if the amount is valid
+        if ($amountUsdt <= 0 || ($contractType != 31)) {
+            return redirect()->route('fundings')->with('status', 'Invalid deposit amount or Token. Contact Customer Support.');
+        }
 
         // Prevent duplicate processing
-        $existing = Deposit::where('user_id', $user_id)
-            ->where('tx_id', $tx_id)
-            ->first();
+        $existing = Deposit::where('user_id', $user_id)->where('tx_id', $tx_id)->first();
 
         if ($existing) {
             return redirect()->route('fundings')->with('status', 'This transaction is already recorded.');
         }
-
-        // dd($contractRet);
 
         // Create new deposit record
         $deposit = Deposit::create([
             'user_id' => $user_id,
             'tx_id' => $tx_id,
             'status' => $contractRet,
-            'amount' => $amountTRX,
-            'token' => $contractType == 31 ? 'USDT' : 'TRX',
+            'amount' => $amountUsdt,
+            'token' => 'USDT',
         ]);
 
-        // === Handle TRX Deposit ===
-        if ($contractType == 1) {
-            $amount_in_usdt = $amountTRX * 0.30; // Example: 1 TRX = 0.30 USD
 
-            if ($contractRet == 'SUCCESS') {
-                $user->increment('balance', $amount_in_usdt);
-                return redirect()->route('fundings')->with('status', '✅ TRX deposit confirmed and converted to USD.');
-            }
+        if ($confirmed && $contractRet == 'SUCCESS') {
+            $user->increment('balance', $amountUsdt);
 
-            return redirect()->route('fundings')->with('status', '⏳ TRX deposit pending confirmation.');
-        }
-
-        // === Handle USDT Deposit ===
-        if ($contractType == 31) {
-            if ($confirmed && $contractRet == 'SUCCESS') {
-                $user->increment('balance', $amountTRX);
-
-                return redirect()->route('fundings')->with('status', '✅ USDT deposit confirmed.');
-            }
-
-            return redirect()->route('fundings')->with('status', '⏳ USDT deposit pending confirmation.');
+            return redirect()->route('fundings')->with('status', '✅ USDT deposit confirmed.');
         }
 
         return redirect()->route('fundings')->with('status', '⚠ Unknown transaction type.');
