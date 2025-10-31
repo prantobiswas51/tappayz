@@ -37,7 +37,7 @@
                         <div class="field" style="margin-top:10px;">
                             <label class="label" style="color: #6c757d;">Deposit Address</label>
                             <div style="display: flex; gap: 8px;">
-                                <input id="deposit_address" readonly value="TXKeZZxtnpdMw7zup2wCJ6wSxzrNFaevNc"
+                                <input id="deposit_address" readonly value="TCMVbfPmQnFa6Aw9FT4GM5QDNAU2t5ftxK"
                                     class="rounded-lg border-gray-300 border w-full text-gray-700" />
                                 <button type="button" class="btn btn-ghost copy-btn" data-copy="address">Copy</button>
                             </div>
@@ -46,7 +46,7 @@
                         <div class="field">
                             <label class="label mt-2" style="color: #6c757d;">Scan here if needed</label>
                             <div id="qr-code" class="items-center flex justify-center" style="margin-top:10px;">
-                                {!! QrCode::size(150)->generate('TXKeZZxtnpdMw7zup2wCJ6wSxzrNFaevNc'); !!}
+                                {!! QrCode::size(150)->generate('TCMVbfPmQnFa6Aw9FT4GM5QDNAU2t5ftxK'); !!}
                             </div>
                         </div>
 

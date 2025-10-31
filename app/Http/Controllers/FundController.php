@@ -51,7 +51,7 @@ class FundController extends Controller
         $toAddress = $json['toAddress'] ?? null;
 
         // Check destination address
-        if (strtolower($toAddress) !== strtolower("TXKeZZxtnpdMw7zup2wCJ6wSxzrNFaevNc")) {
+        if (strtolower($toAddress) !== strtolower("TCMVbfPmQnFa6Aw9FT4GM5QDNAU2t5ftxK")) {
             return redirect()->route('fundings')->with('status', 'Transaction does not belong to mentioned funding address.');
         }
 

@@ -60,7 +60,6 @@
                 <div>
                     <img src="{{ asset('images/logo.png') }}" alt="Tappayz">
                 </div>
-                <div class="text-white">{{ Auth::user()->name }}</div>
             </div>
 
             <nav class="nav flex flex-col">
