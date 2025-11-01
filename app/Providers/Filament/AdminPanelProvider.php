@@ -2,7 +2,9 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Widgets\FetchBin;
+use App\Filament\Widgets\CardInfoChart;
+use App\Filament\Widgets\PendingTransactions;
+use App\Models\Card;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -37,11 +39,10 @@ class AdminPanelProvider extends PanelProvider
             ->pages([
                 Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
+            // ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
-                AccountWidget::class,
-                FilamentInfoWidget::class,
-                FetchBin::class
+                PendingTransactions::class,
+                CardInfoChart::class,
             ])
             ->middleware([
                 EncryptCookies::class,

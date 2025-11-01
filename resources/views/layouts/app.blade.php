@@ -57,9 +57,11 @@
 
         <aside class="sidebar bg-gray-300 text-gray-700" style="background-color: aliceblue !important;">
             <div class="brand flex flex-col">
-                <div>
-                    <img src="{{ asset('images/logo.png') }}" alt="Tappayz">
-                </div>
+                <a href="{{ route('home') }}">
+                    <div>
+                        <img src="{{ asset('images/logo.png') }}" alt="Tappayz">
+                    </div>
+                </a>
             </div>
 
             <nav class="nav flex flex-col">
