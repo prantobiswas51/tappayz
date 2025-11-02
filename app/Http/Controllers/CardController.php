@@ -483,7 +483,7 @@ class CardController extends Controller
             'userSerial' => $this->userSerial,
             'timeStamp' => $timestamp,
             'page' => '0',
-            'pageSize' => '5000000',
+            'pageSize' => '500000000',
         ];
 
         $params['sign'] = $this->sign($params);
