@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Widgets\CardInfoChart;
+use App\Filament\Widgets\CardType;
 use App\Filament\Widgets\PendingTransactions;
 use App\Models\Card;
 use Filament\Http\Middleware\Authenticate;
@@ -43,6 +44,7 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 PendingTransactions::class,
                 CardInfoChart::class,
+                CardType::class,
             ])
             ->middleware([
                 EncryptCookies::class,
