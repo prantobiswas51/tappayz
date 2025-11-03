@@ -2,12 +2,13 @@
 
 namespace App\Filament\Resources\Bins\Tables;
 
+use Filament\Tables\Table;
+use Filament\Actions\Action;
+use Filament\Actions\EditAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Table;
 
 class BinsTable
 {
@@ -44,6 +45,17 @@ class BinsTable
             ->filters([
                 //
             ])
+            ->headerActions([
+                Action::make('syncBin')
+                    ->label('Sync Bin')
+                    ->icon('heroicon-o-arrow-path')
+                    ->color('primary')
+                    ->requiresConfirmation()
+                    ->url(fn() => route('fetch_bins')) // ✅ use url() instead of route()
+                    ->openUrlInNewTab(false) // set to true if you want a new tab
+                    ->successNotificationTitle('Bin synced successfully!'),
+            ])
+
             ->recordActions([
                 EditAction::make(),
             ])

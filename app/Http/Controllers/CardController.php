@@ -80,7 +80,7 @@ class CardController extends Controller
             }
         }
 
-        return redirect('/mahim33485');
+        return redirect('/mahim33485/bins');
     }
 
     public function show_bins()
