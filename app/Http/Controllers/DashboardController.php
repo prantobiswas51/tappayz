@@ -29,6 +29,8 @@ class DashboardController extends Controller
             ->take(8)
             ->get();
 
+        
+
         return view('dashboard', compact('transactions', 'activeCardsCount', 'pendingCardsCount', 'freezedCardsCount'));
     }
 

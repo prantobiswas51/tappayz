@@ -297,6 +297,44 @@ class CardController extends Controller
 
         Card::create($payload);
 
+        $html = '
+            <div style="font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px;">
+                <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 10px; 
+                            box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow: hidden;">
+                    <div style="background-color: #4a90e2; color: #ffffff; padding: 20px; text-align: center;">
+                        <h1 style="margin: 0; font-size: 22px;">New Virtual Card Created</h1>
+                    </div>
+                    <div style="padding: 30px; text-align: center;">
+                        <h2 style="color: #333333;">Your Card Is Ready!</h2>
+                        <p style="color: #555555; font-size: 16px; line-height: 1.6;">
+                            Congratulations! Your new virtual card has been created successfully.
+                        </p>
+                        <div style="margin: 25px auto; background-color: #f1f3f5; border-radius: 8px; 
+                                    padding: 15px; max-width: 400px; font-size: 18px; color: #222; font-weight: bold;">
+                            Card Number: ' . $card_number . '
+                        </div>
+                        <p style="color: #555555; font-size: 15px; line-height: 1.6;">
+                            You can now use this card for secure online transactions directly through your Tappayz dashboard.
+                        </p>
+                        <a href="https://tappayz.com/cards" 
+                        style="display: inline-block; background-color: #4a90e2; color: #ffffff; 
+                                padding: 12px 25px; border-radius: 6px; text-decoration: none; 
+                                font-weight: bold; margin-top: 15px;">
+                            View My Cards
+                        </a>
+                    </div>
+                    <div style="background-color: #f1f3f5; padding: 15px; text-align: center; font-size: 13px; color: #777;">
+                        <p>Need help? Contact our support at 
+                            <a href="mailto:support@tappayz.com" style="color: #4a90e2;">support@tappayz.com</a>
+                        </p>
+                        <p>© ' . date("Y") . ' Tappayz. All rights reserved.</p>
+                    </div>
+                </div>
+            </div>
+        ';
+
+        sendCustomMail(Auth::user()->email, 'New Virtual Card Created', $html);
+
         return redirect()->route('cards')->with('status', 'Card created successfully.');
     }
 
@@ -422,6 +460,47 @@ class CardController extends Controller
             $card->cardBalance -= $request_amount;
             $card->save();
 
+            $html = '
+                <div style="font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px;">
+                    <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 10px;
+                                box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow: hidden;">
+                        <div style="background-color: #4a90e2; color: #ffffff; padding: 20px; text-align: center;">
+                            <h1 style="margin: 0; font-size: 22px;">Card Cashout Successful</h1>
+                        </div>
+                        <div style="padding: 30px; text-align: center;">
+                            <h2 style="color: #333333;">Cashout Completed Successfully!</h2>
+                            <p style="color: #555555; font-size: 16px; line-height: 1.6;">
+                                Your recent cashout from your virtual card has been completed.
+                            </p>
+                            <div style="margin: 25px auto; background-color: #f1f3f5; border-radius: 8px;
+                                        padding: 15px; max-width: 400px; text-align: left; color: #222;">
+                                <p><strong>Card Number:</strong> ' . $card->number . '</p>
+                                <p><strong>Requested Amount:</strong> $' . number_format($request_amount, 2) . '</p>
+                                <p><strong>Fee (10%):</strong> $' . number_format($amount_to_save, 2) . '</p>
+                                <p><strong>Credited to Balance:</strong> $' . number_format($total_deduction, 2) . '</p>
+                            </div>
+                            <p style="color: #555555; font-size: 15px; line-height: 1.6;">
+                                You can view the full transaction details in your Tappayz dashboard.
+                            </p>
+                            <a href="https://tappayz.com/dashboard" 
+                            style="display: inline-block; background-color: #4a90e2; color: #ffffff;
+                                    padding: 12px 25px; border-radius: 6px; text-decoration: none;
+                                    font-weight: bold; margin-top: 15px;">
+                                View Transaction
+                            </a>
+                        </div>
+                        <div style="background-color: #f1f3f5; padding: 15px; text-align: center; font-size: 13px; color: #777;">
+                            <p>Need help? Contact our support at 
+                                <a href="mailto:support@tappayz.com" style="color: #4a90e2;">support@tappayz.com</a>
+                            </p>
+                            <p>© ' . date("Y") . ' Tappayz. All rights reserved.</p>
+                        </div>
+                    </div>
+                </div>
+            ';
+
+            sendCustomMail(Auth::user()->email, 'Tappayz - Cashout Successful', $html);
+
             return redirect()
                 ->route('view_card', $card->id)
                 ->with('status', 'Cashout ' . $request->amount . ' successfully.');
@@ -467,7 +546,48 @@ class CardController extends Controller
 
         if ($response->successful()) {
 
-            // Auth::user()->balance += $request->amount;
+            Auth::user()->balance -= $total_balance_to_cut;
+
+            // After recharge is successful
+            $html = '
+                <div style="font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px;">
+                    <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 10px;
+                                box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow: hidden;">
+                        <div style="background-color: #4a90e2; color: #ffffff; padding: 20px; text-align: center;">
+                            <h1 style="margin: 0; font-size: 22px;">Card Recharge Successful</h1>
+                        </div>
+                        <div style="padding: 30px; text-align: center;">
+                            <h2 style="color: #333333;">Recharge Completed Successfully!</h2>
+                            <p style="color: #555555; font-size: 16px; line-height: 1.6;">
+                                Your virtual card has been recharged successfully.
+                            </p>
+                            <div style="margin: 25px auto; background-color: #f1f3f5; border-radius: 8px;
+                                        padding: 15px; max-width: 400px; text-align: left; color: #222;">
+                                <p><strong>Card Number:</strong> ' . $card->number . '</p>
+                                <p><strong>Recharge Amount:</strong> $' . number_format($total_balance_to_cut, 2) . ' with fees </p>
+                            </div>
+                            <p style="color: #555555; font-size: 15px; line-height: 1.6;">
+                                You can now use your recharged balance for online payments or card transactions.
+                            </p>
+                            <a href="https://tappayz.com/dashboard"
+                            style="display: inline-block; background-color: #4a90e2; color: #ffffff;
+                                    padding: 12px 25px; border-radius: 6px; text-decoration: none;
+                                    font-weight: bold; margin-top: 15px;">
+                                View My Card
+                            </a>
+                        </div>
+                        <div style="background-color: #f1f3f5; padding: 15px; text-align: center; font-size: 13px; color: #777;">
+                            <p>Need help? Contact our support at 
+                                <a href="mailto:support@tappayz.com" style="color: #4a90e2;">support@tappayz.com</a>
+                            </p>
+                            <p>© ' . date("Y") . ' Tappayz. All rights reserved.</p>
+                        </div>
+                    </div>
+                </div>
+            ';
+
+            sendCustomMail(Auth::user()->email, 'Tappayz - Card Recharge Successful', $html);
+
 
             return redirect()
                 ->route('view_card', $card->id)
@@ -547,6 +667,48 @@ class CardController extends Controller
             $card->state = '0';
             $card->save();
 
+            $html = '
+                <div style="font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px;">
+                    <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 10px;
+                                box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow: hidden;">
+                        <div style="background-color: #d9534f; color: #ffffff; padding: 20px; text-align: center;">
+                            <h1 style="margin: 0; font-size: 22px;">Virtual Card Canceled</h1>
+                        </div>
+                        <div style="padding: 30px; text-align: center;">
+                            <h2 style="color: #333333;">Card Successfully Canceled</h2>
+                            <p style="color: #555555; font-size: 16px; line-height: 1.6;">
+                                This is to confirm that your virtual card has been <strong>successfully canceled</strong>.
+                                You will no longer be able to use it for any transactions.
+                            </p>
+                            <div style="margin: 25px auto; background-color: #f1f3f5; border-radius: 8px;
+                                        padding: 15px; max-width: 400px; text-align: left; color: #222;">
+                                <p><strong>Card Number:</strong> ' . $card->number . '</p>
+                                <p><strong>Status:</strong> Canceled</p>
+                                <p><strong>Remaining Balance (if any):</strong> $' . number_format($card->cardBalance, 2) . '</p>
+                            </div>
+                            <p style="color: #555555; font-size: 15px; line-height: 1.6;">
+                                If you did not request this cancellation, please contact Tappayz Support immediately.
+                            </p>
+                            <a href="https://tappayz.com/dashboard"
+                            style="display: inline-block; background-color: #4a90e2; color: #ffffff;
+                                    padding: 12px 25px; border-radius: 6px; text-decoration: none;
+                                    font-weight: bold; margin-top: 15px;">
+                                Go to Dashboard
+                            </a>
+                        </div>
+                        <div style="background-color: #f1f3f5; padding: 15px; text-align: center; font-size: 13px; color: #777;">
+                            <p>Need help? Contact our support at 
+                                <a href="mailto:support@tappayz.com" style="color: #4a90e2;">support@tappayz.com</a>
+                            </p>
+                            <p>© ' . date("Y") . ' Tappayz. All rights reserved.</p>
+                        </div>
+                    </div>
+                </div>
+            ';
+
+            sendCustomMail(Auth::user()->email, 'Tappayz - Virtual Card Canceled', $html);
+
+
             return redirect()->route('cards')->with('status', 'Card deleted successfully.');
         }
     }
@@ -576,6 +738,48 @@ class CardController extends Controller
         if ($response->successful()) {
             $card->state = '2';
             $card->save();
+
+            $html = '
+                <div style="font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px;">
+                    <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 10px;
+                                box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow: hidden;">
+                        <div style="background-color: #f0ad4e; color: #ffffff; padding: 20px; text-align: center;">
+                            <h1 style="margin: 0; font-size: 22px;">Virtual Card Frozen</h1>
+                        </div>
+                        <div style="padding: 30px; text-align: center;">
+                            <h2 style="color: #333333;">Your Card Has Been Temporarily Frozen</h2>
+                            <p style="color: #555555; font-size: 16px; line-height: 1.6;">
+                                Your virtual card has been <strong>temporarily frozen</strong> for security reasons.
+                                While frozen, this card cannot be used for any transactions until reactivated.
+                            </p>
+                            <div style="margin: 25px auto; background-color: #f1f3f5; border-radius: 8px;
+                                        padding: 15px; max-width: 400px; text-align: left; color: #222;">
+                                <p><strong>Card Number:</strong> ' . $card->number . '</p>
+                                <p><strong>Status:</strong> Frozen</p>
+                                <p><strong>Current Balance:</strong> $' . number_format($card->cardBalance, 2) . '</p>
+                            </div>
+                            <p style="color: #555555; font-size: 15px; line-height: 1.6;">
+                                You can unfreeze this card anytime from your Tappayz dashboard if you wish to resume its use.
+                            </p>
+                            <a href="https://tappayz.com/dashboard"
+                            style="display: inline-block; background-color: #4a90e2; color: #ffffff;
+                                    padding: 12px 25px; border-radius: 6px; text-decoration: none;
+                                    font-weight: bold; margin-top: 15px;">
+                                Manage My Card
+                            </a>
+                        </div>
+                        <div style="background-color: #f1f3f5; padding: 15px; text-align: center; font-size: 13px; color: #777;">
+                            <p>Need help? Contact our support at 
+                                <a href="mailto:support@tappayz.com" style="color: #4a90e2;">support@tappayz.com</a>
+                            </p>
+                            <p>© ' . date("Y") . ' Tappayz. All rights reserved.</p>
+                        </div>
+                    </div>
+                </div>
+            ';
+
+            sendCustomMail(Auth::user()->email, 'Tappayz - Virtual Card Frozen', $html);
+
 
             return redirect()
                 ->route('view_card', $card->id)
@@ -608,6 +812,47 @@ class CardController extends Controller
         if ($response->successful()) {
             $card->state = '1';
             $card->save();
+
+            $html = '
+                <div style="font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px;">
+                    <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 10px;
+                                box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow: hidden;">
+                        <div style="background-color: #5cb85c; color: #ffffff; padding: 20px; text-align: center;">
+                            <h1 style="margin: 0; font-size: 22px;">Virtual Card Reactivated</h1>
+                        </div>
+                        <div style="padding: 30px; text-align: center;">
+                            <h2 style="color: #333333;">Your Card Is Active Again</h2>
+                            <p style="color: #555555; font-size: 16px; line-height: 1.6;">
+                                Good news! Your virtual card has been <strong>successfully unfrozen</strong> and is now active again.
+                                You can continue using it for all your online transactions.
+                            </p>
+                            <div style="margin: 25px auto; background-color: #f1f3f5; border-radius: 8px;
+                                        padding: 15px; max-width: 400px; text-align: left; color: #222;">
+                                <p><strong>Card Number:</strong> ' . $card->number . '</p>
+                                <p><strong>Status:</strong> Active</p>
+                                <p><strong>Current Balance:</strong> $' . number_format($card->cardBalance, 2) . '</p>
+                            </div>
+                            <p style="color: #555555; font-size: 15px; line-height: 1.6;">
+                                You can manage or freeze your card anytime from your Tappayz dashboard.
+                            </p>
+                            <a href="https://tappayz.com/dashboard"
+                            style="display: inline-block; background-color: #4a90e2; color: #ffffff;
+                                    padding: 12px 25px; border-radius: 6px; text-decoration: none;
+                                    font-weight: bold; margin-top: 15px;">
+                                Manage My Card
+                            </a>
+                        </div>
+                        <div style="background-color: #f1f3f5; padding: 15px; text-align: center; font-size: 13px; color: #777;">
+                            <p>Need help? Contact our support at 
+                                <a href="mailto:support@tappayz.com" style="color: #4a90e2;">support@tappayz.com</a>
+                            </p>
+                            <p>© ' . date("Y") . ' Tappayz. All rights reserved.</p>
+                        </div>
+                    </div>
+                </div>
+            ';
+
+            sendCustomMail(Auth::user()->email, 'Tappayz - Virtual Card Reactivated', $html);
 
             return redirect()
                 ->route('view_card', $card->id)

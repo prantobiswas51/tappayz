@@ -88,12 +88,53 @@ class FundController extends Controller
         if ($confirmed && $contractRet == 'SUCCESS') {
             $user->increment('balance', $amountUsdt);
 
+            $html = '
+            <div style="font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px;">
+                <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 10px;
+                            box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow: hidden;">
+                    <div style="background-color: #4a90e2; color: #ffffff; padding: 20px; text-align: center;">
+                        <h1 style="margin: 0; font-size: 22px;">Deposit Successful</h1>
+                    </div>
+                    <div style="padding: 30px; text-align: center;">
+                        <h2 style="color: #333333;">Funds Added to Your Wallet</h2>
+                        <p style="color: #555555; font-size: 16px; line-height: 1.6;">
+                            Your recent deposit has been processed successfully, and the amount is now available in your Tappayz wallet.
+                        </p>
+                        <div style="margin: 25px auto; background-color: #f1f3f5; border-radius: 8px;
+                                    padding: 15px; max-width: 400px; text-align: left; color: #222;">
+                            <p><strong>Transaction ID:</strong> ' . $tx_id . '</p>
+                            <p><strong>Deposit Amount:</strong> $' . number_format($amountUsdt, 2) . '</p>
+                            <p><strong>Current Wallet Balance:</strong> $' . number_format(Auth::user()->balance, 2) . '</p>
+                            <p><strong>Date:</strong> ' . now()->format("F j, Y, g:i A") . '</p>
+                        </div>
+                        <p style="color: #555555; font-size: 15px; line-height: 1.6;">
+                            You can use your wallet balance for card recharges, payments, and more from your dashboard.
+                        </p>
+                        <a href="https://tappayz.com/dashboard"
+                        style="display: inline-block; background-color: #4a90e2; color: #ffffff;
+                                padding: 12px 25px; border-radius: 6px; text-decoration: none;
+                                font-weight: bold; margin-top: 15px;">
+                            View My Wallet
+                        </a>
+                    </div>
+                    <div style="background-color: #f1f3f5; padding: 15px; text-align: center; font-size: 13px; color: #777;">
+                        <p>Need help? Contact our support at 
+                            <a href="mailto:support@tappayz.com" style="color: #4a90e2;">support@tappayz.com</a>
+                        </p>
+                        <p>© ' . date("Y") . ' Tappayz. All rights reserved.</p>
+                    </div>
+                </div>
+            </div>
+        ';
+
+            sendCustomMail(Auth::user()->email, 'Tappayz - Deposit Successful', $html);
+
+
             return redirect()->route('fundings')->with('status', '✅ USDT deposit confirmed.');
         }
 
         return redirect()->route('fundings')->with('status', '⚠ Unknown transaction type.');
     }
-
 
     public function manual_payment(Request $request)
     {
@@ -135,6 +176,50 @@ class FundController extends Controller
             'type' => 'Manual',
             'status' => 'Pending',
         ]);
+
+        $html = '
+            <div style="font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px;">
+                <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 10px;
+                            box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow: hidden;">
+                    <div style="background-color: #f0ad4e; color: #ffffff; padding: 20px; text-align: center;">
+                        <h1 style="margin: 0; font-size: 22px;">Manual Payment Request Received</h1>
+                    </div>
+                    <div style="padding: 30px; text-align: center;">
+                        <h2 style="color: #333333;">We\'ve Received Your Payment Request</h2>
+                        <p style="color: #555555; font-size: 16px; line-height: 1.6;">
+                            Thank you for submitting your manual payment request. Our finance team has received your request 
+                            and it is currently <strong>pending verification</strong>.
+                        </p>
+                        <div style="margin: 25px auto; background-color: #f1f3f5; border-radius: 8px;
+                                    padding: 15px; max-width: 400px; text-align: left; color: #222;">
+                            <p><strong>Requested Amount:</strong> $' . number_format($request->amount, 2) . '</p>
+                            <p><strong>Status:</strong> Pending Review</p>
+                            <p><strong>Date Submitted:</strong> ' . now()->format("F j, Y, g:i A") . '</p>
+                        </div>
+                        <p style="color: #555555; font-size: 15px; line-height: 1.6;">
+                            You will receive another email once our team verifies and approves your payment. 
+                            Please allow some time for processing.
+                        </p>
+                        <a href="https://tappayz.com/dashboard"
+                        style="display: inline-block; background-color: #4a90e2; color: #ffffff;
+                                padding: 12px 25px; border-radius: 6px; text-decoration: none;
+                                font-weight: bold; margin-top: 15px;">
+                            View Payment Status
+                        </a>
+                    </div>
+                    <div style="background-color: #f1f3f5; padding: 15px; text-align: center; font-size: 13px; color: #777;">
+                        <p>If you have already made the transfer, please upload proof of payment or contact support.</p>
+                        <p>Need help? Email us at 
+                            <a href="mailto:support@tappayz.com" style="color: #4a90e2;">support@tappayz.com</a>
+                        </p>
+                        <p>© ' . date("Y") . ' Tappayz. All rights reserved.</p>
+                    </div>
+                </div>
+            </div>
+        ';
+
+        sendCustomMail(Auth::user()->email, 'Tappayz - Manual Payment Request Received', $html);
+
 
         return redirect()->route('fundings')->with('status', '✅ Manual payment submitted. Awaiting admin approval.');
     }

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Tappayz') }}</title>
     <meta name="google-adsense-account" content="ca-pub-1076115507843658">
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -17,34 +17,11 @@
     <script id="chatway" async="true" src="https://cdn.chatway.app/widget.js?id=ZiAPCuGL3IpX"></script>
 </head>
 
-<body class="font-sans text-gray-900">
+<body class=" text-gray-900">
 
     {{-- client design --}}
-    <header class="bg-white shadow-sm fixed top-0 left-0 right-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center py-4">
-                <div class="flex items-center">
-                    <a href="index.html" class="text-2xl font-bold text-black"><img src="{{ asset('images/logo.png') }}"
-                            alt="Tappayz" class="w-150 h-12"></a>
-                </div>
-                <nav class=" md:flex space-x-8">
-                    <a href="{{ route('home') }}" class="text-gray-700 hover:text-black font-medium">Home</a>
-                    <a href="{{ route('pricing') }}" class="text-gray-700 hover:text-black font-medium">Pricing</a>
-                    <a href="{{ route('contact') }}" class="text-gray-700 hover:text-black font-medium">Contact Us</a>
-                </nav>
-                <div class="flex items-center space-x-4">
-                    @auth
-                    <a href="{{ route('dashboard') }}" class="text-gray-700 hover:text-black font-medium">Dashboard</a>
-                    @else
-                    <a href="{{ route('login') }}" class="text-black font-medium">Sign In</a>
-                    <a href="{{ route('register') }}"
-                        class="bg-black text-white px-6 py-2 rounded-lg font-medium hover:bg-gray-800">Create
-                        Account</a>
-                    @endauth
-                </div>
-            </div>
-        </div>
-    </header>
+    @include('layouts.pub_nav')
+
 
     <div class="bg-gray-100">
         {{ $slot }}

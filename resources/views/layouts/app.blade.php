@@ -49,13 +49,20 @@
         .animate-fade-in {
             animation: fade-in 0.3s ease-out;
         }
+
+        /* Hide sidebar on small screens */
+        @media (max-width: 640px) {
+            #sidebar_id {
+                display: none;
+            }
+        }
     </style>
     @endif
 
 
     <div class="app min-h-screen bg-gray-100">
 
-        <aside class="sidebar bg-gray-300 text-gray-700" style="background-color: aliceblue !important;">
+        <aside id="sidebar_id" class="sidebar bg-gray-300 text-gray-700" style="background-color: aliceblue !important;">
             <div class="brand flex flex-col">
                 <a href="{{ route('home') }}">
                     <div>
