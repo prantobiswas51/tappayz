@@ -72,7 +72,7 @@ class RegisteredUserController extends Controller
             </div>
         ';
 
-        sendCustomMail($request->email, 'Welcome to Tappayz!', $html);
+        // sendCustomMail($request->email, 'Welcome to Tappayz!', $html);
 
         Auth::login($user);
 
