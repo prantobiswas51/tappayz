@@ -63,7 +63,7 @@ class RegisteredUserController extends Controller
         </div>
         ';
 
-        // sendCustomMail($user->email, 'Verify Your Email - Tappayz', $html);
+        sendCustomMail($user->email, 'Verify Your Email - Tappayz', $html);
 
         return redirect()->route('login')->with('success', 'Please check your email to verify your account.');
     }
