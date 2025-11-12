@@ -1,12 +1,13 @@
 <?php
 
-use App\Http\Controllers\CardController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\FundController;
-use App\Http\Controllers\KycController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\KycController;
+use App\Http\Controllers\CardController;
+use App\Http\Controllers\FundController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\VerifyEmailController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -33,6 +34,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/cards', [CardController::class, 'index'])->name('cards');
     Route::get('/cards/create', [CardController::class, 'show_bins'])->name('show_bins');
+    Route::get('/verify-email', [VerifyEmailController::class, 'verify'])->name('verify.email');
 
     // cards
     Route::get('/cards/fetch', [CardController::class, 'fetch_bins'])->name('fetch_bins');
