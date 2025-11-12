@@ -8,7 +8,7 @@
             </h1>
             <p class="text-xl text-white max-w-3xl mx-auto">
                 We're here to help! Reach out to our support team for any questions, concerns, or assistance with your
-                Tappayz account. k
+                Tappayz account.
             </p>
         </div>
     </section>
