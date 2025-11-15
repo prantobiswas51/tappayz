@@ -26,6 +26,7 @@ Route::get('/contact', function () {
 })->name('contact');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/email-check', [VerifyEmailController::class, 'verify']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -34,7 +35,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/cards', [CardController::class, 'index'])->name('cards');
     Route::get('/cards/create', [CardController::class, 'show_bins'])->name('show_bins');
-    Route::get('/verify-email', [VerifyEmailController::class, 'verify'])->name('verify.email');
 
     // cards
     Route::get('/cards/fetch', [CardController::class, 'fetch_bins'])->name('fetch_bins');

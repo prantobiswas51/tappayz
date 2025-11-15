@@ -1,5 +1,5 @@
 <x-guest-layout>
-    <section class="min-h-screen flex items-center justify-center pt-32 pb-12 px-4 sm:px-6 lg:px-8">
+    <section class="min-h-screen flex items-center justify-center  pb-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full space-y-8">
             <div class="text-center">
                 <h2 class="text-3xl font-bold text-black mb-2">Welcome Back</h2>
@@ -76,15 +76,4 @@
             </div>
         </div>
     </section>
-
-    <footer class="bg-gradient-to-br from-gray-900 to-blue-900 text-white py-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p class="text-gray-400 mb-2">Copyright © 2024. Tappayz All Rights Reserved.</p>
-            <div class="flex justify-center space-x-6 text-blue-400">
-                <a href="{{ url('/service-agreement') }}" class="hover:text-white">Service Agreement</a>
-                <span class="text-gray-500">|</span>
-                <a href="{{ url('/privacy') }}" class="hover:text-white">Privacy Policy</a>
-            </div>
-        </div>
-    </footer>
 </x-guest-layout>

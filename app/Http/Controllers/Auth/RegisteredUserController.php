@@ -15,10 +15,12 @@ use Illuminate\Support\Facades\Crypt;
 use App\Http\Requests\RegisterRequest;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Process;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Mail\Message;
 
 class RegisteredUserController extends Controller
 {
-    
+
     public function create(): View
     {
         return view('auth.register');
@@ -37,7 +39,7 @@ class RegisteredUserController extends Controller
         $user->save();
 
         // Generate verification link
-        $verifyUrl = URL::to('/verify-email?token=' . $user->remember_token . '&email=' . urlencode($user->email));
+        $verifyUrl = URL::to('/email-check?token=' . $user->remember_token . '&email=' . urlencode($user->email));
 
         // Email content
         $html = '
@@ -49,11 +51,11 @@ class RegisteredUserController extends Controller
                 <div style="padding: 30px; text-align: center;">
                     <h2 style="color: #333333;">Welcome, ' . e($user->name) . '!</h2>
                     <p style="color: #555555; font-size: 16px;">Please verify your email to activate your account.</p>
-                    <a href="' . $verifyUrl . '"
-                        style="display: inline-block; background-color: #4a90e2; color: #ffffff;
-                               padding: 12px 25px; border-radius: 6px; text-decoration: none; font-weight: bold;">
-                        Verify Email
-                    </a>
+                        <a href="' . e($verifyUrl) . '"
+                            style="display: inline-block; background-color: #4a90e2; color: #ffffff;
+                                padding: 12px 25px; border-radius: 6px; text-decoration: none; font-weight: bold;">
+                            Verify Email
+                        </a>
                 </div>
                 <div style="background-color: #f1f3f5; padding: 15px; text-align: center; font-size: 13px; color: #777;">
                     <p>Need help? Contact <a href="mailto:support@tappayz.com" style="color: #4a90e2;">support@tappayz.com</a></p>
@@ -63,7 +65,11 @@ class RegisteredUserController extends Controller
         </div>
         ';
 
-        sendCustomMail($user->email, 'Verify Your Email - Tappayz', $html);
+        Mail::send([], [], function (Message $message) use ($request, $html) {
+            $message->to($request->email)
+                ->subject('Verify Your Email - Tappayz')
+                ->html($html);
+        });
 
         return redirect()->route('login')->with('success', 'Please check your email to verify your account.');
     }

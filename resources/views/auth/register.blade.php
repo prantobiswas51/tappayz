@@ -1,6 +1,6 @@
 <x-guest-layout>
 
-    <section class="min-h-screen flex items-center justify-center pt-32 pb-12 px-4 sm:px-6 lg:px-8">
+    <section class="min-h-screen flex items-center justify-center pt-12 pb-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full space-y-8">
             <div class="text-center">
                 <h2 class="text-3xl font-bold text-black mb-2">Create Account</h2>
