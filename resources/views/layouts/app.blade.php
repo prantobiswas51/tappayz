@@ -5,6 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('/images/fev.ico') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('/images/fev.ico') }}">
 
     <title>{{ config('app.name', 'Cards') }}</title>
     <meta name="google-adsense-account" content="ca-pub-1076115507843658">
@@ -62,7 +64,8 @@
 
     <div class="app min-h-screen bg-gray-100">
 
-        <aside id="sidebar_id" class="sidebar bg-gray-300 text-gray-700" style="background-color: aliceblue !important;">
+        <aside id="sidebar_id" class="sidebar bg-gray-300 text-gray-700"
+            style="background-color: aliceblue !important;">
             <div class="brand flex flex-col">
                 <a href="{{ route('home') }}">
                     <div>
