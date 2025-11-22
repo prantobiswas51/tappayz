@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Deposit;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +16,7 @@ class FundController extends Controller
 {
     public function index()
     {
-        $trx_address = Auth::user()->trx_address;
+        $trx_address = Setting::first()->main_deposit_address;
 
         $deposits = Deposit::where('user_id', Auth::id())->get();
 

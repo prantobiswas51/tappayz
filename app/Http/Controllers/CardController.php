@@ -365,7 +365,7 @@ class CardController extends Controller
         });
 
         if (! $cardData) {
-            return redirect()->route('cards')->with('status', 'Cards not found in list. For more info, contact support.');
+            return redirect()->route('cards')->with('status', 'Card has been canceled for multiple failed transactions. For more info, contact support.');
         }
 
         $payload = [
