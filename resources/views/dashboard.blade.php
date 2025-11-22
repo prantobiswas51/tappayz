@@ -4,7 +4,7 @@
         
         <div class="topbar">
             <div class="brand" style="gap:8px;">
-                <div>Dashboard | {{ Auth::user()->name }}</div>
+                <div>Overview | {{ Auth::user()->name }}</div>
             </div>
             <input class="input search" placeholder="Search…"
                 style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333;" />
