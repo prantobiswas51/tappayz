@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Setting;
 use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -28,7 +29,7 @@ if (!function_exists('sendCustomMail')) {
         // Send email using Maileroo API
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
-            'x-api-key'    => env('MAILEROO_API_KEY'),
+            'x-api-key'    => Setting::first()->maileroo_api_key,
         ])->post('https://smtp.maileroo.com/api/v2/emails', $payload);
 
         // Optional: log if failed
