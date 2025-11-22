@@ -5,6 +5,7 @@ use App\Http\Controllers\KycController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\FundController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\MailerooController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\VerifyEmailController;

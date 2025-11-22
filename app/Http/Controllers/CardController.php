@@ -365,7 +365,7 @@ class CardController extends Controller
         });
 
         if (! $cardData) {
-            return response()->json(['success' => false, 'status' => 'Card not found in list'], 404);
+            return redirect()->route('cards')->with('status', 'Cards not found in list. For more info, contact support.');
         }
 
         $payload = [

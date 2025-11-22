@@ -65,11 +65,7 @@ class RegisteredUserController extends Controller
         </div>
         ';
 
-        Mail::send([], [], function (Message $message) use ($request, $html) {
-            $message->to($request->email)
-                ->subject('Verify Your Email - Tappayz')
-                ->html($html);
-        });
+        sendCustomMail($request->email, 'Verify Your Email - Tappayz', $html);
 
         return redirect()->route('login')->with('success', 'Please check your email to verify your account.');
     }
