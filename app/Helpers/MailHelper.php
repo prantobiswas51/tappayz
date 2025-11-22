@@ -29,7 +29,7 @@ if (!function_exists('sendCustomMail')) {
         // Send email using Maileroo API
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
-            'x-api-key'    => Setting::first()->maileroo_api_key ?? null,
+            'x-api-key'    => Setting::first()->maileroo_api_key ?? '',
         ])->post('https://smtp.maileroo.com/api/v2/emails', $payload);
 
         // Optional: log if failed
