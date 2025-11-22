@@ -8,14 +8,12 @@ require 'recipe/laravel.php';
 
 set('repository', 'https://github.com/prantobiswas51/tappayz.git');
 set('keep_releases', 3);
-set('writable_mode', 'chmod');
 
 
 // Load environment variables
 $hostname = getenv('DEPLOY_HOSTNAME');
 $remoteUser = getenv('DEPLOY_REMOTE_USER');
 $deployPath = getenv('DEPLOY_PATH');
-$httpUser = getenv('DEPLOY_HTTP_USER');
 $sshPort = getenv('DEPLOY_SSH_PORT');
 $branch = getenv('DEPLOY_BRANCH') ?: 'main';
 
@@ -29,9 +27,7 @@ if (! $remoteUser) {
 if (! $deployPath) {
     throw new \RuntimeException('DEPLOY_PATH environment variable is required');
 }
-if (! $httpUser) {
-    throw new \RuntimeException('DEPLOY_HTTP_USER environment variable is required');
-}
+
 if (! $sshPort) {
     throw new \RuntimeException('DEPLOY_SSH_PORT environment variable is required');
 }
@@ -41,7 +37,7 @@ if (! $sshPort) {
 host($hostname)
     ->set('remote_user', $remoteUser)
     ->set('deploy_path', $deployPath)
-    ->set('http_user', $httpUser)
+    ->set('http_user', 'www-data')
     ->set('port', $sshPort)
     ->set('branch', $branch);
 
