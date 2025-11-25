@@ -80,7 +80,7 @@ class CardController extends Controller
             }
         }
 
-        return redirect('/mahim33485/bins');
+        return redirect('/admin/bins');
     }
 
     public function show_bins()
@@ -109,7 +109,15 @@ class CardController extends Controller
         // get balance info
         $balance = Auth::user()->balance;
         $request_balance = $request->amount;
-        $total_balance_to_cut = $request_balance + 5 + (0.06 * $request_balance); // including fees
+
+        // Check BIN
+        $specialBins = [428852, 517746];
+
+        if (in_array($request->bin, $specialBins)) {
+            $total_balance_to_cut = $request_balance + 10 + (0.05 * $request_balance);
+        } else {
+            $total_balance_to_cut = $request_balance + 5 + (0.06 * $request_balance);
+        }
 
         if ($balance < $total_balance_to_cut) {
             return redirect()->route('cards')->with('status', 'Insufficient balance');

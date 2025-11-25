@@ -18,6 +18,14 @@ Route::get('/pricing', function () {
     return view('pricing');
 })->name('pricing');
 
+Route::get('/privacy', function () {
+    return view('privacy');
+})->name('privacy');
+
+Route::get('/service_agreement', function () {
+    return view('service_agreement');
+})->name('service_agreement');
+
 Route::get('/faq', function () {
     return view('faq');
 })->name('faq');

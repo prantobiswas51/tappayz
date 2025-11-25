@@ -3,7 +3,8 @@
 
         <!-- Modal -->
         <div id="binModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-            <div class="bg-white rounded-lg shadow-lg w-full  max-w-lg p-6 relative overflow-y-auto" style="max-height: 90vh;">
+            <div class="bg-white rounded-lg shadow-lg w-full  max-w-lg p-6 relative overflow-y-auto"
+                style="max-height: 90vh;">
                 <button onclick="closeBinModal()"
                     class="absolute top-2 right-2 text-gray-500 hover:text-gray-800">✖</button>
 
@@ -47,12 +48,12 @@
                     </div>
 
                     <div class="mb-3 field">
-                        <label class="block text-gray-600">Amount<span class="text-red-600">*</span></label>
-                        <input type="text" name="amount" min="10" value="10" required id="amount" onchange="updateTotal()"
-                            style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333;"
+                        <label class="block text-gray-600">Amount<span class="text-red-600">*</span> (Min : 10$)</label>
+                        <input type="text" name="amount" min="10" value="" required id="amount"
+                            oninput="updateTotal()" style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333;"
                             class="w-full border rounded p-2 bg-gray-100 text-gray-800">
                         <p class="text-red-600 text-sm ">
-                            Total: <span id="total_amount">$15.60</span>
+                            Total: <span id="total_amount">$0.00</span>
                         </p>
                     </div>
 
@@ -93,6 +94,7 @@
         <!-- Card BIN Information & Terms - Collapsible -->
         <div class="card info-card"
             style="margin-bottom: 20px; background: white; border: 1px solid #e9ecef; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            
             <div class="card-header" id="info-toggle">
                 <div>
                     <div class="card-title" style="color: #333;">Card BIN Information & Terms</div>
@@ -200,11 +202,10 @@
         </div>
 
         {{-- card area --}}
-        <div class="flex flex-wrap w-full gap-4 p-4 ">
+        <div class="flex flex-wrap w-full ">
 
             <!-- Left Side -->
-            <div class="card bg-sky-300 p-2 flex-1 min-w-[280px]"
-                style="border: 1px solid #e9ecef; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <div class="card bg-sky-300 p-2 flex-1 min-w-[280px]">
                 <div class="card-header mb-3">
                     <div class="card-title text-lg font-semibold text-[#333]">Card Information</div>
                     <div class="card-subtitle text-sm text-[#6c757d]">Create your virtual card with selected BIN</div>
@@ -212,16 +213,26 @@
 
                 <div class="cards flex flex-wrap gap-4 justify-center">
                     @foreach ($bins as $bin)
-                    <div class="border p-3 rounded-lg shadow-md min-w-[220px] flex-1 hover:cursor-pointer hover:bg-gray-200"
+                    <div class="border  p-3 rounded-lg shadow-md min-w-[220px] flex-1 hover:cursor-pointer hover:bg-gray-200"
+                    
                         onclick="openBinModal('{{ $bin->id }}', '{{ $bin->bin }}', '{{ $bin->organization }}', '{{ $bin->cr }}', '{{ $bin->actualOpenCardPrice }}/{{ $bin->actualRechargeFeeRate }}')">
                         <div class="flex justify-between items-center py-3">
-                            <h3>{{ $bin->bin }}</h3>
+                            <h3>
+                                <span class="font-bold text-lg">
+                                    @if($bin->bin == "428852" || $bin->bin == "517746") PREMIUM @endif
+                                </span>
+                                {{ $bin->bin }}
+                            </h3>
                             <img class="w-16"
                                 src="{{ $bin->organization == 'VISA' ? asset('images/visa-a.png') : asset('images/mastercard.png') }}"
                                 alt="logo">
                         </div>
                         <p class="py-2">Price/Rate :
-                            <span>{{ $bin->actualOpenCardPrice + 3 }}$/6.00%</span>
+                            <span>@if ($bin->bin == 517746 || $bin->bin == 428852)
+                                {{ $bin->actualOpenCardPrice + 8 }}$/5.00%
+                                @else
+                                {{ $bin->actualOpenCardPrice + 3 }}$/6.00%
+                                @endif</span>
                         </p>
                         <p class="flex justify-between items-center">Area : <span>{{ __($bin->cr) }}</span> <button
                                 class="border p-2 bg-green-400 rounded-md">Issue Card</button></p>
@@ -240,20 +251,36 @@
     <script>
         function openBinModal(id, bin, organization, area, price) {
             document.getElementById('modal-bin-id').value = id;
-            document.getElementById('modal-bin').value = bin;
+            let requested_bin = document.getElementById('modal-bin').value = bin;
             document.getElementById('modal-organization').value = organization;
             document.getElementById('modal-area').value = area;
-            document.getElementById('modal-price').value = "5$ / 6.00%";
+
+            if(requested_bin == "517746" || requested_bin == "428852") {
+                let price_modal_value = document.getElementById('modal-price').value = "10$ / 5.00%";
+            } else {
+                let price_modal_value = document.getElementById('modal-price').value = "5$ / 6.00%";
+            }
 
             // Show modal
             document.getElementById('binModal').classList.remove('hidden');
             document.getElementById('binModal').classList.add('flex');
         }
 
-        function updateTotal() {
+         function updateTotal() {
             let amountInput = document.getElementById('amount');
-            fee_percent = amountInput.value * 0.06;
-            total_amount = parseFloat(amountInput.value) + 5 + fee_percent;
+            let requested_bin = document.getElementById('modal-bin').value; // READ ONLY
+
+            let amount = parseFloat(amountInput.value) || 0;
+            let total_amount = 0;
+
+            if (requested_bin == "517746" || requested_bin == "428852") {
+                let fee_percent = amount * 0.05;
+                total_amount = amount + 10 + fee_percent;
+            } else {
+                let fee_percent = amount * 0.06;
+                total_amount = amount + 5 + fee_percent;
+            }
+
             document.getElementById('total_amount').innerText = "$" + total_amount.toFixed(2);
         }
 

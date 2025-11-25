@@ -121,10 +121,10 @@
             <div class="border-t border-gray-700 pt-8">
                 <div class="text-center mb-6">
                     <div class="flex justify-center space-x-6 text-blue-400">
-                        <a href="Service-agreement.html" class="hover:text-white transition-colors">Service
+                        <a href="{{ route('service_agreement') }}" class="hover:text-white transition-colors">Service
                             Agreement</a>
                         <span class="text-gray-500">|</span>
-                        <a href="privacy.html" class="hover:text-white transition-colors">Privacy Policy</a>
+                        <a href="{{ route('privacy') }}" class="hover:text-white transition-colors">Privacy Policy</a>
                     </div>
                 </div>
 
