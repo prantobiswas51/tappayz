@@ -29,7 +29,7 @@
         </section>
 
         <section class="grid grid-1" style="margin-top:16px;">
-            <div class="card"
+            <div class="card hidden"
                 style="background: white; border: 1px solid #e9ecef; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                 <div class="card-header">
                     <div class="card-title" style="color: #333;">Recent Transactions</div>

@@ -13,7 +13,7 @@
         <div class="grid lg:grid-cols-2  p-2" style="gap: 20px; margin-bottom: 20px;">
 
             <!-- Crypto Instant Deposit -->
-            <div class="card bg-amber-400 p-2">
+            <div class="card p-6">
                 <div class="card-header">
                     <div class="card-title" style="color: #333;">Instant Method</div>
                 </div>
@@ -29,7 +29,7 @@
 
                         <div class="field" style="margin-top:10px;">
                             <label class="label" style="color: #6c757d;">Select Cryptocurrency</label>
-                            <select id="crypto-select" name="currency" class="rounded-lg border-gray-300 border">
+                            <select id="crypto-select" name="currency" class="rounded-lg border-gray-300 p-2 border">
                                 <option value="TRX">USDT (TRC-20)</option>
                             </select>
                         </div>
@@ -37,7 +37,7 @@
                         <div class="field" style="margin-top:10px;">
                             <label class="label" style="color: #6c757d;">Deposit Address</label>
                             <div style="display: flex; gap: 8px;">
-                                <input id="deposit_address" readonly value="{{ $trx_address }}"
+                                <input id="deposit_address" readonly value="{{ $trx_address ?? "" }}"
                                     class="rounded-lg border-gray-300 border w-full text-gray-700" />
                                 <button type="button" class="btn btn-ghost copy-btn" data-copy="address">Copy</button>
                             </div>
@@ -46,7 +46,9 @@
                         <div class="field">
                             <label class="label mt-2" style="color: #6c757d;">Scan here if needed</label>
                             <div id="qr-code" class="items-center flex justify-center" style="margin-top:10px;">
-                                {!! QrCode::size(150)->generate($trx_address); !!}
+                                @if($trx_address)
+                                    {!! QrCode::size(150)->generate($trx_address); !!}
+                                @endif
                             </div>
                         </div>
 
@@ -86,7 +88,7 @@
                             <label class="label" for="payment-method" style="color: #6c757d;">Payment Method
                                 <span style="color: #dc3545;">*</span>
                             </label>
-                            <select class="rounded-lg border-gray-300 border" id="payment-method" required
+                            <select class="rounded-lg border-gray-300 p-2 border" id="payment-method" required
                                 name="payment_method">
                                 <option value="">Select Payment Method</option>
                                 <option value="payoneer">Payoneer</option>

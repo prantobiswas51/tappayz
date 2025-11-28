@@ -51,81 +51,68 @@
         .animate-fade-in {
             animation: fade-in 0.3s ease-out;
         }
-
-        /* Hide sidebar on small screens */
-        @media (max-width: 640px) {
-            #sidebar_id {
-                display: none;
-            }
-        }
     </style>
     @endif
 
 
+    <style>
+        /* Hide sidebar on small screens */
+        @media (max-width: 870px) {
+            #sidebar_id {
+                display: none;
+            }
+
+            #mobile_bottom_nav {
+                display: flex;
+            }
+
+            #chatway_widget_trigger {
+                margin-bottom: 60px;
+            }
+        }
+
+        /* Show sidebar on larger screens */
+        @media (min-width: 871px) {
+            #mobile_bottom_nav {
+                display: none;
+            }
+
+            
+        }
+    </style>
+
+
     <div class="app min-h-screen bg-gray-100">
 
-        <aside id="sidebar_id" class="sidebar bg-gray-300 text-gray-700"
-            style="background-color: aliceblue !important;">
-            <div class="brand flex flex-col">
-                <a href="{{ route('home') }}">
-                    <div>
-                        <img src="{{ asset('images/logo.png') }}" alt="Tappayz">
-                    </div>
-                </a>
-            </div>
+        @include('layouts.aside')
 
-            <nav class="nav flex flex-col">
-                <a href="{{ route('dashboard') }}"
-                    @class([ 'py-4 border-gray-400/50 border px-2 rounded-md flex items-center gap-2'
-                    , 'text-green-600 bg-gray-500/60'=> request()->routeIs('dashboard'),
-                    'hover:text-green-600 hover:bg-gray-300/30' => !request()->routeIs('dashboard'),
-                    ])>
-                    <x-heroicon-o-queue-list class="h-6 w-6 mr-2" /> Dashboard
-                </a>
-
-                <a href="{{ route('cards') }}" @class([ 'py-4 flex items-center gap-2'
-                    , 'text-green-600 bg-gray-500/60'=> request()->routeIs('cards') || request()->is('cards/*'),
-                    'hover:text-green-600' => ! (request()->routeIs('cards') || request()->is('cards/*')),
-                    ])>
-                    <x-heroicon-o-credit-card class="h-6 w-6 mr-2" /> Cards
-                </a>
-
-                <a href="{{ route('transactions') }}" @class([ 'py-4 flex items-center gap-2'
-                    , 'text-green-600 bg-gray-500/60'=> request()->routeIs('transactions') ||
-                    request()->is('transactions/*'),
-                    'hover:text-green-600' => ! (request()->routeIs('transactions') || request()->is('transactions/*')),
-                    ])>
-                    <x-heroicon-o-document-text class="h-6 w-6 mr-2" /> Transactions
-                </a>
-
-                <a href="{{ route('fundings') }}" @class([ 'py-4 flex items-center gap-2'
-                    , 'text-green-600 bg-gray-500/60'=> request()->routeIs('fundings'),
-                    'hover:text-green-600' => ! request()->routeIs('fundings'),
-                    ])>
-                    <x-heroicon-o-banknotes class="h-6 w-6 mr-2" /> Funding
-                </a>
-
-                <a href="{{ route('kyc') }}" @class([ 'py-4 flex items-center gap-2' , 'text-green-600 bg-gray-500/60'=>
-                    request()->routeIs('kyc'),
-                    'hover:text-green-600' => ! request()->routeIs('kyc'),
-                    ])>
-                    <x-heroicon-o-document-currency-dollar class="h-6 w-6 mr-2" />KYC
-                </a>
-
-                <a href="{{ route('settings') }}" @class([ 'py-4 flex items-center gap-2'
-                    , 'text-green-600 bg-gray-500/60'=> request()->routeIs('settings'),
-                    'hover:text-green-600' => ! request()->routeIs('settings'),
-                    ])>
-                    <x-heroicon-o-cog-6-tooth class="h-6 w-6 mr-2" />Settings
-                </a>
-            </nav>
-            <div>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="btn">Logout</button>
-                </form>
-            </div>
-        </aside>
+        {{-- mobile nav bottom --}}
+        <div id="mobile_bottom_nav" class="p-2 py-4 bg-gray-900 bottom-0 fixed flex justify-evenly w-full">
+            <a href="{{ route('dashboard') }}">
+                <x-heroicon-o-queue-list class="h-8 w-8 mr-2" />
+            </a>
+            <a href="{{ route('cards') }}">
+                <x-heroicon-o-credit-card class="h-8 w-8 mr-2" />
+            </a>
+            <a href="{{ route('transactions') }}">
+                <x-heroicon-o-document-text class="h-8 w-8 mr-2" />
+            </a>
+            <a href="{{ route('fundings') }}">
+                <x-heroicon-o-banknotes class="h-8 w-8 mr-2" />
+            </a>
+            <a href="{{ route('kyc') }}">
+                <x-heroicon-o-document-currency-dollar class="h-8 w-8 mr-2" />
+            </a>
+            <a href="{{ route('settings') }}">
+                <x-heroicon-o-cog-6-tooth class="h-8 w-8 mr-2" />
+            </a>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit">
+                    <x-heroicon-o-arrow-left-on-rectangle class="h-8 w-8" />
+                </button>
+            </form>
+        </div>
 
         <main class="min-h-screen bg-white">
             {{ $slot }}
