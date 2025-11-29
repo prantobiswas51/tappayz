@@ -19,17 +19,20 @@ class PendingTransactions extends StatsOverviewWidget
         $totalDeposits = \App\Models\Deposit::where('status', 'approved')->orWhere('status', 'SUCCESS')->sum('amount');
         $manualDeposits = \App\Models\Deposit::where('type', 'Manual')->where('status', 'approved')->sum('amount');
         $autoDeposits = \App\Models\Deposit::where('type', 'Auto')->orWhere('status', 'SUCCESS')->sum('amount');
+        $pendingCards = \App\Models\Card::where('state', 4)->count();
 
         return [
-            Stat::make('Total Users', $users),
             Stat::make('Total Cards', $totalCards),
             Stat::make('Pending Transactions', $PendingTransactions),
             Stat::make('Pending Deposits', $pendingDeposits),
             Stat::make('Pending KYC', $pendingKyc),
-            Stat::make('Current Bins', $currentBins),
             Stat::make('Total Deposits', '$ ' . number_format($totalDeposits, 2)),
             Stat::make('Manual Deposits', '$ ' . number_format($manualDeposits, 2)),
             Stat::make('Auto Deposits', '$ ' . number_format($autoDeposits, 2)),
+            Stat::make('Pending Cards', $pendingCards),
+            Stat::make('Current Bins', $currentBins),
+            Stat::make('Total Users', $users),
+
         ];
     }
 }
