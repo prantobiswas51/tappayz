@@ -151,7 +151,7 @@
         <div class="card" style="background: white; border: 1px solid #e9ecef; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
             <div class="card-header">
                 <div class="card-title" style="color: #333;">Recent Transactions</div>
-                <a class="btn" href="transactions.html">View all</a>
+                <a class="btn" href="{{ route('transactions') }}">View all</a>
             </div>
 
             <!-- Table Content -->
@@ -249,15 +249,23 @@
         paymentSelect.addEventListener('change', function() {
             let message = '';
 
+            @php
+
+            $payoneer_email = \App\Models\Setting::value('payoneer_email');
+            $paypal_email = \App\Models\Setting::value('paypal_email');
+            $skrill_email = \App\Models\Setting::value('skrill_email');
+
+            @endphp
+
             switch (this.value) {
             case 'payoneer':
-                message = 'payoneer@example.com';
+                message = '{{ $payoneer_email }}';
                 break;
             case 'paypal':
-                message = 'paypal@example.com';
+                message = '{{ $paypal_email }}';
                 break;
             case 'skrill':
-                message = 'skrill@example.com';
+                message = '{{ $skrill_email }}';
                 break;
             default:
                 message = '';

@@ -16,7 +16,7 @@ class FundController extends Controller
 {
     public function index()
     {
-        $trx_address = Setting::first()->main_deposit_address;
+        $trx_address = Setting::value('main_deposit_address');
 
         $deposits = Deposit::where('user_id', Auth::id())->get();
 
