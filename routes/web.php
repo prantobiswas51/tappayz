@@ -34,6 +34,11 @@ Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
 
+Route::get('/check_mail', function () {
+    return view('check_mail');
+})->name('check_mail');
+
+
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/email-check', [VerifyEmailController::class, 'verify']);
 
