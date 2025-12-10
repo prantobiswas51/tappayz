@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Bin;
 use App\Models\Card;
+use App\Models\Setting;
 use App\Models\Transaction;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
@@ -14,9 +15,16 @@ use Illuminate\Support\Facades\Http;
 
 class CardController extends Controller
 {
+
     protected string $baseUrl = 'http://api.vcc.center';
-    protected string $userSerial = '0852811946422621';
-    protected string $secretKey = 'Okfc-yMDRgKig4E2V75pxw==';
+    protected string $userSerial;
+    protected string $secretKey;
+
+    public function __construct()
+    {
+        $this->userSerial = Setting::value('vcc_user_serial') ?? "";
+        $this->secretKey = Setting::value('vcc_secret_key') ?? "";
+    }
 
     public function index()
     {
