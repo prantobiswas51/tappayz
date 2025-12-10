@@ -15,12 +15,9 @@ class SettingForm
                 TextInput::make('vcc_user_serial'),
                 TextInput::make('vcc_secret_key'),
                 TextInput::make('main_deposit_address'),
-                TextInput::make('paypal_email')
-                    ->email(),
-                TextInput::make('payoneer_email')
-                    ->email(),
-                TextInput::make('skrill_email')
-                    ->email(),
+                TextInput::make('paypal_email'),
+                TextInput::make('payoneer_email'),
+                TextInput::make('skrill_email'),
             ]);
     }
 }
