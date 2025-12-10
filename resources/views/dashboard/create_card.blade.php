@@ -49,8 +49,8 @@
 
                     <div class="mb-3 field">
                         <label class="block text-gray-600">Amount<span class="text-red-600">*</span> (Min : 10$)</label>
-                        <input type="text" name="amount" min="10" value="" required id="amount"
-                            oninput="updateTotal()" style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333;"
+                        <input type="text" name="amount" min="10" value="" required id="amount" oninput="updateTotal()"
+                            style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333;"
                             class="w-full border rounded p-2 bg-gray-100 text-gray-800">
                         <p class="text-red-600 text-sm ">
                             Total: <span id="total_amount">$0.00</span>
@@ -94,7 +94,7 @@
         <!-- Card BIN Information & Terms - Collapsible -->
         <div class="card info-card"
             style="margin-bottom: 20px; background: white; border: 1px solid #e9ecef; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-            
+
             <div class="card-header" id="info-toggle">
                 <div>
                     <div class="card-title" style="color: #333;">Card BIN Information & Terms</div>
@@ -204,17 +204,15 @@
         {{-- card area --}}
         <div class="flex flex-wrap w-full ">
 
-            <!-- Left Side -->
             <div class="card bg-sky-300 p-2 flex-1 min-w-[280px]">
                 <div class="card-header mb-3">
                     <div class="card-title text-lg font-semibold text-[#333]">Card Information</div>
                     <div class="card-subtitle text-sm text-[#6c757d]">Create your virtual card with selected BIN</div>
                 </div>
 
-                <div class="cards flex flex-wrap gap-4 justify-center">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                     @foreach ($bins as $bin)
                     <div class="border  p-3 rounded-lg shadow-md min-w-[220px] flex-1 hover:cursor-pointer hover:bg-gray-200"
-                    
                         onclick="openBinModal('{{ $bin->id }}', '{{ $bin->bin }}', '{{ $bin->organization }}', '{{ $bin->cr }}', '{{ $bin->actualOpenCardPrice }}/{{ $bin->actualRechargeFeeRate }}')">
                         <div class="flex justify-between items-center py-3">
                             <h3>
@@ -240,8 +238,6 @@
                     @endforeach
                 </div>
             </div>
-
-
 
         </div>
 
