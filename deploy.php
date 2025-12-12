@@ -5,7 +5,7 @@ namespace Deployer;
 require 'recipe/laravel.php';
 
 // Config
-
+set('writable_mode', 'chmod');
 set('repository', 'https://github.com/prantobiswas51/tappayz.git');
 set('keep_releases', 3);
 
