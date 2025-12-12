@@ -56,6 +56,11 @@ class FundController extends Controller
         $amountUsdt        = $amountUsdtRaw / 1000000;
         $toAddress         = $tokenInfo['to_address'] ?? null;
 
+        // Check destination address
+        if ($toAddress !== Setting::value('main_deposit_address')) {
+            return redirect()->route('fundings')->with('status', 'Transaction sent to wrong address.');
+        }
+
         // Immediately reject non-USDT transfers
         if ($contractType != 31) {
             return redirect()->route('fundings')->with('status', 'Invalid token. Only USDT TRC20 accepted.');
@@ -66,10 +71,6 @@ class FundController extends Controller
             return redirect()->route('fundings')->with('status', 'Transaction failed on blockchain.');
         }
 
-        // Check destination address
-        if ($toAddress !== Setting::value('main_deposit_address')) {
-            return redirect()->route('fundings')->with('status', 'Transaction sent to wrong address.');
-        }
 
         // Check amount
         if ($amountUsdt <= 0) {
