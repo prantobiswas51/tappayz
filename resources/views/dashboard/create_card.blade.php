@@ -204,7 +204,7 @@
         {{-- card area --}}
         <div class="flex flex-wrap w-full ">
 
-            <div class="card bg-sky-300 p-2 flex-1 min-w-[280px]">
+            <div class="flex-1 min-w-[280px]">
                 <div class="card-header mb-3">
                     <div class="card-title text-lg font-semibold text-[#333]">Card Information</div>
                     <div class="card-subtitle text-sm text-[#6c757d]">Create your virtual card with selected BIN</div>
@@ -227,9 +227,9 @@
                         </div>
                         <p class="py-2">Price/Rate :
                             <span>@if ($bin->bin == 517746 || $bin->bin == 428852)
-                                {{ $bin->actualOpenCardPrice + 8 }}$/5.00%
+                                {{ $bin->actualOpenCardPrice + 3 }}$/10.00%
                                 @else
-                                {{ $bin->actualOpenCardPrice + 3 }}$/6.00%
+                                {{ $bin->actualOpenCardPrice + 3 }}$/10.00%
                                 @endif</span>
                         </p>
                         <p class="flex justify-between items-center">Area : <span>{{ __($bin->cr) }}</span> <button
@@ -252,9 +252,9 @@
             document.getElementById('modal-area').value = area;
 
             if(requested_bin == "517746" || requested_bin == "428852") {
-                let price_modal_value = document.getElementById('modal-price').value = "10$ / 5.00%";
+                let price_modal_value = document.getElementById('modal-price').value = "5$ / 10.00%";
             } else {
-                let price_modal_value = document.getElementById('modal-price').value = "5$ / 6.00%";
+                let price_modal_value = document.getElementById('modal-price').value = "5$ / 10.00%";
             }
 
             // Show modal
@@ -270,10 +270,10 @@
             let total_amount = 0;
 
             if (requested_bin == "517746" || requested_bin == "428852") {
-                let fee_percent = amount * 0.05;
-                total_amount = amount + 10 + fee_percent;
+                let fee_percent = amount * 0.10;
+                total_amount = amount + 5 + fee_percent;
             } else {
-                let fee_percent = amount * 0.06;
+                let fee_percent = amount * 0.10;
                 total_amount = amount + 5 + fee_percent;
             }
 

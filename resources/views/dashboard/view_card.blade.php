@@ -48,8 +48,10 @@
                             class="w-full pl-8 pr-3 py-2 border text-gray-600 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                     </div>
                     <p class=" text-sm text-black ">
-                        <span class="text-green-600">Available: ${{ number_format($card->cardBalance ?? 0, 2) }}</span> <br>
-                        You will get: <span class="text-red-500">${{ number_format($card->cardBalance - ($card->cardBalance * 0.2) ?? 0, 2) }} (Card Balance - 20%)</span>
+                        <span class="text-green-600">Available: ${{ number_format($card->cardBalance ?? 0, 2) }}</span>
+                        <br>
+                        You will get: <span class="text-red-500">${{ number_format($card->cardBalance -
+                            ($card->cardBalance * 0.2) ?? 0, 2) }} (Card Balance - 20%)</span>
                     </p>
                 </div>
 
@@ -275,9 +277,16 @@
                                         class="text-sm text-black bg-black bg-opacity-5 px-2 py-1 rounded font-mono font-normal tracking-wide">
                                         {{ $card->cvv ?? '789' }}</div>
                                 </div>
+
+
                             </div>
+
+
+
                         </div>
                     </div>
+
+
                 </div>
             </div>
 
@@ -303,6 +312,7 @@
                     </div>
                 </div>
 
+
                 <div class="p-2 flex justify-between">
                     <div class="">Card Status</div>
                     <div class="">
@@ -319,7 +329,11 @@
                     <div class="">${{ number_format($card->totalConsume ?? null, 2) }}</div>
                 </div>
 
-
+                {{-- <div class="p-2 bg-gray-300 rounded-lg">
+                    @if ($card->bin == 49387520)
+                        246 Wang Kwong Road, Kwun Tong District, HK, Hong Kong, China, 999077
+                    @endif
+                </div> --}}
             </div>
 
             <!-- Transaction History Table -->

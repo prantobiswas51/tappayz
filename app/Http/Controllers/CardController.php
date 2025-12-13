@@ -122,9 +122,9 @@ class CardController extends Controller
         $specialBins = [428852, 517746];
 
         if (in_array($request->bin, $specialBins)) {
-            $total_balance_to_cut = $request_balance + 10 + (0.05 * $request_balance);
+            $total_balance_to_cut = $request_balance + 5 + (0.10 * $request_balance);
         } else {
-            $total_balance_to_cut = $request_balance + 5 + (0.06 * $request_balance);
+            $total_balance_to_cut = $request_balance + 5 + (0.10 * $request_balance);
         }
 
         if ($balance < $total_balance_to_cut) {
@@ -267,7 +267,7 @@ class CardController extends Controller
             return redirect()->route('cards')->with('status', 'Invalid response format when fetching card details.');
         }
 
-        // 🎯 Filter out the target card
+        // Filter out the target card
         $cardData = collect($responseData['content'])->first(function ($card) use ($card_number) {
             return $card['number'] === $card_number || $card['hiddenNum'] === substr($card_number, -5);
         });
@@ -277,10 +277,14 @@ class CardController extends Controller
             return redirect()->route('cards')->with('status', 'Something went wrong. Try again later or contact support.');
         }
 
-        // 🧩 Prevent duplicate in DB
+        // Prevent duplicate in DB
         if (Card::where('number', $card_number)->exists()) {
             Log::info('Card already exists in database.');
             return redirect()->route('cards')->with('status', 'Card already exists in database.');
+        }
+
+        if (isset($cardData['bin']) && $cardData['bin'] == 49387520 && isset($cardData['number'])) {
+            $bill_address = '246 Wang Kwong Road, Kwun Tong District, HK, Hong Kong, China, 999077';
         }
 
         // Create the card record with all available data
@@ -313,6 +317,8 @@ class CardController extends Controller
 
         Card::create($payload);
 
+
+
         $html = '
             <div style="font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px;">
                 <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 10px; 
@@ -329,6 +335,15 @@ class CardController extends Controller
                                     padding: 15px; max-width: 400px; font-size: 18px; color: #222; font-weight: bold;">
                             Card Number: ' . $card_number . '
                         </div>
+
+
+                        ' . (isset($bill_address) ? '
+                        <div style="margin: 25px auto; background-color: #f1f3f5; border-radius: 8px; 
+                                    padding: 15px; max-width: 400px; font-size: 18px; color: #222; font-weight: bold;">
+                            Billing Address: ' . $bill_address . '
+                        </div>
+                        ' : '') . '
+
                         <p style="color: #555555; font-size: 15px; line-height: 1.6;">
                             You can now use this card for secure online transactions directly through your Tappayz dashboard.
                         </p>
