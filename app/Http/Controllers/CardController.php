@@ -215,7 +215,7 @@ class CardController extends Controller
         $params['sign'] = $this->sign($params);
 
         // ✅ Must be form-data, not JSON
-        $maxRetries = 5;
+        $maxRetries = 10;
         $attempt = 0;
         $card_number = null;
         $userBankCardId = null;
