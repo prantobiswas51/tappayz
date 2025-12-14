@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules;
 
@@ -30,6 +31,9 @@ class RegisterRequest extends FormRequest
             'country' => ['required', 'string', 'max:255'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'terms' => ['required', 'accepted'],
+            'recaptcha_token' => ['required', function ($attribute, $value, $fail) {
+                $this->validateRecaptcha($value, $fail);
+            }],
         ];
     }
 
@@ -48,6 +52,40 @@ class RegisterRequest extends FormRequest
             'password.required' => 'Password is required.',
             'password.confirmed' => 'Password confirmation does not match.',
             'terms.accepted' => 'You must agree to the Terms & Conditions and Privacy Policy.',
+            'recaptcha_token.required' => 'reCAPTCHA verification failed. Please try again.',
         ];
+    }
+
+    /**
+     * Validate the reCAPTCHA token.
+     */
+    protected function validateRecaptcha(string $token, callable $fail): void
+    {
+        $secretKey = config('services.recaptcha.secret_key');
+        
+        if (empty($secretKey)) {
+            // Skip validation in development if keys not configured
+            if (config('app.debug')) {
+                return;
+            }
+            $fail('reCAPTCHA is not configured properly.');
+            return;
+        }
+
+        try {
+            $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+                'secret' => $secretKey,
+                'response' => $token,
+                'remoteip' => request()->ip(),
+            ]);
+
+            $result = $response->json();
+
+            if (!$result['success'] || $result['score'] < 0.5) {
+                $fail('reCAPTCHA verification failed. Please try again.');
+            }
+        } catch (\Exception $e) {
+            $fail('reCAPTCHA verification failed. Please try again.');
+        }
     }
 }

@@ -3,20 +3,22 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
+use ReCaptcha\ReCaptcha;
 use Illuminate\View\View;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\URL;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Crypt;
 use App\Http\Requests\RegisterRequest;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Process;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Mail\Message;
+use Illuminate\Validation\Rules\Password;
 
 class RegisteredUserController extends Controller
 {
@@ -28,6 +30,23 @@ class RegisteredUserController extends Controller
 
     public function store(RegisterRequest $request): RedirectResponse
     {
+        // Validate including reCAPTCHA v3
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'confirmed', Password::defaults()],
+            'g-recaptcha-response' => ['required', function ($attribute, $value, $fail) {
+                $recaptcha = new ReCaptcha(config('services.recaptcha.secret_key'));
+                $response = $recaptcha->setExpectedAction('register')
+                    ->setScoreThreshold(0.5)
+                    ->verify($value, request()->ip());
+
+                if (!$response->isSuccess()) {
+                    $fail('reCAPTCHA verification failed. Please try again.');
+                }
+            }],
+        ]);
+
         // Create user
         $user = new User();
         $user->name = $request->name;
@@ -35,6 +54,7 @@ class RegisteredUserController extends Controller
         $user->phone = $request->phone;
         $user->country = $request->country;
         $user->password = Hash::make($request->password);
+
         $user->remember_token = Str::random(40); // Generate verification token
         $user->save();
 
