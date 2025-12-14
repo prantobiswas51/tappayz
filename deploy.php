@@ -7,7 +7,7 @@ require 'recipe/laravel.php';
 // Config
 set('writable_mode', 'chmod');
 set('repository', 'https://github.com/prantobiswas51/tappayz.git');
-set('keep_releases', 3);
+set('keep_releases', 1);
 
 
 // Load environment variables
