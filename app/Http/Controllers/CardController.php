@@ -141,23 +141,25 @@ class CardController extends Controller
             $card->user_id = Auth::id();
 
             // Generate 12-digit random card number safely
-            $cardNumber = '';
-            for ($i = 0; $i < 12; $i++) {
-                $cardNumber .= random_int(0, 9);
-            }
+            // $cardNumber = '';
+            // for ($i = 0; $i < 12; $i++) {
+            //     $cardNumber .= random_int(0, 9);
+            // }
 
-            $card->hiddenNum = $cardNumber;
+            $card->hiddenNum = "**** ****";
             $card->organization = 'Pending';
             $card->cardBalance = $request->amount;
             $card->state = '4';
             $card->email = $request->email;
             $card->bin = $request->bin;
             $card->remark = $request->remark;
+            $card->hiddenCvv = '***';
+            $card->hiddenDate = '**/**';
             $card->save();
 
             $transaction = new Transaction();
             $transaction->user_id = Auth::id();
-            $transaction->cardNum = $cardNumber;
+            $transaction->cardNum = "**** ****";
             $transaction->amount = $total_balance_to_cut;
             $transaction->type = 'Debit';
             $transaction->status = 'Pending';

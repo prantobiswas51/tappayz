@@ -42,7 +42,7 @@
 
             @if($mycards->isEmpty())
 
-            <p class="text-gray-500 p-4 px-6">No cards available. Please create a card.</p>
+                <p class="text-gray-500 p-4 px-6">No cards available. Please create a card.</p>
 
             @else
 
@@ -74,7 +74,7 @@
                     </div>
                     <div>
                         <div class="text-sm text-gray-500 mb-1">Card Number:</div>
-                        <div class="text-sm font-medium text-gray-800 font-mono @if($card->state == 4) blur @endif">{{ $card->hiddenNum }}</div>
+                        <div class="text-sm font-medium text-gray-800 font-mono">{{ $card->hiddenNum }}</div>
                     </div>
                     <div>
                         <div class="text-sm text-gray-500 mb-1">Expire:</div>
