@@ -131,6 +131,13 @@ class CardController extends Controller
 
         if ($request->bin != '49387520') {
             // cut balance from user
+
+            if($request->bin == '428852' || $request->bin == '428820'){
+                $organization = 'VISA';
+            }else{
+                $organization = "MASTERCARD";
+            }
+
             $user = Auth::user();
             $user->balance = $balance - $total_balance_to_cut;
             $user->save();
@@ -145,7 +152,7 @@ class CardController extends Controller
             // }
 
             $card->hiddenNum = "**** ****";
-            $card->organization = 'Pending';
+            $card->organization = $organization ?? 'Pending';
             $card->cardBalance = $request->amount;
             $card->state = '4';
             $card->email = $request->email;
@@ -170,7 +177,7 @@ class CardController extends Controller
                 <p>We have a new virtual card request.</p>
             ');
 
-            return redirect()->route('cards')->with('status', 'Your Card is being processed. It will appear in your card list shortly.');
+            return redirect()->route('cards')->with('status', 'Your Card is being processed. It will appear in your card list within 30 minutes.');
         }
 
 
@@ -200,14 +207,14 @@ class CardController extends Controller
             return redirect()->route('cards')->with('status', 'Failed to open card. Please try again.');
         }
 
-        Log::channel('dev_error')->info('Open Card Success');
+        Log::channel('dev_error')->error('Open Card Success');
 
         // cut balance from user
         $balance -= $total_balance_to_cut;
         Auth::user()->update(['balance' => $balance]);
 
         $orderId = $data['content']['id'];
-        Log::channel('dev_error')->info('OrderId is: ' . $orderId);
+        Log::channel('dev_error')->error('OrderId is: ' . $orderId);
 
         // $orderId = "C251012152540064266";
 
@@ -241,7 +248,7 @@ class CardController extends Controller
 
             if (!$card_number) {
                 $attempt++;
-                Log::channel('dev_error')->info("Card not ready, retrying in 5 seconds... (Attempt $attempt/$maxRetries)");
+                Log::channel('dev_error')->error("Card not ready, retrying in 5 seconds... (Attempt $attempt/$maxRetries)");
                 sleep(5); // wait before next retry
             }
         }
@@ -251,8 +258,8 @@ class CardController extends Controller
             return redirect()->route('cards')->with('status', 'Card not ready. Please try again later.');
         }
 
-        Log::channel('dev_error')->info('Card number is: ' . $card_number);
-        Log::channel('dev_error')->info('User Bank Card ID is: ' . $userBankCardId);
+        Log::channel('dev_error')->error('Card number is: ' . $card_number);
+        Log::channel('dev_error')->error('User Bank Card ID is: ' . $userBankCardId);
 
         // third request
         $params = [
@@ -269,7 +276,7 @@ class CardController extends Controller
 
         //
         if (! isset($responseData['content']) || ! is_array($responseData['content'])) {
-            Log::channel('dev_error')->info('Invalid response format when fetching card details.');
+            Log::channel('dev_error')->error('Invalid response format when fetching card details.');
             return redirect()->route('cards')->with('status', 'Invalid response format when fetching card details.');
         }
 
@@ -279,13 +286,13 @@ class CardController extends Controller
         });
 
         if (! $cardData) {
-            Log::channel('dev_error')->info('Card not found in list when fetching card details.');
+            Log::channel('dev_error')->error('Card not found in list when fetching card details.');
             return redirect()->route('cards')->with('status', 'Something went wrong. Try again later or contact support.');
         }
 
         // Prevent duplicate in DB
         if (Card::where('number', $card_number)->exists()) {
-            Log::channel('dev_error')->info('Card already exists in database.');
+            Log::channel('dev_error')->error('Card already exists in database.');
             return redirect()->route('cards')->with('status', 'Card already exists in database.');
         }
 

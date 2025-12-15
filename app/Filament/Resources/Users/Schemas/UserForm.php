@@ -20,16 +20,15 @@ class UserForm
                     ->email()
                     ->required(),
                 TextInput::make('phone')
-                    ->tel(),
+                    ->label('Phone number'),
                 TextInput::make('country'),
                 TextInput::make('balance')
                     ->required()
                     ->numeric()
+                    ->prefix('$')
                     ->default(0.0),
                 TextInput::make('number'),
-                TextInput::make('trx_address'),
-                Textarea::make('trx_private_key')
-                    ->columnSpanFull(),
+
                 DateTimePicker::make('email_verified_at'),
                 TextInput::make('password')
                     ->password()

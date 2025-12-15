@@ -20,6 +20,8 @@ class FundController extends Controller
 
         $deposits = Deposit::where('user_id', Auth::id())->get();
 
+        Log::channel('dev_error')->error('Fi');
+
         return view('dashboard/funding', compact('trx_address', 'deposits'));
     }
 
@@ -145,6 +147,8 @@ class FundController extends Controller
             'notes' => 'nullable|string',
             'screenshot' => 'required|file|mimes:jpg,jpeg,png,pdf|max:5120', // Max 5MB
         ]);
+
+        Log::channel('dev_error')->error('Manual Payment Request:', $request->all());
 
         // dd($request->all());
 
