@@ -28,6 +28,8 @@ class RegisteredUserController extends Controller
 
     public function store(RegisterRequest $request): RedirectResponse
     {
+
+        // dd($request->all());
         // Create user
         $user = new User();
         $user->name = $request->name;
