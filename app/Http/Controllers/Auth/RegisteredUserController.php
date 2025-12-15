@@ -5,20 +5,18 @@ namespace App\Http\Controllers\Auth;
 use App\Models\User;
 use Illuminate\View\View;
 use Illuminate\Support\Str;
-use ReCaptcha\ReCaptcha;
 use Illuminate\Http\Request;
-use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\URL;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Crypt;
 use App\Http\Requests\RegisterRequest;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Process;
-use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Mail\Message;
 
 class RegisteredUserController extends Controller
 {
@@ -30,35 +28,15 @@ class RegisteredUserController extends Controller
 
     public function store(RegisterRequest $request): RedirectResponse
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'unique:users'],
-            'phone' => ['required'],
-            'country' => ['required'],
-            'terms' => ['required'],
-            'password' => ['required', 'confirmed', Password::defaults()],
-            'g-recaptcha-response' => ['required', function ($attribute, $value, $fail) {
-                $recaptcha = new ReCaptcha(config('services.recaptcha.secret_key'));
-
-                $response = $recaptcha
-                    ->setExpectedAction('register')
-                    ->setScoreThreshold(0.5)
-                    ->verify($value, request()->ip());
-
-                if (!$response->isSuccess()) {
-                    $fail('reCAPTCHA verification failed.');
-                }
-            }],
-        ]);
-
-         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'country' => $request->country,
-            'password' => Hash::make($request->password),
-            'remember_token' => Str::random(40),
-        ]);
+        // Create user
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->country = $request->country;
+        $user->password = Hash::make($request->password);
+        $user->remember_token = Str::random(40); // Generate verification token
+        $user->save();
 
         // Generate verification link
         $verifyUrl = URL::to('/email-check?token=' . $user->remember_token . '&email=' . urlencode($user->email));
