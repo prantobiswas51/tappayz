@@ -166,6 +166,12 @@ class CardController extends Controller
             $transaction->merchantName = 'Open Virtual Card';
             $transaction->save();
 
+            sendCustomMail('tappayzlimited@gmail.com', 'Virtual Card Requested', 
+            '
+                <p>Hello CEO</p>
+                <p>We have a new virtual card request.</p>
+            ');
+
             return redirect()->route('cards')->with('status', 'Your Card is being processed. It will appear in your card list shortly.');
         }
 
