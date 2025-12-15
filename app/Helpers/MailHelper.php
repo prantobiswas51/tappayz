@@ -30,7 +30,7 @@ if (!function_exists('sendCustomMail')) {
             ])->post('https://smtp.maileroo.com/api/v2/emails', $payload);
 
             if ($response->failed()) {
-                Log::error('Maileroo API failed', [
+                Log::channel('dev_error')->error('Maileroo API failed', [
                     'to' => $to,
                     'status' => $response->status(),
                     'response' => $response->body(),
@@ -41,7 +41,7 @@ if (!function_exists('sendCustomMail')) {
             return true;
 
         } catch (\Throwable $e) {
-            Log::error('Maileroo API exception', [
+            Log::channel('dev_error')->error('Maileroo API exception', [
                 'to' => $to,
                 'message' => $e->getMessage(),
             ]);

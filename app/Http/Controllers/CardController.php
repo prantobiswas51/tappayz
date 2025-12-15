@@ -55,8 +55,6 @@ class CardController extends Controller
 
         $params['sign'] = $this->sign($params);
 
-        Log::info('Test logging status at ' . now());
-
         // Send GET request
         $response = Http::get($this->baseUrl . '/bank_card/enable_bin', $params);
 
@@ -191,25 +189,25 @@ class CardController extends Controller
         $response = Http::asForm()->post($this->baseUrl . '/bank_card/open_card', $params);
 
         if ($response->failed()) {
-            Log::error('Failed to open card: ' . $response->body());
-            return redirect()->route('cards')->with('status', 'First Function Failed');
+            Log::channel('dev_error')->error('Failed to open card: ' . $response->body());
+            return redirect()->route('cards')->with('status', 'Please contact support. Something went wrong.');
         }
 
         $data = json_decode($response, true); // decode JSON string to PHP array
 
         if (!$data || !isset($data['content']['id'])) {
-            Log::error('Failed to open card: Invalid JSON or missing ID');
+            Log::channel('dev_error')->error('Failed to open card: Invalid JSON or missing ID');
             return redirect()->route('cards')->with('status', 'Failed to open card. Please try again.');
         }
 
-        Log::info('Open Card Success');
+        Log::channel('dev_error')->info('Open Card Success');
 
         // cut balance from user
         $balance -= $total_balance_to_cut;
         Auth::user()->update(['balance' => $balance]);
 
         $orderId = $data['content']['id'];
-        Log::info('OrderId is: ' . $orderId);
+        Log::channel('dev_error')->info('OrderId is: ' . $orderId);
 
         // $orderId = "C251012152540064266";
 
@@ -232,7 +230,7 @@ class CardController extends Controller
             $details_response = Http::asForm()->post($this->baseUrl . '/bank_card/open_detail', $params);
 
             if ($details_response->failed()) {
-                Log::error('Failed to fetch card details: ' . $details_response->body());
+                Log::channel('dev_error')->error('Failed to fetch card details: ' . $details_response->body());
                 return redirect()->route('cards')->with('status', 'Failed to fetch card details. Please try again.');
             }
 
@@ -243,18 +241,18 @@ class CardController extends Controller
 
             if (!$card_number) {
                 $attempt++;
-                Log::info("Card not ready, retrying in 5 seconds... (Attempt $attempt/$maxRetries)");
+                Log::channel('dev_error')->info("Card not ready, retrying in 5 seconds... (Attempt $attempt/$maxRetries)");
                 sleep(5); // wait before next retry
             }
         }
 
         if (!$card_number) {
-            Log::error('Card number still not available after 5 attempts.');
+            Log::channel('dev_error')->error('Card number still not available after 5 attempts.');
             return redirect()->route('cards')->with('status', 'Card not ready. Please try again later.');
         }
 
-        Log::info('Card number is: ' . $card_number);
-        Log::info('User Bank Card ID is: ' . $userBankCardId);
+        Log::channel('dev_error')->info('Card number is: ' . $card_number);
+        Log::channel('dev_error')->info('User Bank Card ID is: ' . $userBankCardId);
 
         // third request
         $params = [
@@ -271,7 +269,7 @@ class CardController extends Controller
 
         //
         if (! isset($responseData['content']) || ! is_array($responseData['content'])) {
-            Log::info('Invalid response format when fetching card details.');
+            Log::channel('dev_error')->info('Invalid response format when fetching card details.');
             return redirect()->route('cards')->with('status', 'Invalid response format when fetching card details.');
         }
 
@@ -281,13 +279,13 @@ class CardController extends Controller
         });
 
         if (! $cardData) {
-            Log::info('Card not found in list when fetching card details.');
+            Log::channel('dev_error')->info('Card not found in list when fetching card details.');
             return redirect()->route('cards')->with('status', 'Something went wrong. Try again later or contact support.');
         }
 
         // Prevent duplicate in DB
         if (Card::where('number', $card_number)->exists()) {
-            Log::info('Card already exists in database.');
+            Log::channel('dev_error')->info('Card already exists in database.');
             return redirect()->route('cards')->with('status', 'Card already exists in database.');
         }
 
@@ -649,7 +647,7 @@ class CardController extends Controller
         $response = Http::asForm()->get($this->baseUrl . '/bank_card/consume_order', $params);
 
         if ($response->failed()) {
-            Log::error('Transaction fetch failed: ' . $response->body());
+            Log::channel('dev_error')->error('Transaction fetch failed: ' . $response->body());
             return back()->with('status', 'Failed to fetch transactions.');
         }
 
