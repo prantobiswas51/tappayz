@@ -4,15 +4,15 @@
 
     <section class="min-h-screen flex items-center justify-center pt-12 pb-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full space-y-8">
+
             <div class="text-center">
                 <h2 class="text-3xl font-bold text-black mb-2">Create Account</h2>
                 <p class="text-gray-600">Join Tappayz and start using virtual cards today</p>
             </div>
 
             <div class="bg-white rounded-2xl shadow-lg p-8">
-                <form method="POST" action="{{ route('register') }}" class="space-y-6" id="registerForm">
+                <form method="POST" action="{{ route('register') }}" id="registerForm" class="space-y-6">
                     @csrf
-                    <input type="hidden" name="recaptcha_token" id="recaptcha_token">
 
                     <!-- Name -->
                     <div>
@@ -110,46 +110,32 @@
                         <x-input-error :messages="$errors->get('terms')" class="mt-2 text-sm text-red-500" />
                     </div>
 
-                    <!-- reCAPTCHA Error -->
-                    <x-input-error :messages="$errors->get('recaptcha_token')" class="mt-2 text-sm text-red-500" />
+                    <!-- reCAPTCHA error -->
+                    <x-input-error :messages="$errors->get('g-recaptcha-response')" />
 
-                    <x-primary-button
-                        class="w-full bg-primary-blue text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-600 transition-colors justify-center">
-                        {{ __('Create Account') }}
+                    <x-primary-button class="w-full justify-center">
+                        Create Account
                     </x-primary-button>
-
-                    <div class="text-center">
-                        <p class="text-sm text-gray-600">
-                            Already have an account?
-                            <a href="{{ route('login') }}"
-                                class="text-primary-blue hover:text-blue-600 font-medium">Sign in here</a>
-                        </p>
-                    </div>
-
-                    <!-- reCAPTCHA v3 token (hidden) -->
-                    <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
-                    <x-input-error :messages="$errors->get('g-recaptcha-response')" class="mt-2" />
-
 
                 </form>
             </div>
         </div>
     </section>
 
-    <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.site_key') }}"></script>
+    <!-- reCAPTCHA submit handler -->
     <script>
-        document.getElementById('registerForm').addEventListener('submit', function(e) {
+        document.getElementById('registerForm').addEventListener('submit', function (e) {
             e.preventDefault();
             const form = this;
-            
-            grecaptcha.ready(function() {
-                grecaptcha.execute('{{ config('services.recaptcha.site_key') }}', {action: 'register'})
-                    .then(function(token) {
-                        document.getElementById('recaptcha_token').value = token;
-                        form.submit();
-                    });
+
+            grecaptcha.ready(function () {
+                grecaptcha.execute('{{ config('services.recaptcha.site_key') }}', {
+                    action: 'register'
+                }).then(function (token) {
+                    document.getElementById('g-recaptcha-response').value = token;
+                    form.submit();
+                });
             });
         });
     </script>
-
 </x-guest-layout>
