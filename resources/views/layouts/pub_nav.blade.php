@@ -62,12 +62,13 @@
                 <div class="desktop_link space-x-8 sm:-my-px sm:ms-10">
                     @auth
                     <div class="flex items-center space-x-4">
-                        <a href="{{ route('dashboard') }}" class="text-gray-700 hover:text-black font-medium">Dashboard</a>
-                    <form action="" method="post">
-                        @csrf
-                        <button formaction="{{ route('logout') }}"
-                            class="px-4 py-2 rounded-lg font-medium hover:underline">Logout</button>
-                    </form>
+                        <a href="{{ route('dashboard') }}"
+                            class="text-gray-700 hover:text-black font-medium">Dashboard</a>
+                        <form action="" method="post">
+                            @csrf
+                            <button formaction="{{ route('logout') }}"
+                                class="px-4 py-2 rounded-lg font-medium hover:underline">Logout</button>
+                        </form>
                     </div>
                     @else
                     <a href="{{ route('login') }}" class="text-black font-medium">Sign In</a>
@@ -94,15 +95,22 @@
     <!-- Responsive Navigation Menu -->
     <div id="responsive-menu" class="hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
+            @auth
+                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    {{ __('Dashboard') }}
+                </x-responsive-nav-link>
+            @else
+                <a href="{{ route('login') }}" class="block px-4 py-2">Sign In</a>
+                <a href="{{ route('register') }}" class="block px-4 py-2">Create Account</a>
+            @endauth
+
             <a href="{{ route('home') }}" class="block px-4 py-2">Home</a>
             <a href="{{ route('pricing') }}" class="block px-4 py-2">Pricing</a>
             <a href="{{ route('contact') }}" class="block px-4 py-2">Contact</a>
         </div>
 
         <!-- Responsive Settings Options -->
+        @auth
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="px-4">
                 <div class="font-medium text-base text-gray-800">
@@ -132,6 +140,7 @@
                 </form>
             </div>
         </div>
+        @endauth
     </div>
 
     <script>

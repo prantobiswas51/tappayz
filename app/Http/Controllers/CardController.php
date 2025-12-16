@@ -177,6 +177,14 @@ class CardController extends Controller
                 <p>We have a new virtual card request.</p>
             ');
 
+            sendCustomMail(Auth::user()->email, 'We Received Your Virtual Card Request',
+            '
+                <p>Dear ' . Auth::user()->name . ',</p>
+                <p>Thank you for choosing Tappayz for your virtual card needs. We have received your request to create a new virtual card.</p>
+                <p>Our team is currently processing your request, and we will notify you once your virtual card is ready for use. This typically takes up to 30 minutes.</p>
+                <p>If you have any questions or need further assistance, please do not hesitate to contact our support team at support@tappayz.com.</p>
+            ');
+
             return redirect()->route('cards')->with('status', 'Your Card is being processed. It will appear in your card list within 30 minutes.');
         }
 
