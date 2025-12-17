@@ -1,4 +1,87 @@
 <x-guest-layout>
+
+    <style>
+        @media (max-width: 768px) {
+            .table-container {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: thin;
+            }
+            
+            .table-container::-webkit-scrollbar {
+                height: 8px;
+            }
+            
+            .table-container::-webkit-scrollbar-track {
+                background: #f1f1f1;
+            }
+            
+            .table-container::-webkit-scrollbar-thumb {
+                background: #888;
+                border-radius: 4px;
+            }
+            
+            .table-container::-webkit-scrollbar-thumb:hover {
+                background: #555;
+            }
+            
+            table {
+                font-size: 0.875rem;
+            }
+            
+            th, td {
+                padding: 0.5rem 0.75rem !important;
+                min-width: 120px !important;
+            }
+            
+            th:first-child, td:first-child {
+                min-width: 140px !important;
+                position: sticky;
+                left: 0;
+                z-index: 10;
+            }
+            
+            .mobile-header {
+                font-size: 1.5rem !important;
+            }
+            
+            .mobile-subtitle {
+                font-size: 0.875rem !important;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            body {
+                padding: 0.5rem !important;
+            }
+            
+            .mobile-header {
+                font-size: 1.25rem !important;
+                padding: 1rem !important;
+            }
+            
+            .mobile-subtitle {
+                font-size: 0.75rem !important;
+            }
+            
+            table {
+                font-size: 0.75rem;
+            }
+            
+            th, td {
+                padding: 0.375rem 0.5rem !important;
+                min-width: 100px !important;
+            }
+            
+            th:first-child, td:first-child {
+                min-width: 120px !important;
+            }
+            
+            .card-bin {
+                font-size: 0.75rem !important;
+            }
+        }
+    </style>
     <!-- Hero Section -->
     <section class="pt-32 pb-20 bg-black">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -16,131 +99,277 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
             <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
-                <div class="overflow-x-auto">
-                    <table class="w-full">
-                        <thead class="bg-gray-50">
-                            <!-- <tr>
-                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Features</th>
-                                <th class="px-6 py-4 text-center text-sm font-semibold text-gray-900">Basic</th>
-                                <th class="px-6 py-4 text-center text-sm font-semibold text-gray-900">Standard</th>
-                                <th class="px-6 py-4 text-center text-sm font-semibold text-gray-900">Premium</th>
-                            </tr> -->
+                <div class="overflow-x-auto table-container border">
+                    <table class="w-full border-collapse">
+                        <thead>
+                            <tr class="bg-gray-50 border-b-2 border-gray-200">
+                                <th
+                                    class="px-4 py-4 text-left font-semibold text-gray-700 sticky left-0 bg-gray-50 z-10 border-r border-gray-200 min-w-[180px]">
+                                    Card Features
+                                </th>
+                                <th
+                                    class="px-4 py-4 text-center font-semibold text-gray-700 border-r border-gray-200 min-w-[150px]">
+                                    <div class="font-bold text-blue-600 card-bin">493875</div>
+                                </th>
+                                <th
+                                    class="px-4 py-4 text-center font-semibold text-gray-700 border-r border-gray-200 min-w-[150px]">
+                                    <div class="font-bold text-blue-600 card-bin">537100</div>
+                                </th>
+                                <th
+                                    class="px-4 py-4 text-center font-semibold text-gray-700 border-r border-gray-200 min-w-[150px]">
+                                    <div class="font-bold text-blue-600 card-bin">428852</div>
+                                </th>
+                                <th
+                                    class="px-4 py-4 text-center font-semibold text-gray-700 border-r border-gray-200 min-w-[150px]">
+                                    <div class="font-bold text-blue-600 card-bin">517746</div>
+                                </th>
+                                <th
+                                    class="px-4 py-4 text-center font-semibold text-gray-700 border-r border-gray-200 min-w-[150px]">
+                                    <div class="font-bold text-blue-600 card-bin">428820</div>
+                                </th>
+                                <th
+                                    class="px-4 py-4 text-center font-semibold text-gray-700 border-r border-gray-200 min-w-[150px]">
+                                    <div class="font-bold text-blue-600 card-bin">512631</div>
+                                </th>
+                                <th
+                                    class="px-4 py-4 text-center font-semibold text-gray-700 border-r border-gray-200 min-w-[150px]">
+                                    <div class="font-bold text-blue-600 card-bin">513989</div>
+                                </th>
+                                <th class="px-4 py-4 text-center font-semibold text-gray-700 min-w-[150px]">
+                                    <div class="font-bold text-blue-600 card-bin">543691</div>
+                                </th>
+                            </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-200">
-                            <tr>
-                                <td class="px-6 py-4 text-sm font-medium text-gray-900">Card BIN</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900 font-bold">537100</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900 font-bold">517746</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900 font-bold">428852</td>
-                            </tr>
-                            <tr class="bg-gray-50">
-                                <td class="px-6 py-4 text-sm font-medium text-gray-900">Card Brand</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900 font-bold">Master Card</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900 font-bold">Master Card</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900 font-bold">VISA</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 text-sm font-medium text-gray-900">Card Issue Cost</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">$5.00 per card</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">$8.00 per card</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">$15.00 per card</td>
-                            </tr>
-                            <tr class="bg-gray-50">
-                                <td class="px-6 py-4 text-sm font-medium text-gray-900">Card Top-up Fees</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">7.5% per transaction</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">7.5% per transaction</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">7.5% per transaction</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 text-sm font-medium text-gray-900">Multi-Currency Support</td>
-                                <td class="px-6 py-4 text-center">
-                                    <svg class="w-5 h-5 text-primary-green mx-auto" fill="currentColor"
-                                        viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd"
-                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                            clip-rule="evenodd"></path>
-                                    </svg>
+                        <tbody>
+                            <!-- Card Brand -->
+                            <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                <td
+                                    class="px-4 py-3 font-medium text-gray-700 sticky left-0 bg-white z-10 border-r border-gray-200">
+                                    Card Brand
                                 </td>
-                                <td class="px-6 py-4 text-center">
-                                    <svg class="w-5 h-5 text-primary-green mx-auto" fill="currentColor"
-                                        viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd"
-                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                            clip-rule="evenodd"></path>
-                                    </svg>
-                                </td>
-                                <td class="px-6 py-4 text-center">
-                                    <svg class="w-5 h-5 text-primary-green mx-auto" fill="currentColor"
-                                        viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd"
-                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                            clip-rule="evenodd"></path>
-                                    </svg>
-                                </td>
-                            </tr>
-                            <tr class="bg-gray-50">
-                                <td class="px-6 py-4 text-sm font-medium text-gray-900">Card Type</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">CREDIT</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">CREDIT</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">CREDIT</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 text-sm font-medium text-gray-900">Card Level</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">CORPORATE PURCHASING</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">CORPORATE PURCHASING</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">PURCHASING</td>
-                            </tr>
-                            <tr class="bg-gray-50">
-                                <td class="px-6 py-4 text-sm font-medium text-gray-900">Card Issuer Country</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">United States</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">United States</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">United States</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 text-sm font-medium text-gray-900">3D Secure Payments</td>
-                                <td class="px-6 py-4 text-center">
-                                    <svg class="w-5 h-5 text-primary-green mx-auto" fill="currentColor"
-                                        viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd"
-                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                            clip-rule="evenodd"></path>
-                                    </svg>
-                                </td>
-                                <td class="px-6 py-4 text-center">
-                                    <svg class="w-5 h-5 text-primary-green mx-auto" fill="currentColor"
-                                        viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd"
-                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                            clip-rule="evenodd"></path>
-                                    </svg>
-                                </td>
-                                <td class="px-6 py-4 text-center">
-                                    <svg class="w-5 h-5 text-primary-green mx-auto" fill="currentColor"
-                                        viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd"
-                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                            clip-rule="evenodd"></path>
-                                    </svg>
-                                </td>
-                            </tr>
-                            <tr class="bg-gray-50">
-                                <td class="px-6 py-4 text-sm font-medium text-gray-900">Support Level</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">Email Support</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">Priority Support</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">24/7 Premium Support</td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">VISA</td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">MASTERCARD</td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">VISA</td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">MASTERCARD</td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">VISA</td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">MASTERCARD</td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">MASTERCARD</td>
+                                <td class="px-4 py-3 text-center">MASTERCARD</td>
                             </tr>
 
-
-                            <tr class="bg-gray-50">
-                                <td class="px-6 py-4 text-sm font-medium text-gray-900">Add Money Fees</td>
-                                <td class="px-6 py-4 text-center">5%</td>
-                                <td class="px-6 py-4 text-center">-</td>
-                                <td class="px-6 py-4 text-center">-</td>
+                            <!-- Card Issue Cost -->
+                            <tr class="border-b border-gray-200 hover:bg-gray-50 bg-blue-50">
+                                <td
+                                    class="px-4 py-3 font-medium text-gray-700 sticky left-0 bg-blue-50 z-10 border-r border-gray-200">
+                                    Card Issue Cost
+                                </td>
+                                <td class="px-4 py-3 text-center font-semibold text-green-600 border-r border-gray-200">
+                                    $5.00</td>
+                                <td class="px-4 py-3 text-center font-semibold text-green-600 border-r border-gray-200">
+                                    $5.00</td>
+                                <td class="px-4 py-3 text-center font-semibold text-green-600 border-r border-gray-200">
+                                    $5.00</td>
+                                <td class="px-4 py-3 text-center font-semibold text-green-600 border-r border-gray-200">
+                                    $5.00</td>
+                                <td class="px-4 py-3 text-center font-semibold text-green-600 border-r border-gray-200">
+                                    $5.00</td>
+                                <td class="px-4 py-3 text-center font-semibold text-green-600 border-r border-gray-200">
+                                    $5.00</td>
+                                <td class="px-4 py-3 text-center font-semibold text-green-600 border-r border-gray-200">
+                                    $5.00</td>
+                                <td class="px-4 py-3 text-center font-semibold text-green-600">$5.00</td>
                             </tr>
-                            <td class="px-6 py-4 text-sm font-medium text-gray-900">Payout Fees</td>
-                            <td class="px-6 py-4 text-center">5%</td>
-                            <td class="px-6 py-4 text-center">-</td>
-                            <td class="px-6 py-4 text-center">-</td>
+
+                            <!-- Card Top-up Fees -->
+                            <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                <td
+                                    class="px-4 py-3 font-medium text-gray-700 sticky left-0 bg-white z-10 border-r border-gray-200">
+                                    Card Top-up Fees
+                                </td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">10%</td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">10%</td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">10%</td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">10%</td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">10%</td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">10%</td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">10%</td>
+                                <td class="px-4 py-3 text-center">10%</td>
+                            </tr>
+
+                            <!-- Monthly Charges -->
+                            <tr class="border-b border-gray-200 hover:bg-gray-50 bg-green-50">
+                                <td
+                                    class="px-4 py-3 font-medium text-gray-700 sticky left-0 bg-green-50 z-10 border-r border-gray-200">
+                                    Monthly Charges
+                                </td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">
+                                    <span class="text-green-600 font-semibold">None</span>
+                                </td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">
+                                    <span class="text-green-600 font-semibold">None</span>
+                                </td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">
+                                    <span class="text-green-600 font-semibold">None</span>
+                                </td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">
+                                    <span class="text-green-600 font-semibold">None</span>
+                                </td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">
+                                    <span class="text-green-600 font-semibold">None</span>
+                                </td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">
+                                    <span class="text-green-600 font-semibold">None</span>
+                                </td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">
+                                    <span class="text-green-600 font-semibold">None</span>
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    <span class="text-green-600 font-semibold">None</span>
+                                </td>
+                            </tr>
+
+                            <!-- Reloadable -->
+                            <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                <td
+                                    class="px-4 py-3 font-medium text-gray-700 sticky left-0 bg-white z-10 border-r border-gray-200">
+                                    Reloadable
+                                </td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">
+                                    <span class="text-green-600 font-semibold">✓ Yes</span>
+                                </td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">
+                                    <span class="text-green-600 font-semibold">✓ Yes</span>
+                                </td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">
+                                    <span class="text-green-600 font-semibold">✓ Yes</span>
+                                </td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">
+                                    <span class="text-green-600 font-semibold">✓ Yes</span>
+                                </td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">
+                                    <span class="text-green-600 font-semibold">✓ Yes</span>
+                                </td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">
+                                    <span class="text-green-600 font-semibold">✓ Yes</span>
+                                </td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">
+                                    <span class="text-green-600 font-semibold">✓ Yes</span>
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    <span class="text-green-600 font-semibold">✓ Yes</span>
+                                </td>
+                            </tr>
+
+                            <!-- Multi-Currency Support -->
+                            <tr class="border-b border-gray-200 hover:bg-gray-50 bg-blue-50">
+                                <td
+                                    class="px-4 py-3 font-medium text-gray-700 sticky left-0 bg-blue-50 z-10 border-r border-gray-200">
+                                    Multi-Currency Support
+                                </td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">
+                                    <span class="text-green-600 font-semibold">✓ Yes</span>
+                                </td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">
+                                    <span class="text-green-600 font-semibold">✓ Yes</span>
+                                </td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">
+                                    <span class="text-green-600 font-semibold">✓ Yes</span>
+                                </td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">
+                                    <span class="text-green-600 font-semibold">✓ Yes</span>
+                                </td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">
+                                    <span class="text-green-600 font-semibold">✓ Yes</span>
+                                </td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">
+                                    <span class="text-green-600 font-semibold">✓ Yes</span>
+                                </td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">
+                                    <span class="text-green-600 font-semibold">✓ Yes</span>
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    <span class="text-green-600 font-semibold">✓ Yes</span>
+                                </td>
+                            </tr>
+
+                            <!-- Card Type -->
+                            <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                <td
+                                    class="px-4 py-3 font-medium text-gray-700 sticky left-0 bg-white z-10 border-r border-gray-200">
+                                    Card Type
+                                </td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">CREDIT</td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">CREDIT</td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">CREDIT</td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">CREDIT</td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">CREDIT</td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">CREDIT</td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">CREDIT</td>
+                                <td class="px-4 py-3 text-center">CREDIT</td>
+                            </tr>
+
+                            <!-- Card Level -->
+                            <tr class="border-b border-gray-200 hover:bg-gray-50 bg-gray-50">
+                                <td
+                                    class="px-4 py-3 font-medium text-gray-700 sticky left-0 bg-gray-50 z-10 border-r border-gray-200">
+                                    Card Level
+                                </td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">CORPORATE PURCHASING</td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">CORPORATE PURCHASING</td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">PURCHASING</td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">PURCHASING</td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">CORPORATE PURCHASING</td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">PURCHASING</td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">CORPORATE PURCHASING</td>
+                                <td class="px-4 py-3 text-center">PURCHASING</td>
+                            </tr>
+
+                            <!-- Card Issuer Country -->
+                            <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                <td
+                                    class="px-4 py-3 font-medium text-gray-700 sticky left-0 bg-white z-10 border-r border-gray-200">
+                                    Card Issuer Country
+                                </td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">🇭🇰 Hong Kong</td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">United States</td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">United States</td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">United States</td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">United States</td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">United States</td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">United States</td>
+                                <td class="px-4 py-3 text-center">United States</td>
+                            </tr>
+
+                            <!-- 3D Secure Payments -->
+                            <tr class="border-b border-gray-200 hover:bg-gray-50 bg-green-50">
+                                <td
+                                    class="px-4 py-3 font-medium text-gray-700 sticky left-0 bg-green-50 z-10 border-r border-gray-200">
+                                    3D Secure Payments
+                                </td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">
+                                    <span class="text-green-600 font-semibold">✓ Yes</span>
+                                </td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">
+                                    <span class="text-green-600 font-semibold">✓ Yes</span>
+                                </td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">
+                                    <span class="text-green-600 font-semibold">✓ Yes</span>
+                                </td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">
+                                    <span class="text-green-600 font-semibold">✓ Yes</span>
+                                </td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">
+                                    <span class="text-green-600 font-semibold">✓ Yes</span>
+                                </td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">
+                                    <span class="text-green-600 font-semibold">✓ Yes</span>
+                                </td>
+                                <td class="px-4 py-3 text-center border-r border-gray-200">
+                                    <span class="text-green-600 font-semibold">✓ Yes</span>
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    <span class="text-green-600 font-semibold">✓ Yes</span>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
