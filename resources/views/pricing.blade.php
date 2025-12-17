@@ -83,7 +83,7 @@
         }
     </style>
     <!-- Hero Section -->
-    <section class="pt-32 pb-20 bg-black">
+    <section class="pt-10 pb-4 bg-blue-500">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h1 class="text-5xl lg:text-6xl font-bold text-white mb-6">
                 Pricing
