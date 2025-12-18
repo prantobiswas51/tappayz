@@ -37,12 +37,11 @@ class RegisteredUserController extends Controller
         $user->phone = $request->phone;
         $user->country = $request->country;
         $user->password = Hash::make($request->password);
-        $user->remember_token = Str::random(40); // Generate verification token
+        $user->email_verification_token = Str::random(40); // Generate verification token
         $user->save();
 
         // Generate verification link
-        $verifyUrl = URL::to('/email-check?token=' . $user->remember_token . '&email=' . urlencode($user->email));
-
+        $verifyUrl = URL::to('/email-check?token=' . $user->email_verification_token . '&email=' . urlencode($user->email));
         // Email content
         $html = '
             <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f3f4f6;">

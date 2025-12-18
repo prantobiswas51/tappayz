@@ -1,5 +1,9 @@
 <x-guest-layout>
+
+
+
     <section class="min-h-screen flex items-center justify-center  pb-12 px-4 sm:px-6 lg:px-8">
+
         <div class="max-w-md w-full space-y-8">
             <div class="text-center">
                 <h2 class="text-3xl font-bold text-black mb-2">Welcome Back</h2>
@@ -60,10 +64,12 @@
                         @endif
                     </div>
 
+
                     <x-primary-button
                         class="w-full bg-blue-500 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-600 transition-colors">
                         {{ __('Sign In') }}
                     </x-primary-button>
+
 
                     <div class="text-center">
                         <p class="text-sm text-gray-600">

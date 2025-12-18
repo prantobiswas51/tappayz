@@ -16,7 +16,7 @@ class VerifyEmailController extends Controller
 
         // Find the user
         $user = User::where('email', $email)
-            ->where('remember_token', $token)
+            ->where('email_verification_token', $token)
             ->first();
 
         $user->email_verified_at = now();
@@ -35,7 +35,7 @@ class VerifyEmailController extends Controller
 
         // Mark verified
         $user->email_verified_at = now();
-        $user->remember_token = null; // Optional: remove token so link can't be reused
+        $user->email_verification_token = null; // Optional: remove token so link can't be reused
         $user->save();
 
         return redirect()->route('login')->with('success', 'Email verified successfully! You can now login.');
