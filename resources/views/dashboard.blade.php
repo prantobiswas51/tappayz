@@ -1,38 +1,44 @@
 <x-app-layout>
 
-    <main class="main min-h-screen" style="background: white; color: #333;">
-        
-        <div class="topbar">
-            <div class="brand" style="gap:8px;">
+    <div class="">
+
+        <div class="flex text-gray-800 pl-3 py-3">
+            <div class="brand gap-3">
                 <div>Overview | {{ Auth::user()->name }}</div>
             </div>
-            <input class="input search" placeholder="Search…"
-                style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333;" />
         </div>
-        <section class="grid grid-4" style="max-width: 800px; margin: 0;">
-            <div class="widget kpi" style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333; padding: 16px;">
-                <div class="label" style="color: #6c757d; font-size: 12px;">Total Balance</div>
-                <div class="value" style="color: #28a745; font-weight: 700; font-size: 18px;">${{ Auth::user()->balance }}</div>
+
+        <section class="grid grid-cols-1 text-gray-800 gap-4 sm:grid-cols-2 lg:grid-cols-4 p-4 rounded-lg">
+            <div class="border bg-gray-50 p-4 rounded-md shadow-lg">
+                <div class="label font-bold" >Total Balance</div>
+                <div class="value" style="color: #28a745; font-weight: 700; font-size: 18px;">${{ Auth::user()->balance
+                    }}</div>
             </div>
-            <div class="widget kpi" style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333; padding: 16px;">
-                <div class="label" style="color: #6c757d; font-size: 12px;">Active Cards</div>
-                <div class="value" style="color: #007bff; font-weight: 700; font-size: 18px;">{{ $activeCardsCount }}</div>
+
+            <div class="border bg-gray-50 p-4 rounded-md shadow-lg">
+                <div class="label font-bold" >Active Cards</div>
+                <div class="value" style="color: #007bff; font-weight: 700; font-size: 18px;">{{ $activeCardsCount }}
+                </div>
             </div>
-            <div class="widget kpi" style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333; padding: 16px;">
-                <div class="label" style="color: #6c757d; font-size: 12px;">Pending Cards</div>
-                <div class="value" style="color: #fd7e14; font-weight: 700; font-size: 18px;">{{ $pendingCardsCount }}</div>
+
+            <div class="border bg-gray-50 p-4 rounded-md shadow-lg">
+                <div class="label font-bold" >Pending Cards</div>
+                <div class="value" style="color: #fd7e14; font-weight: 700; font-size: 18px;">{{ $pendingCardsCount }}
+                </div>
             </div>
-            <div class="widget kpi" style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333; padding: 16px;">
-                <div class="label" style="color: #6c757d; font-size: 12px;">Frozen Cards</div>
-                <div class="value" style="color: #ffc107; font-weight: 700; font-size: 18px;">{{ $freezedCardsCount }}</div>
+
+            <div class="border bg-gray-50 p-4 rounded-md shadow-lg">
+                <div class="label font-bold" >Frozen Cards</div>
+                <div class="value" style="color: #ffc107; font-weight: 700; font-size: 18px;">{{ $freezedCardsCount }}
+                </div>
             </div>
         </section>
 
-        <section class="grid grid-1" style="margin-top:16px;">
-            <div class="card"
-                style="background: white; border: 1px solid #e9ecef; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                <div class="card-header">
-                    <div class="card-title" style="color: #333;">Recent Transactions</div>
+        <section class="overflow-hidden  p-4">
+            <div class="rounded-lg p-2 bg-gray-50 shadow-lg text-gray-800 border">
+                
+                <div class="flex items-center justify-between mb-4">
+                    <div class="card-title">Recent Transactions</div>
                     <a class="btn" href="{{ route('transactions') }}">View all</a>
                 </div>
 
@@ -60,7 +66,7 @@
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
 
-                            {{-- dynamic transactions --}}
+
                             @if($transactions->isEmpty())
                             <tr>
                                 <td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
@@ -109,6 +115,6 @@
                 </div>
             </div>
         </section>
-    </main>
+    </div>
 
 </x-app-layout>

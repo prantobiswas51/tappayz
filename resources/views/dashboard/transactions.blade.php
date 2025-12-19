@@ -8,39 +8,18 @@
                     <p style="margin:0; color: #6c757d; font-size:14px;">View and manage your transaction history</p>
                 </div>
             </div>
-            <div class="toolbar">
-                <div class="filters">
-                    <div class="search-container">
-                        <input class="input search-input" placeholder="Search merchant or amount"
-                            style="width:280px; padding-left:40px; background: #f8f9fa; border: 1px solid #e9ecef; color: #333;" />
-                        <div class="search-icon" style="color: #6c757d;">🔍</div>
-                    </div>
-                    <select class="input filter-select"
-                        style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333;">
-                        <option>All statuses</option>
-                        <option>Completed</option>
-                        <option>Pending</option>
-                        <option>Declined</option>
-                    </select>
-                    <select class="input filter-select"
-                        style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333;">
-                        <option>All cards</option>
-                        <option>Marketing</option>
-                        <option>Subscriptions</option>
-                    </select>
-                </div>
-            </div>
         </div>
 
-        <section class="grid grid-1" style="margin-top:16px;">
+        <section class="overflow-hidden" style="margin-top:16px;">
             <div class="card"
                 style="background: white; border: 1px solid #e9ecef; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                
                 <div class="card-header">
                     <div class="card-title" style="color: #333;">Recent Transactions</div>
                 </div>
 
                 <!-- Table Content -->
-                <div class="overflow-x-auto">
+                <div class="overflow-x-auto ">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>

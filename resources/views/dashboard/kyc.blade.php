@@ -1,6 +1,6 @@
 <x-app-layout>
-    <main class="main bg-white text-gray-800">
-        <div class="topbar p-4 border-b border-gray-200 flex items-center justify-between">
+    <main class="p-2 bg-white text-gray-800">
+        <div class="topbar border-b border-gray-200 flex items-center justify-between">
             <div class="brand flex items-center gap-3">
                 <div>
                     <h1 class="text-2xl font-bold text-gray-800">KYC Verification</h1>
@@ -10,7 +10,7 @@
         </div>
 
         <div
-            class="mx-auto mt-6 mb-4 flex items-center w-fit px-4 p-2 rounded-lg btn btn-brand create-btn text-white text-3xl border">
+            class="mx-auto flex items-center w-fit p-2 rounded-lg btn btn-brand create-btn text-white text-3xl border">
             {{-- KYC Status Message --}}
             @if($status)
             <div class="text-gray-800 text-lg">KYC status: {{ $status }}</div>
@@ -20,7 +20,7 @@
         </div>
 
         @if ($status != 'Approved')
-        <div class="grid  gap-6 p-6">
+        <div class="grid my-4">
             <!-- Left Form -->
             <div class="max-w-2xl border mx-auto bg-white rounded-xl shadow-lg p-8">
                 <h2 class="text-2xl font-semibold text-sky-300 text-center uppercase mb-2">

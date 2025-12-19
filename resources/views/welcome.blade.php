@@ -79,7 +79,7 @@
                 </div>
 
                 <div class="relative">
-                    <div class="grid grid-cols-2 gap-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <!-- Mastercard -->
                         <div
                             class="bg-black rounded-2xl p-5 text-white hover:shadow-xl transition-all duration-1000 transform translate-x-full opacity-0 animate-slide-in-left">
