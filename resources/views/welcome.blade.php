@@ -76,6 +76,11 @@
                         </div>
                         <div class="text-gray-600">Join 100K+ users</div>
                     </div>
+
+                    <a href="https://www.kqzyfj.com/click-101617256-13973461" target="_top"> Get unlimited access to
+                        5,000+ magazines, newspapers and curated premium stories for free </a><img
+                        src="https://www.awltovhc.com/image-101617256-13973461" width="1" height="1" border="0" />
+
                 </div>
 
                 <div class="relative">
@@ -271,6 +276,11 @@
                             secure payments anywhere in the world. Our virtual cards work with Mastercard and Visa
                             networks for maximum acceptance.
                         </p>
+                        <p class="pt-2">Maximize campaign ROI and response rates with performance proven GetResponse
+                            solutions. <a href="https://www.tkqlhce.com/click-101617256-10831465" target="_top"
+                                class="underline">
+                                Open an account today! </a><img src="https://www.awltovhc.com/image-101617256-10831465"
+                                width="1" height="1" border="0" /></p>
                     </div>
                     <div class="flex flex-col sm:flex-row gap-4 mt-6 lg:mt-0 lg:ml-8">
                         <div class="text-sm text-gray-500 text-center lg:text-right">
@@ -281,6 +291,11 @@
                 </div>
             </div>
         </div>
+    </section>
+
+
+    <section class="Ads text-center text-lg">
+
     </section>
 
     <!-- FAQ Section -->
