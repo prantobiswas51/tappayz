@@ -22,14 +22,14 @@ class DepositsTable
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('tx_id')
-                    ->searchable(),
+                    ->searchable()->limit(20),
                 TextColumn::make('amount')
                     ->searchable(),
                 TextColumn::make('status')
                     ->color(fn($state) => match ($state) {
-                        'Pending' => 'warning',
-                        'Approved' => 'success',
-                        'Rejected' => 'danger',
+                        'PENDING' => 'warning',
+                        'SUCCESS' => 'success',
+                        'FAILED' => 'danger',
                         default => 'secondary',
                     })
                     ->searchable(),
