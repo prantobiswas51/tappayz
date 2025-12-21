@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Deposit;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -28,110 +29,19 @@ class FundController extends Controller
     public function check_deposit(Request $request)
     {
         $request->validate([
-            'user_id' => 'required|numeric',
-            'tx_id' => 'required|string',
+            'tx_id' => 'required|string|unique:deposits,tx_id',
         ]);
 
-        $user = User::find($request->user_id);
-
-        if (!$user) {
-            return redirect()->route('fundings')->with('status', 'Invalid user.');
-        }
-
-        // Fetch Tron transaction
-        $response = Http::withoutVerifying()
-            ->get("https://apilist.tronscan.org/api/transaction-info?hash={$request->tx_id}");
-
-        if (!$response->successful()) {
-            return redirect()->route('fundings')->with('status', 'Failed to fetch transaction details.');
-        }
-
-        $json = $response->json();
-
-        // Safe extraction
-        $contractType      = $json['contractType'] ?? null;
-        $contractRet       = $json['contractRet'] ?? null;
-        $confirmed         = $json['confirmed'] ?? false;
-        $tokenInfo         = $json['tokenTransferInfo'] ?? null;
-
-        $amountUsdtRaw     = $tokenInfo['amount_str'] ?? 0;
-        $amountUsdt        = $amountUsdtRaw / 1000000;
-        $toAddress         = $tokenInfo['to_address'] ?? null;
-
-        // Check destination address
-        if ($toAddress !== Setting::value('main_deposit_address')) {
-            return redirect()->route('fundings')->with('status', 'Transaction sent to wrong address.');
-        }
-
-        // Immediately reject non-USDT transfers
-        if ($contractType != 31) {
-            return redirect()->route('fundings')->with('status', 'Invalid token. Only USDT TRC20 accepted.');
-        }
-
-        // Check TRON success
-        if ($contractRet !== 'SUCCESS') {
-            return redirect()->route('fundings')->with('status', 'Transaction failed on blockchain.');
-        }
-
-
-        // Check amount
-        if ($amountUsdt <= 0) {
-            return redirect()->route('fundings')->with('status', 'Invalid amount.');
-        }
-
-        // Check duplicate
-        if (Deposit::where('tx_id', $request->tx_id)->exists()) {
-            return redirect()->route('fundings')->with('status', 'This transaction already exists.');
-        }
-
-        // Create deposit log
-        $deposit = Deposit::create([
-            'user_id' => $user->id,
+        Deposit::create([
+            'user_id' => Auth::id(),
             'tx_id'   => $request->tx_id,
-            'status'  => $contractRet,
-            'amount'  => $amountUsdt,
             'token'   => 'USDT',
+            'status'  => 'PENDING',
         ]);
 
-        // If confirmed and success → credit user
-        if ($confirmed && $contractRet === 'SUCCESS') {
-
-            // Increment balance first
-            $user->increment('balance', $amountUsdt);
-
-            // Reload correct latest balance
-            $user->refresh();
-
-            $html = '
-            <div style="font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px;">
-                <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 10px;
-                            box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow: hidden;">
-                    <div style="background-color: #4a90e2; color: #ffffff; padding: 20px; text-align: center;">
-                        <h1 style="margin: 0; font-size: 22px;">Deposit Successful</h1>
-                    </div>
-                    <div style="padding: 30px; text-align: center;">
-                        <h2 style="color: #333333;">Funds Added to Your Wallet</h2>
-                        <p style="color: #555555; font-size: 16px; line-height: 1.6;">
-                            Your recent deposit has been processed successfully.
-                        </p>
-                        <div style="margin: 25px auto; background-color: #f1f3f5; border-radius: 8px;
-                                    padding: 15px; max-width: 400px; text-align: left; color: #222;">
-                            <p><strong>Transaction ID:</strong> ' . $request->tx_id . '</p>
-                            <p><strong>Deposit Amount:</strong> $' . number_format($amountUsdt, 2) . '</p>
-                            <p><strong>Current Wallet Balance:</strong> $' . number_format($user->balance, 2) . '</p>
-                            <p><strong>Date:</strong> ' . now()->format("F j, Y, g:i A") . '</p>
-                        </div>
-                    </div>
-                </div>
-            </div>';
-
-            sendCustomMail($user->email, 'Tappayz - Deposit Successful', $html);
-
-            return redirect()->route('fundings')->with('status', '✅ USDT deposit confirmed.');
-        }
-
-        return redirect()->route('fundings')->with('status', '⚠ Transaction pending or unknown.');
+        return back()->with('status', 'Transaction submitted. Should take a minute to update. Waiting for confirmation.');
     }
+
 
 
     public function manual_payment(Request $request)

@@ -14,14 +14,15 @@ return new class extends Migration
         Schema::create('deposits', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->string('tx_id')->nullable();
+            $table->string('tx_id')->nullable()->unique();
             $table->string('sender_id')->nullable();
             $table->string('receiver_id')->nullable();
             $table->string('amount');
+            $table->string('token')->nullable();
             $table->enum('type', ['Manual', 'Auto']);
             $table->string('method')->nullable();
             $table->string('currency')->nullable();
-            $table->string('status')->default('pending');
+            $table->string('status')->default('PENDING');
             $table->string('screenshot_path')->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();
