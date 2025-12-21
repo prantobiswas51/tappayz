@@ -17,7 +17,7 @@ class UsersTable
                 TextColumn::make('name')
                     ->searchable(),
                 TextColumn::make('email')
-                    ->label('Email address')
+                    ->label('Email')
                     ->searchable(),
                 TextColumn::make('phone')
                     ->searchable(),
@@ -39,7 +39,7 @@ class UsersTable
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-            ])
+            ])->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])

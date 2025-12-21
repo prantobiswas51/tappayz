@@ -28,11 +28,7 @@ class UserForm
                     ->prefix('$')
                     ->default(0.0),
                 TextInput::make('number'),
-
                 DateTimePicker::make('email_verified_at'),
-                TextInput::make('password')
-                    ->password()
-                    ->required(),
             ]);
     }
 }
