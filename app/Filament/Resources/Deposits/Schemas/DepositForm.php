@@ -33,9 +33,10 @@ class DepositForm
                     ->required(),
                 TextInput::make('method'),
                 Select::make('status')->options([
-                    'Pending' => 'Pending',
-                    'Approved' => 'Approved',
-                    'Rejected' => 'Rejected',
+                    'PENDING' => 'PENDING',
+                    'SUCCESS' => 'SUCCESS',
+                    'FAILED' => 'FAILED',
+                    
                 ])->required(),
                 TextInput::make('sender_id'),
                 TextInput::make('receiver_id'),

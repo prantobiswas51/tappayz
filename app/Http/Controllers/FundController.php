@@ -21,8 +21,6 @@ class FundController extends Controller
 
         $deposits = Deposit::where('user_id', Auth::id())->get();
 
-        Log::channel('dev_error')->error('Fi');
-
         return view('dashboard/funding', compact('trx_address', 'deposits'));
     }
 

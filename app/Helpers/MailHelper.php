@@ -33,7 +33,6 @@ if (!function_exists('sendCustomMail')) {
                 Log::channel('dev_error')->error('Maileroo API failed', [
                     'to' => $to,
                     'status' => $response->status(),
-                    'response' => $response->body(),
                 ]);
                 return false;
             }
