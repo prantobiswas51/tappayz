@@ -9,6 +9,15 @@
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('/images/fev.ico') }}">
 
     <title>{{ config('app.name', 'Cards') }}</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y414B1LE4K"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-Y414B1LE4K');
+    </script>
     <meta name="google-adsense-account" content="ca-pub-1076115507843658">
     <meta name="description"
         content="TapPayz offers instant virtual payment cards with 3DS support for secure online transactions. Create your card today and shop with confidence!">
@@ -204,7 +213,7 @@
                 <span>Logout</span>
             </button>
         </form>
-        
+
 
     </div>
 
