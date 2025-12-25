@@ -31,6 +31,7 @@
                             <label class="label" style="color: #6c757d;">Select Cryptocurrency</label>
                             <select id="crypto-select" name="currency" class="rounded-lg border-gray-300 p-2 border">
                                 <option value="TRX">USDT (TRC-20)</option>
+                                <option value="TRX">TRX (TRC-20)</option>
                             </select>
                         </div>
 

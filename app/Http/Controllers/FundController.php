@@ -33,13 +33,13 @@ class FundController extends Controller
         Deposit::create([
             'user_id' => Auth::id(),
             'tx_id'   => $request->tx_id,
-            'token'   => 'USDT',
+            'token'   => 'Pending',
+            'amount'  => 0,
             'status'  => 'PENDING',
         ]);
 
         return back()->with('status', 'Transaction submitted. Should take a minute to update. Waiting for confirmation.');
     }
-
 
 
     public function manual_payment(Request $request)
