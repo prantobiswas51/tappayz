@@ -26,14 +26,28 @@ class FundController extends Controller
 
     public function check_deposit(Request $request)
     {
+
         $request->validate([
-            'tx_id' => 'required|string|unique:deposits,tx_id',
+            'tx_id' => 'required|string',
+            'user_id' => 'required|integer',
         ]);
+
+        $user = User::find($request->user_id);
+
+        if (!$user) {
+            return redirect()->route('fundings')->with('status', 'Invalid user.');
+        }
+
+        if (Deposit::where('tx_id', $request->tx_id)->exists()) {
+            return redirect()->route('fundings')->with('status', 'This transaction already exists.');
+        }
+
+        // dd(123);
 
         Deposit::create([
             'user_id' => Auth::id(),
             'tx_id'   => $request->tx_id,
-            'token'   => 'Pending',
+            'currency'   => 'Pending',
             'amount'  => 0,
             'status'  => 'PENDING',
         ]);
