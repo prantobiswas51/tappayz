@@ -106,6 +106,8 @@ class GetTransactions extends Command
 
         if (!$usdAmount || $usdAmount <= 0) return;
 
+        $user_email = User::where('id', $deposit->user_id)->value('email');
+
         DB::transaction(function () use ($deposit, $usdAmount, $tokenName) {
 
             if ($deposit->status === 'SUCCESS') return;
@@ -117,11 +119,10 @@ class GetTransactions extends Command
                 'credited_at' => now(),
             ]);
 
-            User::where('id', $deposit->user_id)
-                ->increment('balance', $usdAmount);
+            User::where('id', $deposit->user_id)->increment('balance', $usdAmount);
         });
 
-        DepositConfirmedJob::dispatch($deposit);
+        DepositConfirmedJob::dispatch($deposit, $usdAmount, $user_email);
     }
 
 

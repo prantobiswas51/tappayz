@@ -45,11 +45,11 @@ class FundController extends Controller
         // dd(123);
 
         Deposit::create([
-            'user_id' => Auth::id(),
-            'tx_id'   => $request->tx_id,
-            'currency'   => 'Pending',
-            'amount'  => 0,
-            'status'  => 'PENDING',
+            'user_id'   => Auth::id(),
+            'tx_id'     => $request->tx_id,
+            'currency'  => 'Pending',
+            'amount'    => 0,
+            'status'    => 'PENDING',
         ]);
 
         return back()->with('status', 'Transaction submitted. Should take a minute to update. Waiting for confirmation.');
